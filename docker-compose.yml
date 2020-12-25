@@ -1,0 +1,50 @@
+version: "3.7"
+services:
+    client:
+        build:
+            context: ./client
+            dockerfile: ./Dockerfile
+        volumes:
+            - "./client:/app"
+        ports:
+            - "3000:3000"
+        depends_on: 
+            - server
+        restart: always
+
+    server:
+        container_name: api
+        build: 
+            context: ./server
+            dockerfile: Dockerfile.dev
+        volumes:
+            - ./server:/app
+        expose:
+            - "5000"
+        ports:
+            - "5000:5000"
+            - "9229:9229"
+        command: npm start
+        environment:
+            PORT: "${PORT}"
+            DB_USER: "${DB_USER}"
+            DB_PASSWORD: "${DB_PASSWORD}"
+            JWT_SECRET: "${JWT_SECRET}"
+            GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+            
+        depends_on: 
+            - mongodb_container
+            
+    mongodb_container:
+        image: mongo:latest
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: "${DB_USER}"
+            MONGO_INITDB_ROOT_PASSWORD: "${DB_PASSWORD}"
+        ports:
+            - 27017:27017
+        volumes:
+            - mongodb_data_container:/data/db
+        restart: always
+       
+volumes:
+    mongodb_data_container:
