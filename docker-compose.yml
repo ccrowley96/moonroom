@@ -13,7 +13,7 @@ services:
         restart: always
 
     server:
-        container_name: api
+        container_name: server
         build: 
             context: ./server
             dockerfile: Dockerfile.dev

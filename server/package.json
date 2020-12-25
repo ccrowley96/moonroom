@@ -1,5 +1,5 @@
 {
-  "name": "fullstack-auth-docker-boilerplate-server",
+  "name": "shareit-server",
   "version": "1.0.0",
   "description": "Node/Express server configured with Google auth and mongoose/mongo db",
   "main": "dist/index.js",

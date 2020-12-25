@@ -21,7 +21,7 @@ export default function Logout(){
         return(
             <div className="googleLogout">
                 <GoogleLogout
-                    clientId="10363954666-veq3jlluet0her48ntgbcvoqk8fdkof7.apps.googleusercontent.com"
+                    clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
                     buttonText="Logout"
                     onLogoutSuccess={responseGoogle}
                     cookiePolicy={'single_host_origin'}

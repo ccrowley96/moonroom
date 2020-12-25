@@ -39,7 +39,7 @@ export default function Login(){
             <h3 className="loginTitle">Login to continue</h3>
             <div className="googleLogin">
                 <GoogleLogin
-                    clientId="10363954666-veq3jlluet0her48ntgbcvoqk8fdkof7.apps.googleusercontent.com"
+                    clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
                     buttonText="Login with Google"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
