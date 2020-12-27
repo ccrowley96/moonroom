@@ -1,11 +1,14 @@
 
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import UserModel from './models/user'
 
 dotenv.config();
 
-export const User = UserModel;
+// Export db models
+export  { default as User} from './models/user';
+export { default as Community } from './models/community';
+export { default as Post } from './models/post';
+export { default as Room } from './models/room';
 
 export const connectDB = async () => {
     try{

@@ -2,9 +2,11 @@ import jwt from 'jsonwebtoken';
 import express from 'express';
 import dotenv from 'dotenv';
 
-
 dotenv.config();
 
+
+// Middleware used to attach userId to to incoming request.  Currently unused.
+// this function has been replaced by Apollo context middleware
 export const authenticateToken = (req: any, res: express.Response, next: express.NextFunction) => {
     const token = req?.headers?.authorization?.replace('Bearer ', '');
     if(!token) {

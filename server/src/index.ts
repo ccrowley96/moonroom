@@ -2,15 +2,16 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv'
 import path from 'path';
-import { connectDB, User } from './db/index';
+import { Community, connectDB, User } from './db/index';
 import morgan from 'morgan';
 import authApi from './routes/auth';
 import { authenticateToken } from './middleware/authJwt';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
-import Users from './graphql/datasources/user';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import { userApi, communityApi } from './graphql/datasources/index';
 
 dotenv.config();
 
@@ -49,20 +50,24 @@ app.use(express.static(path.join(__dirname, '../../client/build')));
 // Auth API used for login/sign-up
 app.use('/auth', authApi);
 
-// Default catch all -> to index.html (for react-router)
-app.get('/*', (_, res: express.Response) => {
-  res.sendFile(path.join(__dirname, '../../client/build/index.html'), function(err) {
-    if (err) {
-      res.status(500).send(err)
-    }
-  })
-})
-
 // Verify JWT Token (Authenticate request)
-app.use(authenticateToken)
+// app.use(authenticateToken)
 
-// Set up Apollo context
-const context = async({req}) => {
+// Use Apollo context to verify authentication token
+const context = async({req, res}) => {
+
+  const token = req?.headers?.authorization?.replace('Bearer ', '');
+  if(!token) {
+      throw new AuthenticationError('No authorization token provided!');
+  }
+
+  try{
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      req.userId = user._id;
+  } catch(err){
+    throw new AuthenticationError('API access unauthorized!');
+  }
+
   const user = await User.findById(new mongoose.Types.ObjectId(req.userId));
   if(user){
     return {user}
@@ -75,12 +80,22 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources: () => ({
-    users: new Users(User)
+    userApi: new userApi(User),
+    communityApi: new communityApi(Community)
   }),
   context
 });
 
 server.applyMiddleware({ app });
+
+// Default catch all -> to index.html (for react-router)
+app.get('/*', (_, res: express.Response) => {
+  res.sendFile(path.join(__dirname, '../../client/build/index.html'), function(err) {
+    if (err) {
+      res.status(500).send(err)
+    }
+  })
+})
 
 // Start Listening
 app.listen(port, () => {

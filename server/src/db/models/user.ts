@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
+
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -6,6 +8,11 @@ const userSchema = new mongoose.Schema({
     given_name: String,
     family_name: String,
     picture: String,
+    communities: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Community',
+        required: false
+    }],
     registered: {
         type: Date,
         default: Date.now
