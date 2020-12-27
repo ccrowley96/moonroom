@@ -1,34 +1,35 @@
 import { USER_QUERY } from '../../queries/profile';
 import { useQuery } from '@apollo/client';
 import './Profile.scss'
-import { useAuth } from '../../services/auth';
 
-export default function Profile({user}){
+export default function Profile(){
     
-    const { loading, error, data } = useQuery(USER_QUERY, {variables: {id: user._id}});
+    const { loading, error, data } = useQuery(USER_QUERY);
+
+    console.log(data);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
         
-    if(data.user){
-        let { user } = data;
-        let registeredDate = new Date(Number(user.registered));
+    if(data.me){
+        let { me } = data;
+        let registeredDate = new Date(Number(me.registered));
         return(
             <div className="profileWrapper">
-                <img style={{padding: "10px"}} alt="profile" src={user.picture} />
+                <img style={{padding: "10px"}} alt="profile" src={me.picture} />
                 <table>
                     <tbody>
                         <tr>
                             <td>Name</td>
-                            <td>{user.name}</td>
+                            <td>{me.name}</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{user.email}</td>
+                            <td>{me.email}</td>
                         </tr>
                         <tr>
                             <td>ID</td>
-                            <td>{user.id}</td>
+                            <td>{me.id}</td>
                         </tr>
                         <tr>
                             <td>Registered</td>

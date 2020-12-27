@@ -3,7 +3,7 @@ import { User } from '../../db/index';
 import mongoose from 'mongoose';
 
 export default class userApi<TData> extends MongoDataSource<TData>{
-    async findUser(id){
+    async getUser(id){
         if(!id) return null;
         const user = await User.findById(new mongoose.Types.ObjectId(id));
         return user ? user: null;

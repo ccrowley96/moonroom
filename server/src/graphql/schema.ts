@@ -42,10 +42,10 @@ const typeDefs = gql`
    }
 
    type Query {
-      users: [User]!
-      user(id: ID!): User
       me: User
       myCommunities: [Community]!
+      community(communityId: ID!): Community
+      room(communityId: ID!, roomId: ID!): Room
    }
 
    interface MutationResponse{
@@ -66,20 +66,21 @@ const typeDefs = gql`
       code: String!
       success: Boolean!
       message: String!
-      Room: Room
+      room: Room
+      community: Community
    }
 
    type addPostMutationResponse implements MutationResponse{
       code: String!
       success: Boolean!
       message: String!
-      Post: Post
+      post: Post
    }
 
    type Mutation{
       addCommunity(name: String!, picture: String, description: String): addCommunityMutationResponse
-      addRoom(name: String!, community: ID!, description: String): addRoomMutationResponse
-      addPost(title: String!, author: ID!, link: String, body: String, rating: Float): addPostMutationResponse
+      addRoom(name: String!, communityId: ID!, description: String): addRoomMutationResponse
+      addPost(title: String!, authorId: ID!, link: String, body: String, rating: Float): addPostMutationResponse
    }
 `;
 

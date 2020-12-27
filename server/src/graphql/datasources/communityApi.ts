@@ -6,8 +6,8 @@ import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 
 class CommunityApi<TData> extends MongoDataSource<TData>{
-
-    async addCommunity(name: String, user: any, picture?: String, description?: String){
+    async addCommunity(name: String, picture?: String, description?: String){
+        const { user } = this.context;
         try{
             // Only add community if user doesn't already own a community with the same name
             let communityOwner: any = await User.findById({_id: mongooseId(user._id)}).populate('communities');
@@ -31,14 +31,11 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
             communityOwner.communities.push(savedCommunity._id);
             communityOwner = communityOwner.save();
 
-            // Query saved community and populate 'admins' field
-            let populatedCommunity = await Community.findById(savedCommunity._id).populate('admins');
-
             return {
                 code: 200,
                 success: true,
                 message: 'Community created successfully!',
-                community: populatedCommunity,
+                community: savedCommunity,
                 user: communityOwner
             };
         }catch(err){
@@ -52,9 +49,20 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
         }
     }
 
-    async getMyCommunities(user: any){
+    async getMyCommunities(){
+        const { user } = this.context;
         let userQuery: any = await User.findById({_id: mongooseId(user._id)}).populate('communities');
         return userQuery.communities;
+    }
+
+    async getCommunity(communityId: string){
+        // Ensure user has access to this community
+        let myCommunitiesIds = (await this.getMyCommunities()).map(community => String(community.id));
+        if(myCommunitiesIds.indexOf(communityId) === -1){
+            throw new ApolloError('You don\'t have access to this community!', errorCodes.communityUnauthorized)
+        }
+
+        return await Community.findById({_id: mongooseId(communityId)})
     }
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useAuth } from '../../services/auth';
 import {
     BrowserRouter as Router,
@@ -12,7 +12,6 @@ import Logout from '../Logout/Logout';
 import Profile from '../Profile/Profile';
 
 export default function Routes(){
-  const auth = useAuth();
     return(
         <Router>
             <Switch>
@@ -22,7 +21,7 @@ export default function Routes(){
                 <PrivateRoute path="/profile">
                     <h3>Profile page</h3>
                     <NavLink to="/" text="Home" />
-                    <Profile user={auth?.session?.user}/>
+                    <Profile />
                     <i>This is private content</i>
                 </PrivateRoute>
                 <Route path="/">

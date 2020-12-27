@@ -6,7 +6,6 @@ import {
 import { useAuth } from '../../services/auth';
 import { GoogleLogin } from 'react-google-login';
 import './Login.scss';
-import { parse } from "graphql";
 
 export default function Login(){
     let history = useHistory();
