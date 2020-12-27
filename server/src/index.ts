@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv'
 import path from 'path';
-import { Community, connectDB, Room, User } from './db/index';
+import { Community, connectDB, Post, Room, User } from './db/index';
 import morgan from 'morgan';
 import authApi from './routes/auth';
 import { authenticateToken } from './middleware/authJwt';
@@ -11,7 +11,7 @@ import resolvers from './graphql/resolvers/resolvers';
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
-import { userApi, communityApi, roomApi } from './graphql/datasources/index';
+import { userApi, communityApi, roomApi, postApi } from './graphql/datasources/index';
 
 dotenv.config();
 
@@ -82,7 +82,8 @@ const server = new ApolloServer({
   dataSources: () => ({
     userApi: new userApi(User),
     communityApi: new communityApi(Community),
-    roomApi: new roomApi(Room)
+    roomApi: new roomApi(Room),
+    postApi: new postApi(Post)
   }),
   context
 });

@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
         ref: 'Community',
         required: false
     }],
+    posts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+        required: false
+    }],
     registered: {
         type: Date,
         default: Date.now

@@ -1,6 +1,5 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { Community, User } from '../../db/index';
-import Mongoose from 'mongoose';
 import { mongooseId } from '../../controllers/utils';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
@@ -56,6 +55,12 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
     }
 
     async getCommunity(communityId: string){
+        // Check if community exists
+        let community = await Community.findById({_id: mongooseId(communityId)});
+        if(!community){
+            throw new ApolloError('Community does not exist', errorCodes.communityNotFound)
+        }
+
         // Ensure user has access to this community
         let myCommunitiesIds = (await this.getMyCommunities()).map(community => String(community.id));
         if(myCommunitiesIds.indexOf(communityId) === -1){

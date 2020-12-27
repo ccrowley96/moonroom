@@ -1,11 +1,13 @@
 import communityResolvers from './communityResolvers';
 import userResolvers from './userResolvers';
 import roomResolvers from './roomResolvers';
+import postResolvers from './postResolvers';
 
 export default {
     Community: communityResolvers,
     User: userResolvers,
     Room: roomResolvers,
+    Post: postResolvers,
     Query: {
         me: async (_, __, { user }) => {
             return user
@@ -26,6 +28,9 @@ export default {
         },
         addRoom: async(_, {name, communityId, description}, { dataSources: { roomApi } }) => {
             return await roomApi.addRoom(name, communityId, description);
+        },
+        addPost: async (_, {communityId, roomId, title, link, body, rating}, { dataSources: { postApi }}) => {
+            return await postApi.addPost(communityId, roomId, title, link, body, rating);
         }
     }
 }

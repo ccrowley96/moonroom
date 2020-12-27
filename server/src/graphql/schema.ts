@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 
 const typeDefs = gql`
    type User{
-      id: ID
+      id: ID!
       name: String
       email: String
       given_name: String
@@ -13,8 +13,11 @@ const typeDefs = gql`
    }
 
    type Post{
+      id: ID!
       title: String
       author: User
+      community: Community
+      room: Room
       link: String
       date: String
       body: String
@@ -75,12 +78,13 @@ const typeDefs = gql`
       success: Boolean!
       message: String!
       post: Post
+      room: Room
    }
 
    type Mutation{
       addCommunity(name: String!, picture: String, description: String): addCommunityMutationResponse
       addRoom(name: String!, communityId: ID!, description: String): addRoomMutationResponse
-      addPost(title: String!, authorId: ID!, link: String, body: String, rating: Float): addPostMutationResponse
+      addPost(communityId: ID!, roomId: ID!, title: String!, link: String, body: String, rating: Float): addPostMutationResponse
    }
 `;
 

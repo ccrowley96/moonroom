@@ -2,6 +2,7 @@ import { MongoDataSource } from 'apollo-datasource-mongodb';
 import { Room } from '../../db/index';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
+import { mongooseId } from '../../controllers/utils';
 
 export default class roomApi<TData> extends MongoDataSource<TData>{
     async addRoom(name: String, communityId: String, description?: String){
@@ -9,8 +10,6 @@ export default class roomApi<TData> extends MongoDataSource<TData>{
         try{
             // Verify community exists & user has access to community
             let community: any = await communityApi.getCommunity(communityId)
-            if(!community)
-                throw new ApolloError('You\'re trying to add a room to a community which does not exist', errorCodes.communityNotFound)
 
             // Populate rooms on community
             community = await community.populate('rooms').execPopulate();
@@ -56,24 +55,19 @@ export default class roomApi<TData> extends MongoDataSource<TData>{
     async getRoom(communityId: string, roomId: string){
         const { dataSources: {communityApi} } = this.context;
 
-        try{
-            // Ensure user has access to this room
-            let community: any = await communityApi.getCommunity(communityId);
+        // Ensure community exists and user has access to this community
+        let community: any = await communityApi.getCommunity(communityId);
 
-            // Populate rooms on community
-            community = await community.populate('rooms').execPopulate();
+        // Populate rooms on community
+        community = await community.populate('rooms').execPopulate();
 
-            // Ensure room exists
-            let roomIds = community.rooms.map(room => String(room._id))
-            if(roomIds.indexOf(roomId) === -1){
-                throw new ApolloError('Room does not exist!', errorCodes.roomNotFound)
-            }
-
-            // Return room
-            return community.rooms.find(room => roomId === String(room._id))
-        } catch(err){
-            console.log(err);
-            return null
+        // Ensure room exists
+        let roomIds = community.rooms.map(room => String(room._id))
+        if(roomIds.indexOf(roomId) === -1){
+            throw new ApolloError('Room does not exist!', errorCodes.roomNotFound)
         }
+
+        // Return room
+        return await Room.findById({_id: mongooseId(roomId)})
     }
 }
