@@ -29,11 +29,15 @@ const Communities = () => {
         try{
             let community = await joinCommunity({ variables: { code: code } });
             setCode('');
-            setJoinData(community.data.joinCommunity)
-            setTimeout(() => {
-                setJoinData(null);
-                history.push('/')
-            }, 3000)
+            if(community.data.joinCommunity.success){
+                setJoinData(community.data.joinCommunity)
+                setTimeout(() => {
+                    setJoinData(null);
+                    history.push('/')
+                }, 3000)
+            } else{
+                throw new Error(community.data.joinCommunity.message)
+            }
         } catch(err){
             setError(err.message);
         }
@@ -43,11 +47,15 @@ const Communities = () => {
         try{
             let community = await createCommunity({ variables: { name: communityName } });
             setCommunityName('')
-            setCreateData(community.data.addCommunity)
-            setTimeout(() => {
-                setCreateData(null);
-                history.push('/')
-            }, 3000)
+            if(community.data.addCommunity.success){
+                setCreateData(community.data.addCommunity)
+                setTimeout(() => {
+                    setCreateData(null);
+                    history.push('/')
+                }, 3000)
+            } else{
+                throw new Error(community.data.addCommunity.message)
+            }
         }catch(err){
             setError(err.message);
         }

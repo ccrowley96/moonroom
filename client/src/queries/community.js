@@ -25,3 +25,26 @@ export const CREATE_COMMUNITY = gql`
         }
     }
 `;
+
+
+export const MY_COMMUNITIES = gql`
+    query myCommunities{
+        myCommunities{
+            name
+            code
+            description
+            id
+            rooms{
+                name
+                id
+            }
+            members{
+                name
+                email
+            }
+            admins{
+                name
+            }
+        }
+    }
+`;
