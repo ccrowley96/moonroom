@@ -55,4 +55,22 @@ export default class postApi<TData> extends MongoDataSource<TData>{
             }
         }
     }
+
+    async getPost(postId: string){
+
+        const { dataSources: { communityApi} } = this.context;
+
+        // Query post
+        let post: any = await Post.findById({_id: mongooseId(postId)});
+        if(!post)
+            throw new ApolloError('Post does not exist!', errorCodes.postNotFound)
+
+        // Check that user has access to the community
+        post = await post.populate('community');
+        let communityId = post.community._id;
+        await communityApi.verifyAccessToCommunity(communityId);
+
+        // Return post
+        return post;
+    }
 }

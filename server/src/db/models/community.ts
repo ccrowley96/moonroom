@@ -6,6 +6,10 @@ const communitySchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    code: {
+        type: String,
+        required: true
+    },
     picture: {
         type: String,
         required: false

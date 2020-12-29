@@ -36,7 +36,13 @@ export const googleLogin = async (req: express.Request, res: express.Response) =
         if(user){
             sendUserInfo(res, user);
         } else{
-            let newUser = new User({name, given_name, family_name, email, picture});
+            let newUser = new User({
+                name, 
+                given_name, 
+                family_name, 
+                email, 
+                picture
+            });
             newUser = await newUser.save();
             if(newUser){
                 sendUserInfo(res, newUser);

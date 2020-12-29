@@ -32,17 +32,17 @@ app.use(cors({credentials: true, origin: true}));
 // Use JSON
 app.use(express.json());
 
-// // HTTPS Redirect for production
-// if (process.env.NODE_ENV !== 'dev') {
-//   app.enable('trust proxy');
-//   app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-//       if (req.secure) {
-//           next();
-//       } else {
-//           res.redirect('https://' + req.headers.host + req.url);
-//       }
-//   });
-// }
+// HTTPS Redirect for production
+if (process.env.NODE_ENV !== 'dev') {
+  app.enable('trust proxy');
+  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (req.secure) {
+          next();
+      } else {
+          res.redirect('https://' + req.headers.host + req.url);
+      }
+  });
+}
 
 // Serve static client build files
 app.use(express.static(path.join(__dirname, '../../client/build')));
@@ -69,10 +69,12 @@ const context = async({req, res}) => {
   }
 
   const user = await User.findById(new mongoose.Types.ObjectId(req.userId));
+
   if(user){
-    return {user}
+    return { user }
+  } else{
+    throw new AuthenticationError('User not found');
   }
-  return {user: null};
 }
 
 // Initialize Graph QL Apollo server

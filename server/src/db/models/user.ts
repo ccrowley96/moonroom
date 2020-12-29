@@ -11,12 +11,12 @@ const userSchema = new mongoose.Schema({
     communities: [{
         type: Schema.Types.ObjectId,
         ref: 'Community',
-        required: false
+        default: []
     }],
     posts: [{
         type: Schema.Types.ObjectId,
         ref: 'Post',
-        required: false
+        default: []
     }],
     registered: {
         type: Date,

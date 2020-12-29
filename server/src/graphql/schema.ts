@@ -26,6 +26,7 @@ const typeDefs = gql`
 
    type Community{
       id: ID!
+      code: String!
       name: String
       picture: String
       admins: [User]
@@ -49,6 +50,7 @@ const typeDefs = gql`
       myCommunities: [Community]!
       community(communityId: ID!): Community
       room(communityId: ID!, roomId: ID!): Room
+      post(postId: ID!): Post
    }
 
    interface MutationResponse{
@@ -58,6 +60,14 @@ const typeDefs = gql`
    }
 
    type addCommunityMutationResponse implements MutationResponse{
+      code: String!
+      success: Boolean!
+      message: String!
+      community: Community
+      user: User
+   }
+
+   type joinCommunityMutationResponse implements MutationResponse{
       code: String!
       success: Boolean!
       message: String!
@@ -85,6 +95,7 @@ const typeDefs = gql`
       addCommunity(name: String!, picture: String, description: String): addCommunityMutationResponse
       addRoom(name: String!, communityId: ID!, description: String): addRoomMutationResponse
       addPost(communityId: ID!, roomId: ID!, title: String!, link: String, body: String, rating: Float): addPostMutationResponse
+      joinCommunity(code: String!): joinCommunityMutationResponse
    }
 `;
 

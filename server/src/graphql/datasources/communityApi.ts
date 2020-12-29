@@ -3,6 +3,7 @@ import { Community, User } from '../../db/index';
 import { mongooseId } from '../../controllers/utils';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
+import randomstring from 'randomstring';
 
 class CommunityApi<TData> extends MongoDataSource<TData>{
     async addCommunity(name: String, picture?: String, description?: String){
@@ -15,9 +16,24 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
                     throw new ApolloError('You already have a community with that name, please choose a unique name', errorCodes.communityAlreadyExists)
             })
 
+            // Generate unique community code
+            // Find unique room code
+            let communityCodeCheck = null;
+            let communityCode = null;
+            do{
+                communityCode = randomstring.generate({
+                    length: 8,
+                    charset: 'alphabetic',
+                    readable: true,
+                    capitalization: 'lowercase'
+                }).toLowerCase();
+                communityCodeCheck = await Community.find({code: communityCode});
+            } while(communityCodeCheck.length !== 0);
+
             // Construct community object
             let community = new Community({
                 name,
+                code: communityCode,
                 admins: [mongooseId(user._id)],
                 picture,
                 description
@@ -54,20 +70,83 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
         return userQuery.communities;
     }
 
-    async getCommunity(communityId: string){
-        // Check if community exists
-        let community = await Community.findById({_id: mongooseId(communityId)});
+    async verifyCommunityExists(communityId?: string, communityCode?: string){
+
+        let community;
+
+        // Verify community exists; lookup using either communityCode or communityId
+        if(communityCode){
+            community = await Community.findOne({code: communityCode});
+        } else{ 
+            community = await Community.findById({_id: mongooseId(communityId)});
+        }
+        
         if(!community){
             throw new ApolloError('Community does not exist', errorCodes.communityNotFound)
         }
 
-        // Ensure user has access to this community
+        return community;
+    }
+
+    async verifyAccessToCommunity(communityId: string){
+        
+        let community = await this.verifyCommunityExists(communityId);
+
+        // Verify access to community
         let myCommunitiesIds = (await this.getMyCommunities()).map(community => String(community.id));
         if(myCommunitiesIds.indexOf(communityId) === -1){
             throw new ApolloError('You don\'t have access to this community!', errorCodes.communityUnauthorized)
         }
 
-        return await Community.findById({_id: mongooseId(communityId)})
+        return community;
+    }
+
+    async getCommunity(communityId: string){
+        return await this.verifyAccessToCommunity(communityId);
+    }
+
+    async joinCommunity(code: string){
+
+        const { user } = this.context;
+        
+        try{
+            // Verify community with given code exists
+            let community: any = await this.verifyCommunityExists(null, code);
+
+            // Populate members and admins
+            community = await community.populate('members').populate('admins');
+
+            // Make sure user hasn't already joined community and is not an admin
+            let membersAndAdmins = [...community.members.map(m => String(m)), ...community.admins.map(a => String(a))]
+            if(membersAndAdmins.indexOf(String(user._id)) !== -1){
+                throw new ApolloError('You are already a member or admin of this community', errorCodes.communityAlreadyJoined)
+            }
+
+            //  Add user to community
+            community.members.push(mongooseId(user._id));
+            let savedCommunity = await community.save();
+
+            // Add community ref to user
+            user.communities.push(mongooseId(community._id));
+            let savedUser = await user.save();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Community joined!',
+                community: savedCommunity,
+                user: savedUser
+            };
+        } catch(err){
+            return {
+                code: 500,
+                success: false,
+                message: err,
+                community: null,
+                user: null
+            };
+        }
+        
     }
 }
 
