@@ -1,9 +1,8 @@
-.loginWrapper{
-    background-color: rgba(0,0,0,.1);
-    border-radius: 8px;
-    max-width: 400px;
-    height: 140px;
+.jumboContainer{
     position: absolute;
+    height: 400px;
+    width: 100%;
+    max-width: 600px;
     left: 0;
     right: 0;
     top: 0;
@@ -11,14 +10,18 @@
     margin: auto;
 }
 
+.jumbo{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
 .googleLogin{
-    position: absolute;
+    position: relative;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
-    width: 100%;
-    margin: auto;
-    bottom: 0px;
     padding: 20px;
 }
 

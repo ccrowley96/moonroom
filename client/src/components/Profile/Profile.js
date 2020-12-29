@@ -6,8 +6,6 @@ export default function Profile(){
     
     const { loading, error, data } = useQuery(USER_QUERY);
 
-    console.log(data);
-
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
         

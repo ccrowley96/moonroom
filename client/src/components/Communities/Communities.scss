@@ -1,0 +1,40 @@
+.homeContainer{
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    height: 200px;
+    width: 320px;
+}
+
+.section{
+    margin: 20px;
+    input{
+        width: 200px;
+    }
+}
+
+.joinCommunity, .createCommunity{
+    display: block;
+    margin-top: 8px;
+}
+
+.error{
+    color: red;
+}
+
+.loading, .error{
+    margin-top: 8px;
+}
+
+.success{
+    margin-top: 8px;
+    color: green;
+}
+
+.info{
+    margin: 20px;
+}
+

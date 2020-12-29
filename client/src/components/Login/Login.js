@@ -34,17 +34,20 @@ export default function Login(){
     }
 
     return(
-        <div className="loginWrapper">
-            <h3 className="loginTitle">Login to continue</h3>
-            <div className="googleLogin">
-                <GoogleLogin
-                    clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
-                    buttonText="Login with Google"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    // isSignedIn={true} auto logs in user
-                    cookiePolicy={'single_host_origin'}
-                />
+        <div className="jumboContainer">
+            <div className="jumbo">
+                <h2>OurStuff</h2>
+                <h4><i>Start sharing some stuff</i></h4>
+                <div className="googleLogin">
+                    <GoogleLogin
+                        clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
+                        buttonText="Login with Google"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        // isSignedIn={true} auto logs in user
+                        cookiePolicy={'single_host_origin'}
+                    />
+                </div>
             </div>
         </div>
     ) 

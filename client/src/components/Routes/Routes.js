@@ -10,6 +10,7 @@ import {
 import Login from '../Login/Login';
 import Logout from '../Logout/Logout';
 import Profile from '../Profile/Profile';
+import Communities from '../Communities/Communities';
 
 export default function Routes(){
     return(
@@ -19,16 +20,18 @@ export default function Routes(){
                     <Login />
                 </Route>
                 <PrivateRoute path="/profile">
-                    <h3>Profile page</h3>
-                    <NavLink to="/" text="Home" />
-                    <Profile />
-                    <i>This is private content</i>
+                  <h3>Profile page</h3>
+                  <NavLink to="/" text="Home" />
+                  <Profile />
+                  <i>This is private content</i>
                 </PrivateRoute>
-                <Route path="/">
-                    <h3>Home page</h3>
-                    <NavLink to="/profile" text="Profile" />
-                    <i>This is public content</i>
-                </Route>
+                <PrivateRoute path="/communities">
+                  <Communities />
+                </PrivateRoute>
+                <PrivateRoute path="/">
+                  {/* <Home/> */}
+                  <NavLink to="/communities" text="Communities" />
+                </PrivateRoute>
             </Switch>
             <Logout/>
         </Router>
