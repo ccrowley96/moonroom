@@ -1,3 +1,48 @@
+.panelBlocker{
+    background-color: var(--color-bg-backdrop);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+}
+
 .communitySelector{
-    padding: 8px;
+    width: 80%;
+    height: 100%;
+    overflow-y: scroll;
+    background-color: var(--color-bg-canvas);
+    padding: 16px;
+}
+
+.activeCommunity{
+    min-height: 80px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    .communityName{
+        margin: 0px;
+    }
+
+    .communityCode{
+        font-style: italic;
+        margin: 0px;
+    }
+
+    th, td {
+        padding: 8px 0px;
+    }
+}
+
+.communityOption, .room{
+    margin: 4px;
+}
+
+.joinCreateContainer{
+    height: 200px;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 40px;
 }

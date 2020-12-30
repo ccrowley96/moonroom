@@ -5,5 +5,10 @@ export const themes = {
 
 export const actionTypes = {
     SET_ACTIVE_COMMUNITY: 'SET_ACTIVE_COMMUNITY',
-    SET_ACTIVE_ROOM: 'SET_ACTIVE_ROOM'
+    SET_ACTIVE_ROOM: 'SET_ACTIVE_ROOM',
+    SET_ACTIVE_MODAL: 'SET_ACTIVE_MODAL'
+}
+
+export const modalTypes = {
+    COMMUNITY_SELECTOR: 'COMMUNITY_SELECTOR'
 }

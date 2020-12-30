@@ -13,10 +13,10 @@ const initialAppState = {
 const AppStateReducer = (state, action) =>{
     switch(action.type){
         case actionTypes.SET_ACTIVE_COMMUNITY:
-            return {...state, activeCommunity: action.payload}
+            return {...state, activeCommunity: action.payload, activeRoom: null}
         case actionTypes.SET_ACTIVE_ROOM:
             return {...state, activeRoom: action.payload}
-        case actionTypes.SET_APP_STATE:
+        case actionTypes.SET_ACTIVE_MODAL:
             return {...state, activeModal: action.payload}
         default:
             throw new Error();

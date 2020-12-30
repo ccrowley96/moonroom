@@ -35,8 +35,8 @@ export const MY_COMMUNITIES = gql`
             description
             id
             rooms{
-                name
                 id
+                name
             }
             members{
                 name

@@ -4,12 +4,10 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
-    Link,
+    Redirect
 } from "react-router-dom";
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
-import Communities from '../Communities/Communities';
 import Home from '../Home/Home';
 import TopBar from '../TopBar/TopBar';
 
@@ -23,12 +21,6 @@ export default function Routes(){
             <PrivateRoute path="/profile">
               <Profile />
             </PrivateRoute>
-
-            <PrivateRoute path="/communities">
-              <TopBar />
-              <Communities />
-            </PrivateRoute>
-
             <PrivateRoute path="/">
               <TopBar />
               <Home />

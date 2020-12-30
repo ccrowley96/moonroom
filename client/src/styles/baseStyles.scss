@@ -20,3 +20,28 @@
         transition-duration: .1s;
     }
 }
+
+._base-slideRight{
+    animation: slideRight 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards, fadeIn 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+._base-slideLeft{
+    animation: slideLeft 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards, fadeIn 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes slideRight {
+    from {
+      transform: translateX(-10px);
+    }
+    to {
+      transform: translateX(0px);
+    } 
+}
+@keyframes slideLeft {
+    from {
+      transform: translateX(10px);
+    }
+    to {
+      transform: translateX(0px);
+    } 
+}
