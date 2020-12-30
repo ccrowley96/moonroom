@@ -9,12 +9,12 @@ const client = new OAuth2Client(
 )
 
 const sendUserInfo = (res: express.Response, user) => {
-    const {_id, name, email} = user;
+    const {_id, name, email, picture} = user;
     const token = jwt.sign({_id}, process.env.JWT_SECRET, {expiresIn: '7d'})
 
     res.json({
         token,
-        user: {_id, name, email}
+        user: {_id, name, email, picture}
     })
 }
 

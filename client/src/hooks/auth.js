@@ -29,7 +29,7 @@ const getSessionFromLocalStorage = () => {
     return null;
 }
 
-export function useProvideAuth(){
+function useProvideAuth(){
     let sessionFromStorage = getSessionFromLocalStorage();
     const [session, setSession] = useState(sessionFromStorage);
 

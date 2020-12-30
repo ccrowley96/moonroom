@@ -1,7 +1,23 @@
+@import "../../styles/baseStyles.scss";
+
 .profileWrapper{
     width: 100%;
     padding: 20px;
+    overflow-x: hidden;
     th, td {
-        padding: 10px;
+        padding: 8px 0px;
+    }
+}
+
+.profilePicture{
+    border-radius: 50%;
+}
+
+.homeLink{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    a{
+        color: var(--color-text-primary)
     }
 }

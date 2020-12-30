@@ -3,11 +3,15 @@ import {
     useHistory,
     useLocation
 } from "react-router-dom";
-import { useAuth } from '../../services/auth';
+import { useAuth } from '../../hooks/auth';
 import { GoogleLogin } from 'react-google-login';
 import './Login.scss';
+import { useTheme } from "../../hooks/provideTheme";
 
 export default function Login(){
+
+    const {theme} = useTheme()
+
     let history = useHistory();
     let location = useLocation();
     let auth = useAuth();
@@ -40,6 +44,7 @@ export default function Login(){
                 <h4><i>Start sharing some stuff</i></h4>
                 <div className="googleLogin">
                     <GoogleLogin
+                        theme={theme}
                         clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
                         buttonText="Login with Google"
                         onSuccess={responseGoogle}

@@ -1,3 +1,9 @@
-.app{
-    padding: 20px;
+// App level styles
+body{
+    background-color: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    width: 100%;
+}
+*{
+    box-sizing: border-box;
 }

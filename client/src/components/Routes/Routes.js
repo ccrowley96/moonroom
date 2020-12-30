@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../services/auth';
+import { useAuth } from '../../hooks/auth';
 import {
     BrowserRouter as Router,
     Switch,
@@ -8,44 +8,34 @@ import {
     Link,
 } from "react-router-dom";
 import Login from '../Login/Login';
-import Logout from '../Logout/Logout';
 import Profile from '../Profile/Profile';
 import Communities from '../Communities/Communities';
 import Home from '../Home/Home';
+import TopBar from '../TopBar/TopBar';
 
 export default function Routes(){
     return(
-        <Router>
-            <Switch>
-                <Route path="/login">
-                    <Login />
-                </Route>
-                <PrivateRoute path="/profile">
-                  <h3>Profile page</h3>
-                  <NavLink to="/" text="Home" />
-                  <Profile />
-                  <i>This is private content</i>
-                </PrivateRoute>
-                <PrivateRoute path="/communities">
-                  <Communities />
-                  <NavLink to="/home" text="home" />
-                </PrivateRoute>
-                <PrivateRoute path="/">
-                  <Home />
-                  <NavLink to="/communities" text="Communities" />
-                </PrivateRoute>
-            </Switch>
-            <Logout/>
-        </Router>
-    )
-}
+      <Router>
+          <Switch>
+            <Route path="/login">
+                <Login />
+            </Route>
+            <PrivateRoute path="/profile">
+              <Profile />
+            </PrivateRoute>
 
-function NavLink({to, text}){
-  return(
-    <div style={{position: "absolute", top: "20px", right: "140px"}}>
-      <Link to={to}>{text}</Link>
-    </div>
-  )
+            <PrivateRoute path="/communities">
+              <TopBar />
+              <Communities />
+            </PrivateRoute>
+
+            <PrivateRoute path="/">
+              <TopBar />
+              <Home />
+            </PrivateRoute>
+          </Switch>
+      </Router>
+    )
 }
 
 // A wrapper for <Route> that redirects to the login

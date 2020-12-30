@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { useMutation } from '@apollo/client';
 import { JOIN_COMMUNITY, CREATE_COMMUNITY } from '../../queries/community';
@@ -10,7 +10,21 @@ const Communities = () => {
     const [errorState, setError] = useState(null);
     const [joinData, setJoinData] = useState(null);
     const [createData, setCreateData] = useState(null);
+    const [shouldRedirect, setShouldRedirect] = useState(false);
     const history = useHistory();
+
+    useEffect(() => {
+        let timeout = null;
+        
+        if(shouldRedirect){
+            timeout = setTimeout(() => {
+                setJoinData(null);
+                setCreateData(null);
+                history.push('/')
+            }, 2000)
+        }
+        return () => clearTimeout(timeout);
+    })
 
     const [joinCommunity] = useMutation(JOIN_COMMUNITY);
     const [createCommunity] = useMutation(CREATE_COMMUNITY);
@@ -31,10 +45,7 @@ const Communities = () => {
             setCode('');
             if(community.data.joinCommunity.success){
                 setJoinData(community.data.joinCommunity)
-                setTimeout(() => {
-                    setJoinData(null);
-                    history.push('/')
-                }, 3000)
+                setShouldRedirect(true);
             } else{
                 throw new Error(community.data.joinCommunity.message)
             }
@@ -45,14 +56,15 @@ const Communities = () => {
 
     const handleCreateCommunity = async () => {
         try{
+            // Validate input
+            if(communityName === ''){
+                throw new Error('Community name cannot be empty');
+            }
             let community = await createCommunity({ variables: { name: communityName } });
             setCommunityName('')
             if(community.data.addCommunity.success){
                 setCreateData(community.data.addCommunity)
-                setTimeout(() => {
-                    setCreateData(null);
-                    history.push('/')
-                }, 3000)
+                setShouldRedirect(true);
             } else{
                 throw new Error(community.data.addCommunity.message)
             }
@@ -73,6 +85,7 @@ const Communities = () => {
             <div className="section">
                 <h3>Create a new community</h3>
                 <input 
+                    maxLength={16} 
                     value={communityName} 
                     onChange={(e) => handleChangeCommunityName(e)} 
                     placeholder='Enter name for your community'

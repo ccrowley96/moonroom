@@ -1,17 +1,24 @@
 import React from "react";
-import { ProvideAuth } from './services/auth';
+import { ProvideAuth } from './hooks/auth';
 import Routes from './components/Routes/Routes';
 import { ApolloProvider, createHttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import './App.scss';
+import { ProvideAppState } from './hooks/provideAppState';
+import { ProvideTheme } from './hooks/provideTheme';
 
-export default function App() {
+
+export const App = () => {
   return (
     <ProvideAuth>
       <ApolloProvider client={client}>
-        <div className="app">
-          <Routes/>
-        </div>
+        <ProvideTheme>
+          <ProvideAppState>
+            <div className="app">
+              <Routes/>
+            </div>
+          </ProvideAppState>
+        </ProvideTheme>
       </ApolloProvider>
     </ProvideAuth>
   );

@@ -3,11 +3,13 @@ import {
     useHistory,
     useLocation
 } from "react-router-dom";
-import { useAuth } from '../../services/auth';
+import { useAuth } from '../../hooks/auth';
 import { GoogleLogout } from 'react-google-login';
 import './Logout.scss';
+import { useTheme } from "../../hooks/provideTheme";
 
 export default function Logout(){
+    const {theme} = useTheme()
     let history = useHistory();
     let location = useLocation();
     let auth = useAuth();
@@ -21,6 +23,7 @@ export default function Logout(){
         return(
             <div className="googleLogout">
                 <GoogleLogout
+                    theme={theme}
                     clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"
                     buttonText="Logout"
                     onLogoutSuccess={responseGoogle}
