@@ -30,6 +30,18 @@
       border-color: var(--color-btn-danger-hover-border);
       box-shadow: var(--color-btn-danger-hover-shadow),var(--color-btn-danger-hover-inset-shadow);
   }
+  &:disabled{
+    color: var(--color-btn-danger-disabled-text);
+    background-color: var(--color-btn-danger-disabled-bg);
+  }
+}
+
+._success{
+  color: var(--color-label-success-text)
+}
+
+._danger{
+  color: var(--color-label-danger-text);
 }
 
 ._base-slideRight{

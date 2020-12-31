@@ -154,15 +154,16 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
             // Verify community exists
             let community: any = await this.verifyCommunityExists(communityId);
 
-            // Populate members, admins, and rooms
-            community = await community.populate('members').populate('admins').populate('rooms');
+            // Populate admins
+            community = await community.populate('admins');
 
             // Verify user is admin of community
             if(community.admins.indexOf(user._id) === -1)
                 throw new Error('You are not authorized to delete this community')
 
             // Delete community
-            await Community.findOneAndDelete({_id: mongooseId(communityId)})
+            let toDelete = await Community.findById({_id: mongooseId(communityId)});
+            await toDelete.deleteOne();
 
             return {
                 code: 200,

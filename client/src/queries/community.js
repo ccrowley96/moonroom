@@ -6,6 +6,16 @@ export const GET_ACTIVE_COMMUNITY_ID_CLIENT = gql`
     }
 `;
 
+export const DELETE_COMMUNITY = gql`
+    mutation deleteCommunity($communityId: ID!){
+        deleteCommunity(communityId: $communityId){
+            code
+            success
+            message
+        }
+    }
+`
+
 export const GET_ACTIVE_COMMUNITY_CLIENT = gql`
     query getActiveCommunity{
         activeCommunity @client

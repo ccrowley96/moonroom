@@ -39,22 +39,26 @@ const communitySchema = new mongoose.Schema({
     }
 })
 
-communitySchema.post('findOneAndDelete', async function(doc){
+// @ts-ignore
+communitySchema.pre('deleteOne', { document: true }, async function(){
+    const community = this;
+    let userAndAdminIds = [...community.members, ...community.admins];
 
-    console.log('Post community findOneAndDelete middleware');
-    console.log(doc);
-    // let roomIds = []
+    // Remove all rooms with this community ID
+    await community.model('Room').deleteMany({community: community._id})
 
-    // // Remove all rooms in community
-    // await community.model('Room').deleteMany({
-    //     _id: {
-    //         $in: roomIds
-    //     }
-    // })
+    // Remove all posts with this community ID
+    await community.model('Post').deleteMany({community: community._id})
 
-    // remove community ref from all admins
-
-    // remove community ref from all users
+    // Remove community ID from users with ID in their communities ref array
+    await community.model('User').update({
+        _id: {$in: userAndAdminIds}
+    },
+    {
+        $pull: {
+            communities: community._id
+        }
+    }, {multi: true})
 })
 
 const CommunityModel = mongoose.model('Community', communitySchema);
