@@ -3,10 +3,10 @@ import { ProvideAuth } from './hooks/auth';
 import Routes from './components/Routes/Routes';
 import { ApolloProvider, createHttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { cache } from './cache';
 import './App.scss';
 import { ProvideAppState } from './hooks/provideAppState';
 import { ProvideTheme } from './hooks/provideTheme';
-
 
 export const App = () => {
   return (
@@ -49,5 +49,5 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache()
+  cache
 })

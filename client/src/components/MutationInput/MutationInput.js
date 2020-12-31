@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import './MutationInput.scss';
 
 
-const MutationInput = ({refetch, mutationType, dataTitle, dataKey, maxLength, placeholder, inputVariable, customVariables}) => {
+const MutationInput = ({mutationType, dataTitle, dataKey, maxLength, placeholder, inputVariable, customVariables, refetchQueries}) => {
     const [text, setText] = useState('');
     const [errorState, setError] = useState(null);
     const [mutation] = useMutation(mutationType);
@@ -43,14 +43,18 @@ const MutationInput = ({refetch, mutationType, dataTitle, dataKey, maxLength, pl
 
             let variableObj = customVariables ? Object.assign({}, inputVarObj, ...customVariables) : inputVarObj;
 
-            let result = await mutation({ variables: variableObj });
+            let mutationOptions = {
+                variables: variableObj,
+                ...(refetchQueries && {refetchQueries})
+            }
+
+            let result = await mutation(mutationOptions);
 
             setText('')
 
             if(result.data[dataKey].success){
                 setMessage(result.data[dataKey].message)
                 setShouldDisplayOnTimeout(true)
-                refetch();
             } else{
                 throw new Error(result.data[dataKey].message)
             }

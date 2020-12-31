@@ -19,20 +19,21 @@
 .activeCommunity{
     min-height: 80px;
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
 
     .communityName{
         margin: 0px;
+        margin: 4px 0px;
+    }
+
+    .roomName{
+        font-weight: 600;
+        margin: 4px 0px;
     }
 
     .communityCode{
         font-style: italic;
-        margin: 0px;
-    }
-
-    th, td {
-        padding: 8px 0px;
+        margin: 4px 0px;
     }
 }
 

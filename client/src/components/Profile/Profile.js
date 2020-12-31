@@ -42,18 +42,16 @@ export default function Profile(){
                             <td>Registered</td>
                             <td>{registeredDate.toLocaleString()}</td>
                         </tr>
-                        <tr>
-                            <td> 
-                                <button className="_btn" onClick={() => toggleTheme()}>Change theme</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> 
-                                <Logout/>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
+
+                <div className='profileBtn'>
+                    <button className="_btn" onClick={() => toggleTheme()}>Change theme</button>
+                </div>
+                
+                <div className='profileBtn'>
+                    <Logout/>
+                </div>
             </div>
         )
     } else{

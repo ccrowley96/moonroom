@@ -1,13 +1,25 @@
 import React from 'react';
 import { useAuth } from '../../hooks/auth';
 import { Link } from "react-router-dom";
+import { useQuery } from '@apollo/client';
 import './TopBar.scss';
 import { useAppState } from '../../hooks/provideAppState';
+import { GET_ACTIVE_COMMUNITY_CLIENT } from '../../queries/community';
+import { GET_ACTIVE_ROOM_CLIENT } from '../../queries/room';
 import { actionTypes, modalTypes } from '../../constants/constants';
 
 const TopBar = () => {
     const {session: {user: {picture}}} = useAuth();
-    const { appState: {activeCommunity}, appDispatch } = useAppState();
+    const { appDispatch } = useAppState();
+
+    const {
+        data: {activeCommunity: activeCommunity}
+    } = useQuery(GET_ACTIVE_COMMUNITY_CLIENT)
+
+    const {
+        data: {activeRoom: activeRoom}
+    } = useQuery(GET_ACTIVE_ROOM_CLIENT)
+
     return(
         <div className='topBar'>
             <div className='communityBurger navItem'>
@@ -18,12 +30,12 @@ const TopBar = () => {
                 </div>
             </div>
             <div className='title navItem'>
-            {
-                activeCommunity ?
-                    activeCommunity.name
-                :   '<-- select community'
-
-            }
+                <div className='communityName'>
+                    {activeCommunity && activeCommunity.name}
+                </div>
+                <div className='roomName'>
+                    {activeRoom && `| ${activeRoom.name}`}
+                </div>
             </div>
             <div className='profile navItem'>
                 <Link className='imgWrapper' to={'/profile'}>

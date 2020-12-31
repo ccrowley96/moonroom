@@ -1,5 +1,42 @@
 import { gql } from '@apollo/client';
 
+export const GET_ACTIVE_COMMUNITY_ID_CLIENT = gql`
+    query getActiveCommunityId{
+        activeCommunityId @client
+    }
+`;
+
+export const GET_ACTIVE_COMMUNITY_CLIENT = gql`
+    query getActiveCommunity{
+        activeCommunity @client
+    }
+`
+
+export const GET_ACTIVE_COMMUNITY = gql`
+    query getCommunity($communityId: ID!){
+        community(communityId: $communityId){
+            id
+            code
+            name
+            picture
+            admins{
+                name
+                email
+            }
+            members{
+                name
+                email
+            }
+            rooms{
+                name
+                id
+            }
+            description
+            createdAt
+        }
+    }
+`;
+
 export const JOIN_COMMUNITY = gql`
     mutation joinCommunity($code: String!){
         joinCommunity(code: $code){
@@ -20,31 +57,18 @@ export const CREATE_COMMUNITY = gql`
             success
             message
             community{
+                id
                 name
             }
         }
     }
 `;
 
-
 export const MY_COMMUNITIES = gql`
     query myCommunities{
         myCommunities{
             name
-            code
-            description
             id
-            rooms{
-                id
-                name
-            }
-            members{
-                name
-                email
-            }
-            admins{
-                name
-            }
         }
     }
 `;
