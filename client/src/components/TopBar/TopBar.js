@@ -1,24 +1,18 @@
 import React from 'react';
 import { useAuth } from '../../hooks/auth';
 import { Link } from "react-router-dom";
-import { useQuery } from '@apollo/client';
+import { useReactiveVar } from '@apollo/client';
 import './TopBar.scss';
 import { useAppState } from '../../hooks/provideAppState';
-import { GET_ACTIVE_COMMUNITY_CLIENT } from '../../queries/community';
-import { GET_ACTIVE_ROOM_CLIENT } from '../../queries/room';
 import { actionTypes, modalTypes } from '../../constants/constants';
+import { activeCommunityVar, activeRoomVar} from '../../cache';
 
 const TopBar = () => {
     const {session: {user: {picture}}} = useAuth();
     const { appDispatch } = useAppState();
 
-    const {
-        data: {activeCommunity: activeCommunity}
-    } = useQuery(GET_ACTIVE_COMMUNITY_CLIENT)
-
-    const {
-        data: {activeRoom: activeRoom}
-    } = useQuery(GET_ACTIVE_ROOM_CLIENT)
+    const activeCommunity = useReactiveVar(activeCommunityVar)
+    const activeRoom = useReactiveVar(activeRoomVar)
 
     return(
         <div className='topBar'>
@@ -30,10 +24,10 @@ const TopBar = () => {
                 </div>
             </div>
             <div className='title navItem'>
-                <div className='communityName'>
+                <div className='communityName' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.COMMUNITY_DETAILS})}>
                     {activeCommunity && activeCommunity.name}
                 </div>
-                <div className='roomName'>
+                <div className='roomName' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.ROOM_DETAILS})}>
                     {activeRoom && `| ${activeRoom.name}`}
                 </div>
             </div>

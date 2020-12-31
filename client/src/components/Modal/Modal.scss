@@ -1,0 +1,36 @@
+.modalBlocker{
+    background-color: var(--color-bg-backdrop);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal{
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+    padding: 12px 20px 20px 20px;
+    background-color: var(--color-bg-canvas);
+}
+
+.modalTitle{
+    font-weight: 600;
+    margin-bottom: 8px;
+    width: calc(100% - 40px);
+    font-size: large;
+}
+
+.closeX{
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+}

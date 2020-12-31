@@ -39,4 +39,10 @@ const postSchema = new mongoose.Schema({
     }
 })
 
+postSchema.pre('remove', () => {
+    // Remove post ref from Room
+
+    // Remove post ref from User
+})
+
 export default mongoose.model('Post', postSchema);

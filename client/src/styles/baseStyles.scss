@@ -21,6 +21,17 @@
     }
 }
 
+._btn-danger{
+  @extend ._btn;
+  color: var(--color-btn-danger-text);
+  &:hover{
+      color: var(--color-btn-danger-hover-text);
+      background-color: var(--color-btn-danger-hover-bg);
+      border-color: var(--color-btn-danger-hover-border);
+      box-shadow: var(--color-btn-danger-hover-shadow),var(--color-btn-danger-hover-inset-shadow);
+  }
+}
+
 ._base-slideRight{
     animation: slideRight 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards, fadeIn 0.367s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
 }

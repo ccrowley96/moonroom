@@ -1,4 +1,4 @@
-import { InMemoryCache, Reference, makeVar } from '@apollo/client'
+import { InMemoryCache, makeVar } from '@apollo/client'
 
 export const cache = new InMemoryCache({
     typePolicies: {
@@ -16,12 +16,12 @@ export const cache = new InMemoryCache({
                 },
                 activeCommunity: {
                     read() {
-                        return activeCommunity();
+                        return activeCommunityVar();
                     }
                 },
                 activeRoom: {
                     read() {
-                        return activeRoom();
+                        return activeRoomVar();
                     }
                 }
             }
@@ -32,5 +32,5 @@ export const cache = new InMemoryCache({
 export const activeCommunityIdVar = makeVar(null);
 export const activeRoomIdVar = makeVar(null);
 
-export const activeCommunity = makeVar(null);
-export const activeRoom = makeVar(null);
+export const activeCommunityVar = makeVar(null);
+export const activeRoomVar = makeVar(null);

@@ -11,6 +11,7 @@
 .communityName{
     margin-right: 4px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .communityBurger{
@@ -25,6 +26,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
+        cursor: pointer;
         .burger{
             border-radius: 2px;
             width: 100%;

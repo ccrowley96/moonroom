@@ -20,6 +20,7 @@ export const GET_ACTIVE_COMMUNITY = gql`
             name
             picture
             admins{
+                id
                 name
                 email
             }

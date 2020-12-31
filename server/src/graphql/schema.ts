@@ -59,6 +59,12 @@ const typeDefs = gql`
       message: String!
    }
 
+   type deleteMutationResponse implements MutationResponse{
+      code: String!
+      success: Boolean!
+      message: String!
+   }
+
    type addCommunityMutationResponse implements MutationResponse{
       code: String!
       success: Boolean!
@@ -96,6 +102,8 @@ const typeDefs = gql`
       addRoom(name: String!, communityId: ID!, description: String): addRoomMutationResponse
       addPost(communityId: ID!, roomId: ID!, title: String!, link: String, body: String, rating: Float): addPostMutationResponse
       joinCommunity(code: String!): joinCommunityMutationResponse
+      deleteCommunity(communityId: ID!): deleteMutationResponse
+      deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse
    }
 `;
 

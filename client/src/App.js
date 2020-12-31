@@ -1,7 +1,7 @@
 import React from "react";
 import { ProvideAuth } from './hooks/auth';
 import Routes from './components/Routes/Routes';
-import { ApolloProvider, createHttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloProvider, createHttpLink, ApolloClient } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { cache } from './cache';
 import './App.scss';

@@ -39,4 +39,23 @@ const communitySchema = new mongoose.Schema({
     }
 })
 
-export default mongoose.model('Community', communitySchema);
+communitySchema.post('findOneAndDelete', async function(doc){
+
+    console.log('Post community findOneAndDelete middleware');
+    console.log(doc);
+    // let roomIds = []
+
+    // // Remove all rooms in community
+    // await community.model('Room').deleteMany({
+    //     _id: {
+    //         $in: roomIds
+    //     }
+    // })
+
+    // remove community ref from all admins
+
+    // remove community ref from all users
+})
+
+const CommunityModel = mongoose.model('Community', communitySchema);
+export default CommunityModel;

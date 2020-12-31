@@ -146,7 +146,36 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
                 user: null
             };
         }
-        
+    }
+
+    async deleteCommunity(communityId: string){
+        const { user } = this.context;
+        try{
+            // Verify community exists
+            let community: any = await this.verifyCommunityExists(communityId);
+
+            // Populate members, admins, and rooms
+            community = await community.populate('members').populate('admins').populate('rooms');
+
+            // Verify user is admin of community
+            if(community.admins.indexOf(user._id) === -1)
+                throw new Error('You are not authorized to delete this community')
+
+            // Delete community
+            await Community.findOneAndDelete({_id: mongooseId(communityId)})
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Community deleted.'
+            };
+        } catch(err){
+            return {
+                code: 500,
+                success: false,
+                message: err
+            };
+        }
     }
 }
 

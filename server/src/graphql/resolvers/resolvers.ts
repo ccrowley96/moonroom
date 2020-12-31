@@ -37,6 +37,13 @@ export default {
         },
         joinCommunity: async (_, { code }, { dataSources: { communityApi }}) => {
             return await communityApi.joinCommunity(code);
-        }
+        },
+        deleteCommunity: async (_, {communityId}, { dataSources: { communityApi }}) => {
+            return await communityApi.deleteCommunity(communityId);
+        },
+        deleteRoom: async (_, {communityId, roomId}, { dataSources: { roomApi }}) => {
+            // return await roomApi.deleteRoom(communityId, roomId);
+            return null;
+        },
     }
 }

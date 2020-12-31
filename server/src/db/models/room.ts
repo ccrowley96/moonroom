@@ -25,4 +25,15 @@ const roomSchema = new mongoose.Schema({
     }
 })
 
+roomSchema.pre('deleteOne', () => {
+    // remove room ref from Community
+
+    // remove all posts with room ref
+})
+
+roomSchema.pre('deleteMany', () => {
+    // remove all posts with room ref
+    console.log('trying to delete many rooms')
+})
+
 export default mongoose.model('Room', roomSchema);
