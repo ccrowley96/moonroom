@@ -111,5 +111,4 @@ export default class roomApi<TData> extends MongoDataSource<TData>{
             };
         }
     }
-    }
 }

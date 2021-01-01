@@ -33,7 +33,7 @@ export default function Home(){
             communityId: activeCommunityId
         }, 
         skip: !activeCommunityId, 
-        pollInterval: 10000,
+        pollInterval: 5000,
         onCompleted: (data) => activeCommunityVar(data.community)
     })
 
@@ -47,7 +47,7 @@ export default function Home(){
         }, 
         skip: !activeRoomId,
         onCompleted: (data) => activeRoomVar(data.room),
-        // pollInterval: 2000 // Poll for changes every x msecs
+        pollInterval: 2000 // Poll for changes every x msecs
     })
 
     return(
