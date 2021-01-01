@@ -33,6 +33,7 @@ export default function Home(){
             communityId: activeCommunityId
         }, 
         skip: !activeCommunityId, 
+        pollInterval: 10000,
         onCompleted: (data) => activeCommunityVar(data.community)
     })
 

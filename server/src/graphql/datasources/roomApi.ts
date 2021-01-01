@@ -70,4 +70,46 @@ export default class roomApi<TData> extends MongoDataSource<TData>{
         // Return room
         return await Room.findById({_id: mongooseId(roomId)})
     }
+
+    async deleteRoom(communityId: string, roomId: string){
+        const { user, dataSources: {communityApi} } = this.context;
+
+        try{
+            // Verify community exists
+            let community: any = await communityApi.verifyCommunityExists(communityId);
+
+            // Populate admins
+            community = await community.populate('admins');
+
+            // Verify user is admin of community
+            if(community.admins.indexOf(user._id) === -1)
+                throw new Error('You are not authorized to delete this room')
+
+            // Populate rooms on community
+            community = await community.populate('rooms').execPopulate();
+
+            // Ensure room exists
+            let roomIds = community.rooms.map(room => String(room._id))
+            if(roomIds.indexOf(roomId) === -1){
+                throw new ApolloError('Room does not exist!', errorCodes.roomNotFound)
+            }
+
+            // Delete room
+            let toDelete = await Room.findById({_id: mongooseId(roomId)});
+            await toDelete.deleteOne();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Room deleted.'
+            };
+        } catch(err){
+            return {
+                code: 500,
+                success: false,
+                message: err
+            };
+        }
+    }
+    }
 }

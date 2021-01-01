@@ -1,0 +1,20 @@
+.deleteContainer{
+    margin-top: 8px;
+    .sectionValue{
+        margin: 8px 0px;
+    }
+    .confirmInput{
+        display: block;
+        height: 32px;
+        width: 220px;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+    .deleteBtn{
+        display: block;
+    }
+}
+
+.successMessage{
+    margin-top: 16px;
+}
