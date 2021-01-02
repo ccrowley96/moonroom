@@ -58,10 +58,42 @@
 ._sectionLabel{
   font-weight: 600;
   margin-bottom: 8px;
+  &._required{
+    &::after{
+      padding-left: 5px;
+      color: var(--color-text-danger);
+      content: "*";
+    }
+  }
 }
 
 ._sectionValue{
   margin: 8px 0px;
+}
+
+._input{
+  color: var(--color-text-primary);
+  vertical-align: middle;
+  background-color: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  padding: 5px 12px;
+  outline: none;
+  box-shadow: var(--color-shadow-inset);
+  
+  &:focus{
+    border-color: var(--color-state-focus-border);
+    outline: none;
+    box-shadow: var(--color-state-focus-shadow);
+  }
+
+  &._error{
+    border: 1px solid var( --color-input-error-border);
+  }
+
+  &:disabled{
+    background-color: var(--color-input-disabled-bg);
+  }
 }
 
 ._success{

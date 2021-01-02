@@ -19,7 +19,7 @@ const AreYouSure = ({ mutation, buttonText, placeholder, confirmText, dangerText
                         placeholder={placeholder}
                         value={areYouSureInput}
                         onChange={(e) => setAreYouSureInput(e.target.value)}
-                        className={cx('confirmInput')}
+                        className={cx('_input', 'confirmInput')}
                     />
                     <button className={cx('_btn-danger', 'deleteBtn')} onClick={mutation} disabled={areYouSureInput !== confirmText}>
                         {buttonText}

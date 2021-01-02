@@ -1,1 +1,23 @@
 @import '../../../../styles/baseStyles.module.scss';
+
+.tagWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 8px 0px;
+    .tag{
+        background-color: var(--color-topic-tag-bg);
+        border-radius: 6px;
+        margin: 4px;
+        padding: 5px 12px;
+        padding-right: 6px;
+        display: flex;
+
+        .deleteTagWrapper{
+            height: 100%;
+            width: 16px;
+            display: flex;
+            align-items: center;
+            margin-left: 4px;
+        }
+    }
+}

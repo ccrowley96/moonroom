@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
+import { enterPressed } from '../../services/utils';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./MutationInput.module.scss'));
@@ -15,13 +16,6 @@ const MutationInput = ({mutationType, cacheUpdate, dataTitle, dataKey, maxLength
     const handleTextChange = (e) => {
         setError(null);
         setText(e.target.value);
-    }
-
-    const enterPressed = (e, targetFunc) => {
-        let code = e.keyCode || e.which;
-        if(code === 13) { 
-            targetFunc()
-        } 
     }
 
     useEffect(() => {
@@ -78,6 +72,7 @@ const MutationInput = ({mutationType, cacheUpdate, dataTitle, dataKey, maxLength
                 onChange={(e) => handleTextChange(e)} 
                 placeholder={placeholder}
                 onKeyPress={(e) => enterPressed(e, handleSubmit)}
+                className={cx('_input')}
             />
             <button className={cx('_btn', 'submitButton')} onClick={() => handleSubmit()}>{dataTitle}</button>
             <div className={cx('info')}>
