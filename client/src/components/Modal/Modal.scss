@@ -17,6 +17,9 @@
     width: 100%;
     padding: 12px 20px 20px 20px;
     background-color: var(--color-bg-canvas);
+    @media screen and (min-width: '600px') {
+        border-radius: 8px;
+      }
 }
 
 .modalTitle{

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes } from '../../constants/constants';
 import { JOIN_COMMUNITY, CREATE_COMMUNITY, MY_COMMUNITIES } from '../../queries/community';
@@ -9,6 +9,9 @@ import './CommunitySelector.scss'
 
 const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity}) => {
     const { appDispatch } = useAppState();
+    const [ selectedCommunity, setSelectedCommunity ] = useState(activeCommunity ? activeCommunity.id : 'none')
+
+    const communityIds = communities.map(c => c.id);
 
     // Refetch active community on mount (ensures that up to date rooms will be displayed)
     useEffect(() => {
@@ -17,9 +20,20 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
     }, [])
 
     const selectCommunity = (communityId) => {
-        localStorage.setItem('activeCommunityId', communityId)
-        activeCommunityIdVar(communityId)
+        localStorage.setItem('activeCommunityId', communityId);
+        activeCommunityIdVar(communityId);
         activeRoomIdVar(null);
+    }
+
+    const handleCommunitySelectChange = (e) => {
+        let selection = e.target.value;
+        if(communityIds.indexOf(selection) === -1){
+            setSelectedCommunity('none');
+            selectCommunity(null);
+        } else{
+            setSelectedCommunity(selection);
+            selectCommunity(selection);
+        }
     }
 
     return (
@@ -38,17 +52,25 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                         }
 
                     <div className='sectionLabel'>{activeCommunity ? 'My communities' : 'Select community'}</div>
-                    {
-                        communities.map((community, idx) => {
-                            return(
-                                <button className="communityOption _btn" key={idx} onClick={() => {
-                                    selectCommunity(community.id);
-                                }}>
-                                    {community.name}
-                                </button>
-                            )
-                        })
-                    }
+                    {/* { activeCommunity && */}
+                        <div className='communityOptions'>
+                            <select className='_select' value={selectedCommunity} onChange={handleCommunitySelectChange}>
+                                {/* Default option */}
+                                <option key={'default'} value={'none'} disabled hidden>
+                                    Select community
+                                </option>
+                            {
+                                communities.map((community, idx) => {
+                                    return(
+                                        <option key={idx} value={community.id}>
+                                            {community.name}
+                                        </option>
+                                    )
+                                })
+                            }
+                            </select>
+                        </div>
+                    {/* } */}
                     </>
                 }
                 <div className="joinCreateContainer">
@@ -60,7 +82,11 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                         placeholder={'Enter community name'}
                         inputVariable={'name'}
                         refetchQueries={[{query: MY_COMMUNITIES}]}
-                        onSuccess={(result) => selectCommunity(result.data.addCommunity.community.id)}
+                        onSuccess={(result) => {
+                            let communityId = result.data.addCommunity.community.id;
+                            setSelectedCommunity(communityId);
+                            selectCommunity(communityId);
+                        }}
                     />
                     <MutationInput 
                         mutationType={JOIN_COMMUNITY}
