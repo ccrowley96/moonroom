@@ -8,7 +8,9 @@ import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
 import AreYouSure from '../AreYouSure/AreYouSure';
 import MutationInput from '../../../MutationInput/MutationInput';
-import './RoomDetailsModal.scss';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./RoomDetailsModal.module.scss'));
 
 const RoomDetailsModal = ({ activeCommunity }) => {
 
@@ -64,19 +66,19 @@ const RoomDetailsModal = ({ activeCommunity }) => {
         <Modal title={room ? room.name : 'All'}>
             {
                 room &&
-                <div className='activeRoomDetails'>
-                    <div className="modalSection">
-                        <div className="sectionLabel">Created</div>
-                        <div className="sectionValue">{new Date(Number(room.createdAt)).toDateString()}</div>
+                <div className={cx('activeRoomDetails')}>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>Created</div>
+                        <div className={cx('_sectionValue')}>{new Date(Number(room.createdAt)).toDateString()}</div>
                     </div>
                 </div>
             }
             <div className = 'selectCreateRoom'>
                 { activeCommunity.rooms && activeCommunity.rooms.length > 0 &&
-                    <div className="modalSection">
-                        <div className="sectionLabel">Select room</div>
-                        <div className="rooms">
-                            <select className='_select' value={selectedRoom} onChange={(e) => {
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>Select room</div>
+                        <div className={cx('rooms')}>
+                            <select className={cx('_select')} value={selectedRoom} onChange={(e) => {
                                 let val = e.target.value;
                                 setSelectedRoom(val);
                                 activeRoomIdVar(val === 'all' ? null : val);
@@ -104,7 +106,7 @@ const RoomDetailsModal = ({ activeCommunity }) => {
                         </div>
                     </div>
                 }
-                <div className="modalSection">
+                <div className={cx('_modalSection')}>
                     <MutationInput 
                         mutationType={CREATE_ROOM}
                         cacheUpdate={(cache, data) => {
@@ -145,7 +147,7 @@ const RoomDetailsModal = ({ activeCommunity }) => {
                 </div>
             </div>
             { room &&
-                <div className="modalSection">
+                <div className={cx('_modalSection')}>
                     <AreYouSure 
                         mutation={() => deleteRoom({variables: {communityId: activeCommunity.id, roomId: activeRoomId}})}
                         activeCommunity={activeCommunity}

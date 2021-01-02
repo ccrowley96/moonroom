@@ -5,7 +5,8 @@ import { JOIN_COMMUNITY, CREATE_COMMUNITY, MY_COMMUNITIES } from '../../queries/
 import MutationInput from '../MutationInput/MutationInput';
 import { activeCommunityIdVar, activeRoomIdVar  } from '../../cache';
 
-import './CommunitySelector.scss'
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./CommunitySelector.module.scss'))
 
 const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity}) => {
     const { appDispatch } = useAppState();
@@ -37,24 +38,24 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
     }
 
     return (
-        <div className='panelBlocker' onClick={(e) => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null})}>
-            <div className="communitySelector _base-slideRight" onClick={(e) => e.stopPropagation()}>
+        <div className={cx('panelBlocker')} onClick={(e) => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null})}>
+            <div className={cx('communitySelector', '_base-slideRight')} onClick={(e) => e.stopPropagation()}>
                 {communities && communities.length > 0 &&
                     <>
                         { activeCommunity ? 
-                            <div className="panelHeader">
-                                <div className='activeCommunity'>
-                                        <h3 className="communityName">Community: {activeCommunity.name}</h3>
-                                        <p className="communityCode">Join code: {activeCommunity.code}</p>
+                            <div className={cx('_modalSection')}>
+                                <div className={cx('activeCommunity')}>
+                                        <h3 className={cx('communityName')}>Community: {activeCommunity.name}</h3>
+                                        <p className={cx('communityCode')}>Join code: {activeCommunity.code}</p>
                                 </div>
                             </div>
                             : null
                         }
-
-                    <div className='sectionLabel'>{activeCommunity ? 'My communities' : 'Select community'}</div>
-                    {/* { activeCommunity && */}
-                        <div className='communityOptions'>
-                            <select className='_select' value={selectedCommunity} onChange={handleCommunitySelectChange}>
+                        <div className={cx('_modalSection')}>
+                            <div className={cx('_sectionLabel')}>{
+                                activeCommunity ? 'My communities' : 'Select community'}
+                            </div>
+                            <select className={cx('_select')} value={selectedCommunity} onChange={handleCommunitySelectChange}>
                                 {/* Default option */}
                                 <option key={'default'} value={'none'} disabled hidden>
                                     Select community
@@ -70,10 +71,9 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                             }
                             </select>
                         </div>
-                    {/* } */}
                     </>
                 }
-                <div className="joinCreateContainer">
+                <div className={cx('_modalSection')}>
                     <MutationInput 
                         mutationType={CREATE_COMMUNITY}
                         dataTitle={'Create community'}

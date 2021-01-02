@@ -5,7 +5,9 @@ import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
-import './CommunityDetailsModal.scss';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./CommunityDetailsModal.module.scss'));
 
 const CommunityDetailsModal = ({activeCommunity}) => {
 
@@ -45,28 +47,28 @@ const CommunityDetailsModal = ({activeCommunity}) => {
     
     return(
         <Modal title={activeCommunity.name}>
-            <div className="modalSection">
-                <div className="sectionLabel">Community code</div>
-                <div className="sectionValue">{activeCommunity.code}</div>
+            <div className={cx('m_odalSection')}>
+                <div className={cx('_sectionLabel')}>Community code</div>
+                <div className={cx('_sectionValue')}>{activeCommunity.code}</div>
             </div>
             {
                 activeCommunity.members.length > 0 &&
-                <div className="modalSection">
-                    <div className="sectionLabel">Members</div>
+                <div className={cx('_modalSection')}>
+                    <div className={cx('_sectionLabel')}>Members</div>
                     {activeCommunity.members.map((member, idx) => {
-                        return <div key={idx} className="sectionValue">{member.name}</div>
+                        return <div key={idx} className={cx('sectionValue')}>{member.name}</div>
                     })}
                 </div>
             }
-            <div className="modalSection">
-                <div className="sectionLabel">Admins</div>
+            <div className={cx('_modalSection')}>
+                <div className={cx('_sectionLabel')}>Admins</div>
                 {activeCommunity.admins.map((admin, idx) => {
-                    return <div key={idx} className="sectionValue">{admin.name}</div>
+                    return <div key={idx} className={cx('sectionValue')}>{admin.name}</div>
                 })}
             </div>
-            <div className="modalSection">
-                <div className="sectionLabel">Created</div>
-                <div className="sectionValue">{new Date(Number(activeCommunity.createdAt)).toDateString()}</div>
+            <div className={cx('_modalSection')}>
+                <div className={cx('_sectionLabel')}>Created</div>
+                <div className={cx('_sectionValue')}>{new Date(Number(activeCommunity.createdAt)).toDateString()}</div>
             </div>
             
             <AreYouSure 

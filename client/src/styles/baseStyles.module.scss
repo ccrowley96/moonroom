@@ -51,6 +51,19 @@
   }
 }
 
+._modalSection{
+  margin-bottom: 16px;
+}
+
+._sectionLabel{
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+._sectionValue{
+  margin: 8px 0px;
+}
+
 ._success{
   color: var(--color-label-success-text)
 }

@@ -4,9 +4,11 @@ import Routes from './components/Routes/Routes';
 import { ApolloProvider, createHttpLink, ApolloClient } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { cache } from './cache';
-import './App.scss';
 import { ProvideAppState } from './hooks/provideAppState';
 import { ProvideTheme } from './hooks/provideTheme';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./App.module.scss'));
 
 export const App = () => {
   return (
@@ -14,7 +16,7 @@ export const App = () => {
       <ApolloProvider client={client}>
         <ProvideTheme>
           <ProvideAppState>
-            <div className="app">
+            <div className={cx('app')}>
               <Routes/>
             </div>
           </ProvideAppState>

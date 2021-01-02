@@ -5,8 +5,10 @@ import {
 } from "react-router-dom";
 import { useAuth } from '../../hooks/auth';
 import { GoogleLogin } from 'react-google-login';
-import './Login.scss';
 import { useTheme } from "../../hooks/provideTheme";
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./Login.module.scss'))
 
 export default function Login(){
 
@@ -38,11 +40,11 @@ export default function Login(){
     }
 
     return(
-        <div className="jumboContainer">
-            <div className="jumbo">
+        <div className={cx('jumboContainer')}>
+            <div className={cx('jumbo')}>
                 <h2>OurStuff</h2>
                 <h4><i>Start sharing some stuff</i></h4>
-                <div className="googleLogin">
+                <div className={cx('googleLogin')}>
                     <GoogleLogin
                         theme={theme}
                         clientId="1064969668600-0j2jr5n6e2hppq6nki2qaal905sj2qea.apps.googleusercontent.com"

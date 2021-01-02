@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
-import './MutationInput.scss';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./MutationInput.module.scss'));
 
 
 const MutationInput = ({mutationType, cacheUpdate, dataTitle, dataKey, maxLength, placeholder, inputVariable, customVariables, refetchQueries, onSuccess}) => {
@@ -66,24 +68,24 @@ const MutationInput = ({mutationType, cacheUpdate, dataTitle, dataKey, maxLength
     }
 
     return(
-        <div className='mutationInputContainer'>
-            <div className='section'>
-                <div className='sectionLabel'>{dataTitle}</div>
-                <input 
-                    maxLength={maxLength} 
-                    value={text} 
-                    onChange={(e) => handleTextChange(e)} 
-                    placeholder={placeholder}
-                    onKeyPress={(e) => enterPressed(e, handleSubmit)}
-                />
-                <button className="_btn submitButton" onClick={() => handleSubmit()}>{dataTitle}</button>
+        <div className={cx('_modalSection')}>
+            <div className={cx('_sectionLabel')}>
+                {dataTitle}
             </div>
-            <div className="info">
+            <input 
+                maxLength={maxLength} 
+                value={text} 
+                onChange={(e) => handleTextChange(e)} 
+                placeholder={placeholder}
+                onKeyPress={(e) => enterPressed(e, handleSubmit)}
+            />
+            <button className={cx('_btn', 'submitButton')} onClick={() => handleSubmit()}>{dataTitle}</button>
+            <div className={cx('info')}>
                 { errorState &&
-                    <div className='error'>{errorState}</div>
+                    <div className={cx('error')}>{errorState}</div>
                 }
                 { message &&
-                    <div className='success'>{message}</div>
+                    <div className={cx('success')}>{message}</div>
                 }
             </div>
         </div>

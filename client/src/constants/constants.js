@@ -12,5 +12,6 @@ export const actionTypes = {
 export const modalTypes = {
     COMMUNITY_SELECTOR: 'COMMUNITY_SELECTOR',
     COMMUNITY_DETAILS: 'COMMUNITY_DETAILS',
-    ROOM_DETAILS: 'ROOM_DETAILS'
+    ROOM_DETAILS: 'ROOM_DETAILS',
+    NEW_POST: 'NEW_POST'
 }

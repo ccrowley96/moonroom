@@ -2,12 +2,15 @@ import React from 'react';
 import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
-import './Home.scss'
 import { activeCommunityIdVar } from '../../cache'
 import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
 import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal/RoomDetailsModal';
+import NewPostModal from '../Modal/Modals/NewPostModal/NewPostModal';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./Home.module.scss'))
 
 export default function Home(){
     
@@ -37,7 +40,7 @@ export default function Home(){
     })
 
     return(
-        <div className='homeWrapper'>
+        <div className={cx('homeWrapper')}>
             {/* Render modals */}
             { activeModal === modalTypes.COMMUNITY_SELECTOR &&
                 <CommunitySelector refetchActiveCommunity={() => activeCommunityId && refetchActiveCommunity()} communities={communitiesData?.myCommunities} activeCommunity={activeCommunityData?.community}/>
@@ -47,6 +50,9 @@ export default function Home(){
             }
             { activeModal === modalTypes.ROOM_DETAILS &&
                 <RoomDetailsModal activeCommunity={activeCommunityData?.community} />
+            }
+            { activeModal === modalTypes.NEW_POST &&
+                <NewPostModal activeCommunity={activeCommunityData?.community} />
             }
         </div>
     );

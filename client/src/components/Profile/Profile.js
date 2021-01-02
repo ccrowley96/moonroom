@@ -2,9 +2,11 @@ import React from 'react';
 import { USER_QUERY } from '../../queries/profile';
 import { useQuery } from '@apollo/client';
 import Logout from '../Logout/Logout';
-import './Profile.scss'
 import { useTheme } from '../../hooks/provideTheme';
 import { useHistory } from 'react-router-dom';
+
+import classNames from 'classnames/bind';
+const cx = classNames.bind(require('./Profile.module.scss'));
 
 export default function Profile(){
     
@@ -19,11 +21,11 @@ export default function Profile(){
         let { me } = data;
         let registeredDate = new Date(Number(me.registered));
         return(
-            <div className="profileWrapper">
-                <button className='homeLink _btn' onClick={() => history.push('/home')}>
+            <div className={cx('profileWrapper')}>
+                <button className={cx('homeLink', '_btn')} onClick={() => history.push('/home')}>
                     Home
                 </button>
-                <img className="profilePicture" style={{padding: "10px"}} alt="profile" src={me.picture} />
+                <img className={cx('profilePicture')} style={{padding: "10px"}} alt="profile" src={me.picture} />
                 <table>
                     <tbody>
                         <tr>
@@ -45,11 +47,11 @@ export default function Profile(){
                     </tbody>
                 </table>
 
-                <div className='profileBtn'>
-                    <button className="_btn" onClick={() => toggleTheme()}>Change theme</button>
+                <div className={cx('profileBtn')}>
+                    <button className={cx('_btn')} onClick={() => toggleTheme()}>Change theme</button>
                 </div>
                 
-                <div className='profileBtn'>
+                <div className={cx('profileBtn')}>
                     <Logout/>
                 </div>
             </div>
