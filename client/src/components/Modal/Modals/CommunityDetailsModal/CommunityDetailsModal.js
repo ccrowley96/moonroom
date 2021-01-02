@@ -2,14 +2,53 @@ import React from 'react';
 import Modal from '../../Modal';
 import { useReactiveVar, useMutation } from '@apollo/client';
 import { activeCommunityVar } from '../../../../cache';
-import { DELETE_COMMUNITY } from '../../../../queries/community';
+import { actionTypes } from '../../../../constants/constants';
+import { useAppState } from '../../../../hooks/provideAppState';
+import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
 import './CommunityDetailsModal.scss';
 
 const CommunityDetailsModal = () => {
 
-    const activeCommunity = useReactiveVar(activeCommunityVar)
-    const [ deleteCommunity ] = useMutation(DELETE_COMMUNITY);
+    const activeCommunity = useReactiveVar(activeCommunityVar);
+    const { appDispatch } = useAppState();
+
+    const [ deleteCommunity ] = useMutation(DELETE_COMMUNITY, {
+        update(cache, data){
+            console.log(cache, data);
+
+            const communityId = activeCommunity.id;
+            const queryVars = { communityId };
+
+            // Delete active community from cache
+            cache.writeQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: queryVars,
+                data: {community: null}
+            })
+
+            // Close modal
+            appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
+
+            // Update reactive var
+            activeCommunityVar(null);
+
+            // Read my communities
+            let communitiesData = cache.readQuery({
+                query: MY_COMMUNITIES,
+                variables: queryVars
+            })
+
+            // Filter out deleted community
+            const newCommunities = communitiesData.myCommunities.filter(community => community.id !== communityId);
+
+            cache.writeQuery({
+                query: MY_COMMUNITIES, 
+                variables: queryVars,
+                data: { myCommunities: newCommunities }
+            })
+        }
+    });
     
     return(
         <Modal title={activeCommunity.name}>
@@ -39,6 +78,7 @@ const CommunityDetailsModal = () => {
             
             <AreYouSure 
                 mutation={() => deleteCommunity({variables: {communityId: activeCommunity.id}})}
+                activeCommunity={activeCommunity}
                 dataKey={'deleteCommunity'}
                 successMessage={'Community deleted'}
                 failedMessage={'Community could not be deleted'}

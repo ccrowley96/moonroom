@@ -36,13 +36,37 @@ const postSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: false
-    }
+    },
+    tags: [{
+        type: String,
+        required: false
+    }]
 })
 
-postSchema.pre('remove', () => {
-    // Remove post ref from Room
+// @ts-ignore
+postSchema.pre('remove', { document: true }, async function(){
+    
+    const post = this;
 
-    // Remove post ref from User
+    // Remove post ref from User posts
+    await post.model('User').update({
+        _id: post.author
+    },
+    {
+        $pull: {
+            posts: post._id
+        }
+    }, {multi: true})
+
+    // Remove post ref from Community posts
+    await post.model('Community').update({
+        _id: post.community
+    },
+    {
+        $pull: {
+            posts: post._id
+        }
+    }, {multi: true})
 })
 
 export default mongoose.model('Post', postSchema);

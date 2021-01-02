@@ -5,14 +5,14 @@ import { useReactiveVar } from '@apollo/client';
 import './TopBar.scss';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes, modalTypes } from '../../constants/constants';
-import { activeCommunityVar, activeRoomVar} from '../../cache';
+import { activeCommunityVar, activeRoomIdVar} from '../../cache';
 
 const TopBar = () => {
     const {session: {user: {picture}}} = useAuth();
     const { appDispatch } = useAppState();
 
-    const activeCommunity = useReactiveVar(activeCommunityVar)
-    const activeRoom = useReactiveVar(activeRoomVar)
+    const activeCommunity = useReactiveVar(activeCommunityVar);
+    const activeRoomId = useReactiveVar(activeRoomIdVar);
 
     return(
         <div className='topBar'>
@@ -24,12 +24,18 @@ const TopBar = () => {
                 </div>
             </div>
             <div className='title navItem'>
-                <div className='communityName' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.COMMUNITY_DETAILS})}>
-                    {activeCommunity && activeCommunity.name}
-                </div>
-                <div className='roomName' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.ROOM_DETAILS})}>
-                    {activeRoom && `| ${activeRoom.name}`}
-                </div>
+                {
+                    activeCommunity && 
+                    <>
+                        <div className='communityName' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.COMMUNITY_DETAILS})}>
+                            {activeCommunity.name}
+                        </div>
+                        <div className='roomNameBtn' onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.ROOM_DETAILS})}>
+                            {activeRoomId ? activeCommunity.rooms.find(room => room.id === activeRoomId).name : 'All'}
+                        </div>
+                    </>
+                }
+               
             </div>
             <div className='profile navItem'>
                 <Link className='imgWrapper' to={'/profile'}>

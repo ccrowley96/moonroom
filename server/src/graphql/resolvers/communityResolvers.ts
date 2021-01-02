@@ -8,4 +8,7 @@ export default {
     rooms: async(community) => {
         return (await community.populate('rooms').execPopulate()).rooms
     },
+    posts: async(community) => {
+        return (await community.populate('posts').execPopulate()).posts
+    }
 }

@@ -29,20 +29,6 @@ export const GET_ACTIVE_ROOM = gql`
             name
             description
             createdAt
-            posts{
-                id
-                title
-                author{
-                    name
-                }
-                community{
-                    name
-                }
-                link
-                date
-                body
-                rating
-            }
         }
     }
 `;

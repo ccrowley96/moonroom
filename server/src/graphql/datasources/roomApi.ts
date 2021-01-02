@@ -91,7 +91,7 @@ export default class roomApi<TData> extends MongoDataSource<TData>{
             // Ensure room exists
             let roomIds = community.rooms.map(room => String(room._id))
             if(roomIds.indexOf(roomId) === -1){
-                throw new ApolloError('Room does not exist!', errorCodes.roomNotFound)
+                throw new ApolloError('Failed deletion. Room does not exist!', errorCodes.roomNotFound)
             }
 
             // Delete room

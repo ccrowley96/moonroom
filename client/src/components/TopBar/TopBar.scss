@@ -14,8 +14,11 @@
     cursor: pointer;
 }
 
-.roomName{
+.roomNameBtn{
     cursor: pointer;
+    margin-left: 4px;
+    border-left: 1px solid var(--color-text-primary);
+    padding-left: 4px;
 }
 
 .communityBurger{

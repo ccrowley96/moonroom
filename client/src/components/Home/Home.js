@@ -3,12 +3,11 @@ import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
 import './Home.scss'
-import { GET_ACTIVE_ROOM } from '../../queries/room';
-import {activeCommunityVar, activeRoomVar, activeCommunityIdVar, activeRoomIdVar} from '../../cache'
+import { activeCommunityVar, activeCommunityIdVar, activeRoomIdVar } from '../../cache'
 import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
-import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal.js/RoomDetailsModal';
+import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal/RoomDetailsModal';
 
 export default function Home(){
     
@@ -32,35 +31,27 @@ export default function Home(){
         variables: {
             communityId: activeCommunityId
         }, 
+        errorPolicy: 'all',
         skip: !activeCommunityId, 
-        pollInterval: 5000,
-        onCompleted: (data) => activeCommunityVar(data.community)
-    })
-
-    // Query active room using activeRoomId and poll for changes every 500 ms
-    const {
-        data: activeRoomData,
-    } = useQuery(GET_ACTIVE_ROOM, {
-        variables: {
-            communityId: activeCommunityId, 
-            roomId: activeRoomId
-        }, 
-        skip: !activeRoomId,
-        onCompleted: (data) => activeRoomVar(data.room),
-        pollInterval: 2000 // Poll for changes every x msecs
+        // pollInterval: 5000,
+        onCompleted: (data) => {
+            console.log('completed active community refetch')
+            activeCommunityVar(data.community)
+        },
+        fetchPolicy: 'cache-and-network'
     })
 
     return(
         <div className='homeWrapper'>
             {/* Render modals */}
             { activeModal === modalTypes.COMMUNITY_SELECTOR &&
-                <CommunitySelector refetchActiveCommunity={() => activeCommunityId && refetchActiveCommunity()} communities={communitiesData?.myCommunities} activeCommunity={activeCommunityData?.community} activeRoom={activeRoomData?.room}/>
+                <CommunitySelector refetchActiveCommunity={() => activeCommunityId && refetchActiveCommunity()} communities={communitiesData?.myCommunities} activeCommunity={activeCommunityData?.community}/>
             }
             { activeModal === modalTypes.COMMUNITY_DETAILS &&
                 <CommunityDetailsModal />
             }
             { activeModal === modalTypes.ROOM_DETAILS &&
-                <RoomDetailsModal />
+                <RoomDetailsModal activeCommunity={activeCommunityData?.community} />
             }
         </div>
     );

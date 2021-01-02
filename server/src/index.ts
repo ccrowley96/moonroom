@@ -5,7 +5,6 @@ import path from 'path';
 import { Community, connectDB, Post, Room, User } from './db/index';
 import morgan from 'morgan';
 import authApi from './routes/auth';
-import { authenticateToken } from './middleware/authJwt';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers/resolvers';
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';

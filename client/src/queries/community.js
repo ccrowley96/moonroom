@@ -42,6 +42,24 @@ export const GET_ACTIVE_COMMUNITY = gql`
                 name
                 id
             }
+            posts{
+                id
+                title
+                author{
+                    name
+                }
+                community{
+                    name
+                }
+                room {
+                    name
+                }
+                link
+                date
+                body
+                rating
+                tags
+            }
             description
             createdAt
         }

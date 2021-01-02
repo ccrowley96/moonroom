@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes } from '../../constants/constants';
-import { JOIN_COMMUNITY, CREATE_COMMUNITY, MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community';
-import { CREATE_ROOM } from '../../queries/room';
+import { JOIN_COMMUNITY, CREATE_COMMUNITY, MY_COMMUNITIES } from '../../queries/community';
 import MutationInput from '../MutationInput/MutationInput';
-import { activeCommunityIdVar, activeRoomIdVar, activeRoomVar } from '../../cache';
+import { activeCommunityIdVar, activeRoomIdVar  } from '../../cache';
 
 import './CommunitySelector.scss'
 
-const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity, activeRoom}) => {
+const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity}) => {
     const { appDispatch } = useAppState();
 
     // Refetch active community on mount (ensures that up to date rooms will be displayed)
@@ -25,37 +24,7 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                             <div className="panelHeader">
                                 <div className='activeCommunity'>
                                         <h3 className="communityName">Community: {activeCommunity.name}</h3>
-                                        <p className="roomName">Room: {activeRoom ? activeRoom.name : null}</p>
                                         <p className="communityCode">Join code: {activeCommunity.code}</p>
-                                        {   activeCommunity.rooms && activeCommunity.rooms.length > 0 &&
-                                            <>
-                                                <h3>Rooms</h3>
-                                                <div className="rooms">
-                                                    {
-                                                        activeCommunity.rooms.map((room, idx) => {
-                                                            return(
-                                                                <button className="room _btn" key={idx} onClick={() => activeRoomIdVar(room.id)}>
-                                                                    {room.name}
-                                                                </button>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                            </>
-                                        }
-                                            
-                                </div>
-                                <div className="createRoomContainer">
-                                    <MutationInput 
-                                        mutationType={CREATE_ROOM}
-                                        dataTitle={'Create room'}
-                                        dataKey={'addRoom'}
-                                        maxLength={16}
-                                        placeholder={'Enter room name'}
-                                        inputVariable={'name'}
-                                        customVariables={[{communityId: activeCommunity.id}]}
-                                        refetchQueries={[{query: GET_ACTIVE_COMMUNITY, variables: {communityId: activeCommunity.id}}]}
-                                    />
                                 </div>
                             </div>
                             : null
@@ -68,7 +37,6 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                                 <button className="communityOption _btn" key={idx} onClick={() => {
                                     activeCommunityIdVar(community.id)
                                     activeRoomIdVar(null);
-                                    activeRoomVar(null);
                                 }}>
                                     {community.name}
                                 </button>

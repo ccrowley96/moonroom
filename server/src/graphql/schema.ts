@@ -9,6 +9,7 @@ const typeDefs = gql`
       family_name: String
       picture: String
       communities: [Community]
+      posts: [Post]
       registered: String
    }
 
@@ -22,6 +23,7 @@ const typeDefs = gql`
       date: String
       body: String
       rating: Float
+      tags: [String]
    }
 
    type Community{
@@ -32,6 +34,7 @@ const typeDefs = gql`
       admins: [User]
       members: [User]
       rooms: [Room]
+      posts: [Post]
       description: String
       createdAt: String
    }
@@ -39,7 +42,6 @@ const typeDefs = gql`
    type Room{
       id: ID!
       name: String
-      posts: [Post]
       community: Community
       description: String
       createdAt: String

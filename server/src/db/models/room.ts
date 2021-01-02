@@ -5,11 +5,6 @@ const roomSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    posts: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Post',
-        required: false
-    }],
     community: {
         type: mongoose.Types.ObjectId,
         ref: 'Community',
@@ -27,10 +22,10 @@ const roomSchema = new mongoose.Schema({
 
 // @ts-ignore
 roomSchema.pre('deleteOne', { document: true }, async function() {
-    // remove room ref from Community
+    
     const room = this;
 
-    // Remove community ID from users with ID in their communities ref array
+    // remove room ref from Community
     await room.model('Community').update({
         _id: room.community
     },
@@ -40,8 +35,15 @@ roomSchema.pre('deleteOne', { document: true }, async function() {
         }
     }, {multi: true})
 
-    // remove all posts with room ref
-    await room.model('Post').deleteMany({room: room._id})
+    // remove room ref from all posts that reference it
+    await room.model('Post').update({
+        room: room._id
+    },
+    {
+        $unset: {
+            room: ""
+        }
+    }, {multi: true})
 
 })
 

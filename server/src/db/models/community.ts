@@ -29,6 +29,11 @@ const communitySchema = new mongoose.Schema({
         ref: 'Room',
         required: false
     }],
+    posts: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Post',
+        required: false
+    }],
     description: {
         type: String,
         required: false
