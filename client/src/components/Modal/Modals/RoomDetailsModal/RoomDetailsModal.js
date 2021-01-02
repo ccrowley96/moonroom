@@ -3,7 +3,7 @@ import Modal from '../../Modal';
 import { useReactiveVar, useMutation, useQuery } from '@apollo/client';
 import { activeRoomIdVar } from '../../../../cache';
 import { DELETE_ROOM, GET_ACTIVE_ROOM , CREATE_ROOM} from '../../../../queries/room';
-import { GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community'
+import { GET_ACTIVE_COMMUNITY } from '../../../../queries/community'
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
 import AreYouSure from '../AreYouSure/AreYouSure';

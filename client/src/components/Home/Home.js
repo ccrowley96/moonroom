@@ -3,7 +3,7 @@ import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
 import './Home.scss'
-import { activeCommunityIdVar, activeRoomIdVar } from '../../cache'
+import { activeCommunityIdVar } from '../../cache'
 import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
@@ -23,7 +23,6 @@ export default function Home(){
 
 
     const activeCommunityId = useReactiveVar(activeCommunityIdVar)
-    const activeRoomId = useReactiveVar(activeRoomIdVar)
 
     // Query active community using activeCommunityId
     const {

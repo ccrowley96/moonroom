@@ -19,5 +19,5 @@ export const cache = new InMemoryCache({
     }
 })
 
-export const activeCommunityIdVar = makeVar(null);
+export const activeCommunityIdVar = makeVar(localStorage.getItem('activeCommunityId'));
 export const activeRoomIdVar = makeVar(null);

@@ -13,7 +13,14 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
     // Refetch active community on mount (ensures that up to date rooms will be displayed)
     useEffect(() => {
         refetchActiveCommunity();
+        // eslint-disable-next-line
     }, [])
+
+    const selectCommunity = (communityId) => {
+        localStorage.setItem('activeCommunityId', communityId)
+        activeCommunityIdVar(communityId)
+        activeRoomIdVar(null);
+    }
 
     return (
         <div className='panelBlocker' onClick={(e) => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null})}>
@@ -35,8 +42,7 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                         communities.map((community, idx) => {
                             return(
                                 <button className="communityOption _btn" key={idx} onClick={() => {
-                                    activeCommunityIdVar(community.id)
-                                    activeRoomIdVar(null);
+                                    selectCommunity(community.id);
                                 }}>
                                     {community.name}
                                 </button>
@@ -54,6 +60,7 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                         placeholder={'Enter community name'}
                         inputVariable={'name'}
                         refetchQueries={[{query: MY_COMMUNITIES}]}
+                        onSuccess={(result) => selectCommunity(result.data.addCommunity.community.id)}
                     />
                     <MutationInput 
                         mutationType={JOIN_COMMUNITY}

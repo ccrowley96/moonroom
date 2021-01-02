@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect} from 'react';
+import React, { useState } from 'react';
 import { USER_QUERY } from '../../../../queries/profile';
 import { useQuery } from '@apollo/client';
 import './AreYouSure.scss';

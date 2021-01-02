@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '../../Modal';
-import { useReactiveVar, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community';
