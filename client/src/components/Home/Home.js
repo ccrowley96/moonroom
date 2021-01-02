@@ -3,7 +3,7 @@ import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
 import './Home.scss'
-import { activeCommunityVar, activeCommunityIdVar, activeRoomIdVar } from '../../cache'
+import { activeCommunityIdVar, activeRoomIdVar } from '../../cache'
 import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
@@ -17,7 +17,9 @@ export default function Home(){
     // Grab list of all communities
     const { 
         data: communitiesData
-    } = useQuery(MY_COMMUNITIES, {notifyOnNetworkStatusChange: true, fetchPolicy: 'cache-and-network'});
+    } = useQuery(MY_COMMUNITIES, {
+        notifyOnNetworkStatusChange: true
+    });
 
 
     const activeCommunityId = useReactiveVar(activeCommunityIdVar)
@@ -33,12 +35,6 @@ export default function Home(){
         }, 
         errorPolicy: 'all',
         skip: !activeCommunityId, 
-        // pollInterval: 5000,
-        onCompleted: (data) => {
-            console.log('completed active community refetch')
-            activeCommunityVar(data.community)
-        },
-        fetchPolicy: 'cache-and-network'
     })
 
     return(
@@ -48,7 +44,7 @@ export default function Home(){
                 <CommunitySelector refetchActiveCommunity={() => activeCommunityId && refetchActiveCommunity()} communities={communitiesData?.myCommunities} activeCommunity={activeCommunityData?.community}/>
             }
             { activeModal === modalTypes.COMMUNITY_DETAILS &&
-                <CommunityDetailsModal />
+                <CommunityDetailsModal activeCommunity={activeCommunityData?.community}/>
             }
             { activeModal === modalTypes.ROOM_DETAILS &&
                 <RoomDetailsModal activeCommunity={activeCommunityData?.community} />

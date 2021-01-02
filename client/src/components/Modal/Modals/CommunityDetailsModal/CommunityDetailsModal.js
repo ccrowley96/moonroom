@@ -1,22 +1,18 @@
 import React from 'react';
 import Modal from '../../Modal';
 import { useReactiveVar, useMutation } from '@apollo/client';
-import { activeCommunityVar } from '../../../../cache';
 import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
 import './CommunityDetailsModal.scss';
 
-const CommunityDetailsModal = () => {
+const CommunityDetailsModal = ({activeCommunity}) => {
 
-    const activeCommunity = useReactiveVar(activeCommunityVar);
     const { appDispatch } = useAppState();
 
     const [ deleteCommunity ] = useMutation(DELETE_COMMUNITY, {
         update(cache, data){
-            console.log(cache, data);
-
             const communityId = activeCommunity.id;
             const queryVars = { communityId };
 
@@ -29,9 +25,6 @@ const CommunityDetailsModal = () => {
 
             // Close modal
             appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
-
-            // Update reactive var
-            activeCommunityVar(null);
 
             // Read my communities
             let communitiesData = cache.readQuery({

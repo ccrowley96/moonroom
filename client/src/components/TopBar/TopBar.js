@@ -1,18 +1,28 @@
 import React from 'react';
 import { useAuth } from '../../hooks/auth';
 import { Link } from "react-router-dom";
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useQuery } from '@apollo/client';
 import './TopBar.scss';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes, modalTypes } from '../../constants/constants';
-import { activeCommunityVar, activeRoomIdVar} from '../../cache';
+import { activeCommunityIdVar, activeRoomIdVar} from '../../cache';
+import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
 
 const TopBar = () => {
     const {session: {user: {picture}}} = useAuth();
     const { appDispatch } = useAppState();
 
-    const activeCommunity = useReactiveVar(activeCommunityVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
+    const activeCommunityId = useReactiveVar(activeCommunityIdVar);
+
+    const {
+        data: activeCommunityData
+    } = useQuery(GET_ACTIVE_COMMUNITY, {
+        variables: { communityId: activeCommunityId }, 
+        skip: !activeCommunityId
+    })
+
+    const activeCommunity = activeCommunityData?.community;
 
     return(
         <div className='topBar'>

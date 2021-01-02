@@ -3,10 +3,10 @@ import { useMutation } from '@apollo/client';
 import './MutationInput.scss';
 
 
-const MutationInput = ({mutationType, dataTitle, dataKey, maxLength, placeholder, inputVariable, customVariables, refetchQueries, onSuccess}) => {
+const MutationInput = ({mutationType, cacheUpdate, dataTitle, dataKey, maxLength, placeholder, inputVariable, customVariables, refetchQueries, onSuccess}) => {
     const [text, setText] = useState('');
     const [errorState, setError] = useState(null);
-    const [mutation] = useMutation(mutationType);
+    const [mutation] = useMutation(mutationType, {...(cacheUpdate && {update: cacheUpdate})});
     const [message, setMessage] = useState(null);
     const [shouldDisplayOnTimeout, setShouldDisplayOnTimeout] = useState(false);
 
@@ -68,7 +68,7 @@ const MutationInput = ({mutationType, dataTitle, dataKey, maxLength, placeholder
     return(
         <div className='mutationInputContainer'>
             <div className='section'>
-                <h3>{dataTitle}</h3>
+                <div className='sectionLabel'>{dataTitle}</div>
                 <input 
                     maxLength={maxLength} 
                     value={text} 

@@ -1,7 +1,6 @@
 ._btn{
     color: var(--color-btn-text);
     background-color: var(--color-btn-bg);
-    border-color: var(--color-btn-border);
     box-shadow: var(--color-btn-shadow),var(--color-btn-inset-shadow);
     transition: .2s cubic-bezier(.3,0,.5,1);
     transition-property: color,background-color,border-color;
@@ -10,15 +9,31 @@
     font-size: 14px;
     font-weight: 500;
     border: 1px solid;
+    border-color: var(--color-btn-border);
+
     line-height: 20px;
     white-space: nowrap;
     vertical-align: middle;
     cursor: pointer;
     &:hover{
         background-color: var(--color-btn-hover-bg);
-        border-color: var(--color-btn-hover-border);
+        border-color: var(--color-select-menu-backdrop-bg);
         transition-duration: .1s;
     }
+}
+
+._select{
+  padding: 5px 8px;
+  border-radius: 6px;
+  color: var(--color-btn-text);
+  background-color: var(--color-btn-bg);
+  border-color: var(--color-btn-border) !important;
+  box-shadow: var(--color-btn-shadow),var(--color-btn-inset-shadow);
+  transition: .2s cubic-bezier(.3,0,.5,1);
+  transition-property: color,background-color,border-color;
+  &::after{
+    padding-right: 8px;
+  }
 }
 
 ._btn-danger{

@@ -30,7 +30,7 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                             : null
                         }
 
-                    <h3>{activeCommunity ? 'My communities' : 'Select community'}</h3>
+                    <div className='sectionLabel'>{activeCommunity ? 'My communities' : 'Select community'}</div>
                     {
                         communities.map((community, idx) => {
                             return(

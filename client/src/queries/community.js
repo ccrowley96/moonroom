@@ -1,11 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const GET_ACTIVE_COMMUNITY_ID_CLIENT = gql`
-    query getActiveCommunityId{
-        activeCommunityId @client
-    }
-`;
-
 export const DELETE_COMMUNITY = gql`
     mutation deleteCommunity($communityId: ID!){
         deleteCommunity(communityId: $communityId){
@@ -13,12 +7,6 @@ export const DELETE_COMMUNITY = gql`
             success
             message
         }
-    }
-`
-
-export const GET_ACTIVE_COMMUNITY_CLIENT = gql`
-    query getActiveCommunity{
-        activeCommunity @client
     }
 `
 

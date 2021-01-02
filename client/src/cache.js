@@ -13,11 +13,6 @@ export const cache = new InMemoryCache({
                     read() {
                         return activeRoomIdVar();
                     }
-                },
-                activeCommunity: {
-                    read() {
-                        return activeCommunityVar();
-                    }
                 }
             }
         }
@@ -26,4 +21,3 @@ export const cache = new InMemoryCache({
 
 export const activeCommunityIdVar = makeVar(null);
 export const activeRoomIdVar = makeVar(null);
-export const activeCommunityVar = makeVar(null);

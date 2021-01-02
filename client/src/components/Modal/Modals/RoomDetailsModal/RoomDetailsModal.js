@@ -6,31 +6,48 @@ import { DELETE_ROOM, GET_ACTIVE_ROOM , CREATE_ROOM} from '../../../../queries/r
 import { GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community'
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
-
 import AreYouSure from '../AreYouSure/AreYouSure';
 import MutationInput from '../../../MutationInput/MutationInput';
 import './RoomDetailsModal.scss';
 
-const RoomDetailsModal = ({activeCommunity}) => {
+const RoomDetailsModal = ({ activeCommunity }) => {
 
     const activeRoomId = useReactiveVar(activeRoomIdVar)
     const { appDispatch } = useAppState();
 
     const [ deleteRoom ] = useMutation(DELETE_ROOM, {
-        onCompleted: () => {
-             // Close modal
-             appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
-             // Update reactive room ID var
-             activeRoomIdVar(null);
+        update(cache){
+            const queryVars = { communityId: activeCommunity.id };
+            
+            // Read active community
+            let activeCommunityData = cache.readQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: queryVars
+            })
+
+            // Write new community and filter out deleted room
+            cache.writeQuery({
+                query: GET_ACTIVE_COMMUNITY, 
+                variables: queryVars,
+                data: { 
+                    community: {
+                        ...activeCommunityData.community,
+                        rooms: activeCommunityData.community.rooms.filter(room => room.id !== activeRoomId)
+                    } 
+                }
+            })
+
+            // Update reactive room ID var
+            activeRoomIdVar(null);
+
+            // Close modal
+            appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
         },
-        refetchQueries: [
-            { query: GET_ACTIVE_COMMUNITY, variables: {communityId: activeCommunity.id}},
-            { query: MY_COMMUNITIES }
-        ]
     });
+
     const [ selectedRoom, setSelectedRoom ] = useState(activeRoomId ? activeRoomId : 'all')
 
-    // Query active room using activeRoomId and poll for changes every 500 ms
+    // Query active room using activeRoomId
     const {
         data: activeRoomData,
     } = useQuery(GET_ACTIVE_ROOM, {
@@ -59,7 +76,7 @@ const RoomDetailsModal = ({activeCommunity}) => {
                     <div className="modalSection">
                         <div className="sectionLabel">Select room</div>
                         <div className="rooms">
-                            <select value={selectedRoom} onChange={(e) => {
+                            <select className='_select' value={selectedRoom} onChange={(e) => {
                                 let val = e.target.value;
                                 setSelectedRoom(val);
                                 activeRoomIdVar(val === 'all' ? null : val);
@@ -90,6 +107,28 @@ const RoomDetailsModal = ({activeCommunity}) => {
                 <div className="modalSection">
                     <MutationInput 
                         mutationType={CREATE_ROOM}
+                        cacheUpdate={(cache, data) => {
+                            
+                            const queryVars = { communityId: activeCommunity.id };
+                            
+                            // Read active community
+                            const activeCommunityData = cache.readQuery({
+                                query: GET_ACTIVE_COMMUNITY,
+                                variables: queryVars
+                            })
+
+                            // Overwrite cached query with new room added
+                            cache.writeQuery({
+                                query: GET_ACTIVE_COMMUNITY,
+                                variables: queryVars,
+                                data: {
+                                    community: {
+                                        ...activeCommunityData.community,
+                                        rooms: [...activeCommunityData.community.rooms, data.data.addRoom.room]
+                                    }
+                                }
+                            })
+                        }}
                         dataTitle={'Create room'}
                         dataKey={'addRoom'}
                         maxLength={16}
@@ -98,9 +137,7 @@ const RoomDetailsModal = ({activeCommunity}) => {
                         customVariables={[{communityId: activeCommunity.id}]}
                         refetchQueries={[{query: GET_ACTIVE_COMMUNITY, variables: {communityId: activeCommunity.id}}]}
                         onSuccess={(result) => {
-                            console.log(result)
                             let roomId = result.data.addRoom.room.id;
-                            console.log(roomId)
                             setSelectedRoom(roomId);
                             activeRoomIdVar(roomId);
                         }}
@@ -110,16 +147,15 @@ const RoomDetailsModal = ({activeCommunity}) => {
             { room &&
                 <div className="modalSection">
                     <AreYouSure 
-                            mutation={() => deleteRoom({variables: {communityId: activeCommunity.id, roomId: activeRoomId}})}
-                            activeCommunity={activeCommunity}
-                            dataKey={'deleteRoom'}
-                            successMessage={'Room deleted'}
-                            failedMessage={'Room could not be deleted'}
-                            buttonText={'Delete room'}
-                            placeholder={'Enter room name to confirm'}
-                            confirmText={room.name}
-                            dangerText={<span>Deleting <b>{room.name}</b> cannot be undone.  All posts created in this room will <b>not</b> be deleted.  These posts will become uncategorized.</span>}
-                        />
+                        mutation={() => deleteRoom({variables: {communityId: activeCommunity.id, roomId: activeRoomId}})}
+                        activeCommunity={activeCommunity}
+                        successMessage={'Room deleted'}
+                        failedMessage={'Room could not be deleted'}
+                        buttonText={'Delete room'}
+                        placeholder={'Enter room name to confirm'}
+                        confirmText={room.name}
+                        dangerText={<span>Deleting <b>{room.name}</b> cannot be undone.  All posts created in this room will <b>not</b> be deleted.  These posts will become uncategorized.</span>}
+                    />
                 </div>
             }
         </Modal>
