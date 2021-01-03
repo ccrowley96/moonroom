@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
-import { useReactiveVar } from '@apollo/client';
+import { useReactiveVar, useMutation } from '@apollo/client';
+import { NEW_POST } from '../../../../queries/post';
 import { enterPressed } from '../../../../services/utils'
 import { CgClose } from 'react-icons/cg';
 
@@ -11,7 +12,6 @@ const cx = classNames.bind(require('./NewPostModal.module.scss'));
 
 
 const NewPostModal = ({activeCommunity}) => {
-
     const noRoomSelected = 'Uncategorized';
     const activeRoomId = useReactiveVar(activeRoomIdVar)
     const [selectedRoom, setSelectedRoom] = useState(activeRoomId ? activeRoomId : noRoomSelected)
@@ -23,6 +23,9 @@ const NewPostModal = ({activeCommunity}) => {
     const [newTag, setNewTag] = useState('');
     const [tags, setTags] = useState([]);
     const [rating, setRating] = useState('noRating')
+
+    // New post mutation
+    const [ createNewPost ] = useMutation(NEW_POST) // TODO add cache update
 
     // Possible ratings
     const ratings = [1,2,3,4,5]
@@ -45,6 +48,14 @@ const NewPostModal = ({activeCommunity}) => {
             setNewTag('');
         } catch(err){
             console.log(err);
+        }
+    }
+
+    const handleSubmit = () => {
+        try{
+
+        } catch(err){
+
         }
     }
 
@@ -115,7 +126,7 @@ const NewPostModal = ({activeCommunity}) => {
                     {
                         ratings.map((rating, idx) => {
                             return(
-                                <option key={idx} value={rating}>{rating}</option>
+                                <option key={idx} value={rating}>{rating} / 5</option>
                             )
                         })
                     }
@@ -149,6 +160,9 @@ const NewPostModal = ({activeCommunity}) => {
                         })
                     }
                 </div>
+            </div>
+            <div className={cx('postWrapper')}>
+                <button className={cx('_btn-success')} onClick={handleSubmit}>Post</button>
             </div>
         </Modal>
     )
