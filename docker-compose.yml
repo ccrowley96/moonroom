@@ -9,11 +9,11 @@ services:
         ports:
             - "3000:3000"
         depends_on: 
-            - server
+            - app-server
         restart: always
 
-    server:
-        container_name: server
+    app-server:
+        container_name: app-server
         build: 
             context: ./server
             dockerfile: Dockerfile.dev

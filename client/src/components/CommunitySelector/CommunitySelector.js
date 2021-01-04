@@ -12,7 +12,7 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
     const { appDispatch } = useAppState();
     const [ selectedCommunity, setSelectedCommunity ] = useState(activeCommunity ? activeCommunity.id : 'none')
 
-    const communityIds = communities.map(c => c.id);
+    const communityIds = communities?.map(c => c.id);
 
     // Refetch active community on mount (ensures that up to date rooms will be displayed)
     useEffect(() => {

@@ -49,9 +49,6 @@ app.use(express.static(path.join(__dirname, '../../client/build')));
 // Auth API used for login/sign-up
 app.use('/auth', authApi);
 
-// Verify JWT Token (Authenticate request)
-// app.use(authenticateToken)
-
 // Use Apollo context to verify authentication token
 const context = async({req, res}) => {
 

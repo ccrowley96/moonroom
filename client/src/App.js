@@ -1,19 +1,20 @@
 import React from "react";
 import { ProvideAuth } from './hooks/auth';
 import Routes from './components/Routes/Routes';
-import { ApolloProvider, createHttpLink, ApolloClient } from '@apollo/client';
+import { ApolloProvider, createHttpLink, ApolloClient, from, gql } from '@apollo/client';
+import { onError } from '@apollo/client/link/error'
 import { setContext } from '@apollo/client/link/context';
 import { cache } from './cache';
 import { ProvideAppState } from './hooks/provideAppState';
 import { ProvideTheme } from './hooks/provideTheme';
-
+ 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./App.module.scss'));
 
 export const App = () => {
   return (
-    <ProvideAuth>
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <ProvideAuth>
         <ProvideTheme>
           <ProvideAppState>
             <div className={cx('app')}>
@@ -21,14 +22,33 @@ export const App = () => {
             </div>
           </ProvideAppState>
         </ProvideTheme>
-      </ApolloProvider>
-    </ProvideAuth>
+      </ProvideAuth>
+    </ApolloProvider>
   );
 }
 
 const httpLink = createHttpLink({
   uri: '/graphql',
 });
+
+const errorLink = onError(({graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.map(({ message, extensions: { code }}) => {
+      console.log(`[GraphQL error]:`, {message, code})
+      if(code === 'UNAUTHENTICATED'){
+        // redirect to login
+        localStorage.removeItem('session');
+        window.location = '/login';
+      }
+      if(code === 'COMMUNITY_NOT_FOUND'){
+        localStorage.removeItem('activeCommunityId')
+        window.location = '/';
+        // client.clearStore();
+      }
+    });
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+})
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -50,6 +70,10 @@ const authLink = setContext((_, { headers }) => {
 });
 
 export const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from([
+    authLink,
+    errorLink,
+    httpLink
+  ]),
   cache
 })

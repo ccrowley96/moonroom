@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
@@ -21,9 +21,9 @@ export default function Home(){
     const { 
         data: communitiesData
     } = useQuery(MY_COMMUNITIES, {
-        notifyOnNetworkStatusChange: true
+        notifyOnNetworkStatusChange: true,
+        errorPolicy: 'all'    
     });
-
 
     const activeCommunityId = useReactiveVar(activeCommunityIdVar)
 
@@ -36,7 +36,7 @@ export default function Home(){
             communityId: activeCommunityId
         }, 
         errorPolicy: 'all',
-        skip: !activeCommunityId, 
+        skip: !activeCommunityId
     })
 
     return(

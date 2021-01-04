@@ -59,6 +59,8 @@ const NewPostModal = ({activeCommunity}) => {
         }
     }
 
+    if(!activeCommunity) return null;
+
     return(
         <Modal title={`Posting to ${activeCommunity.name}`}>
             <div className={cx('_modalSection')}>

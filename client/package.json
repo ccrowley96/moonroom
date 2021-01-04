@@ -1,6 +1,6 @@
 {
   "name": "shareit-client",
-  "proxy": "http://server:5000/",
+  "proxy": "http://app-server:5000/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
