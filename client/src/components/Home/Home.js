@@ -21,7 +21,6 @@ export default function Home(){
     const { 
         data: communitiesData
     } = useQuery(MY_COMMUNITIES, {
-        notifyOnNetworkStatusChange: true,
         errorPolicy: 'all'    
     });
 

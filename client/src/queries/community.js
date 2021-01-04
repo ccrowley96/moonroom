@@ -61,6 +61,7 @@ export const JOIN_COMMUNITY = gql`
             success
             message
             community{
+                id
                 name
             }
         }

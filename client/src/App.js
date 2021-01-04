@@ -7,8 +7,12 @@ import { setContext } from '@apollo/client/link/context';
 import { cache } from './cache';
 import { ProvideAppState } from './hooks/provideAppState';
 import { ProvideTheme } from './hooks/provideTheme';
+import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from './queries/community';
+
+import { activeCommunityIdVar } from './cache';
  
 import classNames from 'classnames/bind';
+import { removeCommunityFromCache } from "./services/utils";
 const cx = classNames.bind(require('./App.module.scss'));
 
 export const App = () => {
@@ -31,7 +35,7 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, extensions: { code }}) => {
       console.log(`[GraphQL error]:`, {message, code})
@@ -42,8 +46,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       }
       if(code === 'COMMUNITY_NOT_FOUND'){
         localStorage.removeItem('activeCommunityId')
-        window.location = '/';
-        // client.clearStore();
+        activeCommunityIdVar(null);
+        let communityId = operation?.variables?.communityId;
+        removeCommunityFromCache(communityId);
       }
     });
 

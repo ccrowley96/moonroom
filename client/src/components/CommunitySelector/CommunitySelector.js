@@ -20,6 +20,10 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
         // eslint-disable-next-line
     }, [])
 
+    useEffect(() => {
+        setSelectedCommunity(activeCommunity ? activeCommunity.id : 'none')
+    }, [activeCommunity])
+
     const selectCommunity = (communityId) => {
         localStorage.setItem('activeCommunityId', communityId);
         activeCommunityIdVar(communityId);
@@ -96,6 +100,11 @@ const CommunitySelector = ({refetchActiveCommunity, communities, activeCommunity
                         placeholder={'Enter community code'}
                         inputVariable={'code'}
                         refetchQueries={[{query: MY_COMMUNITIES}]}
+                        onSuccess={(result) => {
+                            let communityId = result.data.joinCommunity.community.id;
+                            setSelectedCommunity(communityId);
+                            selectCommunity(communityId);
+                        }}
                     />
                 </div>
             </div>

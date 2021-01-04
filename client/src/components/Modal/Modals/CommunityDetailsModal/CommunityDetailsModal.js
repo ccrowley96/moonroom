@@ -7,6 +7,7 @@ import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../..
 import AreYouSure from '../AreYouSure/AreYouSure';
 
 import classNames from 'classnames/bind';
+import { removeCommunityFromCache } from '../../../../services/utils';
 const cx = classNames.bind(require('./CommunityDetailsModal.module.scss'));
 
 const CommunityDetailsModal = ({activeCommunity}) => {
@@ -14,34 +15,12 @@ const CommunityDetailsModal = ({activeCommunity}) => {
     const { appDispatch } = useAppState();
 
     const [ deleteCommunity ] = useMutation(DELETE_COMMUNITY, {
-        update(cache, data){
+        update(){
             const communityId = activeCommunity.id;
-            const queryVars = { communityId };
-
-            // Delete active community from cache
-            cache.writeQuery({
-                query: GET_ACTIVE_COMMUNITY,
-                variables: queryVars,
-                data: {community: null}
-            })
+            removeCommunityFromCache(communityId);
 
             // Close modal
             appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
-
-            // Read my communities
-            let communitiesData = cache.readQuery({
-                query: MY_COMMUNITIES,
-                variables: queryVars
-            })
-
-            // Filter out deleted community
-            const newCommunities = communitiesData.myCommunities.filter(community => community.id !== communityId);
-
-            cache.writeQuery({
-                query: MY_COMMUNITIES, 
-                variables: queryVars,
-                data: { myCommunities: newCommunities }
-            })
         }
     });
     
