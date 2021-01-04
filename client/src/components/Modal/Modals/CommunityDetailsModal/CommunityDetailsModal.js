@@ -3,7 +3,7 @@ import Modal from '../../Modal';
 import { useMutation } from '@apollo/client';
 import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
-import { DELETE_COMMUNITY, GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../../../../queries/community';
+import { DELETE_COMMUNITY } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
 
 import classNames from 'classnames/bind';

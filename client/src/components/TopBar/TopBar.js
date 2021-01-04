@@ -50,9 +50,16 @@ const TopBar = () => {
                 }
                
             </div>
-            <div className={cx('newPost', 'navItem')} onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.NEW_POST})}>
-                <BsPlus className={cx('newPostIcon')}/>
+            
+            <div className={cx('newPost', 'navItem')}>
+                { activeCommunity &&
+                    <BsPlus className={cx('newPostIcon')}
+                        onClick={() => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: modalTypes.NEW_POST})}
+                    />
+                }
             </div>
+            
+           
             <div className={cx('profile', 'navItem')}>
                 <Link className={cx('imgWrapper')} to={'/profile'}>
                     <img src={picture} className={cx('userImg')} alt='profile'/>

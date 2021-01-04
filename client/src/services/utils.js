@@ -20,11 +20,11 @@ export const removeCommunityFromCache = (communityId) => {
         // Remove communityId from MY_COMMUNITIES cache
         // Read my communities
         let communitiesData = cache.readQuery({
-        query: MY_COMMUNITIES,
+            query: MY_COMMUNITIES,
         })
 
         // Filter out deleted community
-        const newCommunities = communitiesData.myCommunities.filter(community => community.id !== communityId);
+        const newCommunities = communitiesData?.myCommunities.filter(community => community.id !== communityId);
 
         cache.writeQuery({
             query: MY_COMMUNITIES, 

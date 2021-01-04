@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
