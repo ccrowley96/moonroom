@@ -10,8 +10,6 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Home from '../Home/Home';
 import TopBar from '../TopBar/TopBar';
-import { client } from '../../App';
-import { authQuery } from '../../queries/auth';
 
 export default function Routes(){
     return(

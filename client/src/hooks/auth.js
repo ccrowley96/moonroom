@@ -1,7 +1,6 @@
 import jwt_decode from "jwt-decode";
 import React, { useContext, createContext, useState } from "react";
 import { client } from '../App';
-import { activeCommunityIdVar, activeRoomIdVar } from "../cache";
 
 const authContext = createContext();
 
@@ -43,8 +42,6 @@ function useProvideAuth(){
     const deauthenticateUser = cb => {
         localStorage.removeItem('session');
         client.clearStore();
-        activeCommunityIdVar(null);
-        activeRoomIdVar(null);
         setSession(null);
         cb();
     }

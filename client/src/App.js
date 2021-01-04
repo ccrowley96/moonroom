@@ -31,7 +31,7 @@ const httpLink = createHttpLink({
   uri: '/graphql',
 });
 
-const errorLink = onError(({graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
     graphQLErrors.map(({ message, extensions: { code }}) => {
       console.log(`[GraphQL error]:`, {message, code})
