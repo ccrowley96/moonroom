@@ -46,6 +46,11 @@ The client, server, and database are then containerized using the `docker-compos
 |GOOGLE_CLIENT_ID | client ID from console.cloud.google.com|
 |JWT_SECRET | any string that is complex and not easy to guess / brute force |
 
+## If developing on Windows, you must also create a .env file inside the `/client` directory with one entry
+| Key | Value|
+|-------- | ----- |
+|CHOKIDAR_USEPOLLING| `true` |
+
 ## Install Docker desktop
 1. Navigate to [here](https://www.docker.com/products/docker-desktop), download and install docker desktop
 
