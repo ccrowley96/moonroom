@@ -32,8 +32,8 @@ export default {
         addRoom: async(_, {name, communityId, description}, { dataSources: { roomApi } }) => {
             return await roomApi.addRoom(name, communityId, description);
         },
-        addPost: async (_, {communityId, roomId, title, link, body, rating}, { dataSources: { postApi }}) => {
-            return await postApi.addPost(communityId, roomId, title, link, body, rating);
+        addPost: async (_, {communityId, roomId, title, link, body, rating, tags}, { dataSources: { postApi }}) => {
+            return await postApi.addPost(communityId, roomId, title, link, body, rating, tags);
         },
         joinCommunity: async (_, { code }, { dataSources: { communityApi }}) => {
             return await communityApi.joinCommunity(code);

@@ -5,9 +5,11 @@ import { useReactiveVar, useMutation } from '@apollo/client';
 import { NEW_POST } from '../../../../queries/post';
 import { enterPressed } from '../../../../services/utils'
 import { CgClose } from 'react-icons/cg';
-
+import { useAppState } from '../../../../hooks/provideAppState';
+import { actionTypes } from '../../../../constants/constants';
 
 import classNames from 'classnames/bind';
+import { GET_ACTIVE_COMMUNITY } from '../../../../queries/community';
 const cx = classNames.bind(require('./NewPostModal.module.scss'));
 
 
@@ -15,6 +17,7 @@ const NewPostModal = ({activeCommunity}) => {
     const noRoomSelected = 'Uncategorized';
     const activeRoomId = useReactiveVar(activeRoomIdVar)
     const [selectedRoom, setSelectedRoom] = useState(activeRoomId ? activeRoomId : noRoomSelected)
+    const { appDispatch } = useAppState();
 
     // Input field state
     const [title, setTitle] = useState('');
@@ -23,9 +26,37 @@ const NewPostModal = ({activeCommunity}) => {
     const [newTag, setNewTag] = useState('');
     const [tags, setTags] = useState([]);
     const [rating, setRating] = useState('noRating')
+    const [errors, setErrors] = useState({})
 
     // New post mutation
-    const [ createNewPost ] = useMutation(NEW_POST) // TODO add cache update
+    const [ createNewPost ] = useMutation(NEW_POST, {
+        update: (cache, data) => {
+            // Add post to active community's post list
+             
+            // Read active community
+             const activeCommunityData = cache.readQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: { communityId: activeCommunity.id }
+            })
+
+            // Overwrite cached query with new post added
+            cache.writeQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: { communityId: activeCommunity.id },
+                data: {
+                    community: {
+                        ...activeCommunityData.community,
+                        posts: [...activeCommunityData.community.posts, data.data.addPost.post]
+                    }
+                }
+            })
+        }
+    })
+
+    const isErrorPresent = (customErrObj) => {
+        let errorObj = customErrObj ? customErrObj : errors;
+        return Object.keys(errorObj).reduce((_, curr) => errorObj[curr] !== null, false);
+    };
 
     // Possible ratings
     const ratings = [1,2,3,4,5]
@@ -51,11 +82,39 @@ const NewPostModal = ({activeCommunity}) => {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         try{
+            let newErrors = {};
+            // Validate title
+            if(title.length === 0){
+                newErrors.title = 'Title cannot be empty';
+            }
+            setErrors({...errors, ...newErrors})
 
+            if(!isErrorPresent({...errors, ...newErrors})){
+                let result = await createNewPost({
+                    variables: {
+                        communityId: activeCommunity.id,
+                        roomId: selectedRoom === 'Uncategorized' ? null : selectedRoom,
+                        title: title,
+                        link: link.length > 0 ? link : null,
+                        body: body.length > 0 ? body : null,
+                        rating: rating === 'noRating' ? null : Number(rating),
+                        tags: tags.length > 0 ? tags : null
+                    }
+                })
+
+                if(result.data['addPost'].success){
+                    // TODO add post succeeded messsage, animation / timeout here
+                    appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
+                } else{
+                    throw new Error(result.data['addPost'].message)
+                }
+            } else{
+                return;
+            }
         } catch(err){
-
+            console.error(err);
         }
     }
 
@@ -95,9 +154,12 @@ const NewPostModal = ({activeCommunity}) => {
             <div className={cx('_modalSection')}>
                 <div className={cx('_sectionLabel', '_required')}>Title</div>
                 <input 
-                    className={cx('_input')}
+                    className={cx('_input', errors.title ? '_error' : '')}
                     placeholder={'Give your post a title'}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => {
+                        setTitle(e.target.value)
+                        setErrors({...errors, ...{title: null}})
+                    }}
                 />
             </div>
             <div className={cx('_modalSection')}>
@@ -164,7 +226,13 @@ const NewPostModal = ({activeCommunity}) => {
                 </div>
             </div>
             <div className={cx('postWrapper')}>
-                <button className={cx('_btn-success')} onClick={handleSubmit}>Post</button>
+                <button 
+                    className={cx('_btn-success')} 
+                    onClick={handleSubmit}
+                    disabled={isErrorPresent()}
+                >
+                    Post
+                    </button>
             </div>
         </Modal>
     )

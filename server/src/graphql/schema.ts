@@ -96,13 +96,12 @@ const typeDefs = gql`
       success: Boolean!
       message: String!
       post: Post
-      room: Room
    }
 
    type Mutation{
       addCommunity(name: String!, picture: String, description: String): addCommunityMutationResponse
       addRoom(name: String!, communityId: ID!, description: String): addRoomMutationResponse
-      addPost(communityId: ID!, roomId: ID!, title: String!, link: String, body: String, rating: Float): addPostMutationResponse
+      addPost(communityId: ID!, roomId: ID, title: String!, link: String, body: String, rating: Float, tags: [String]): addPostMutationResponse
       joinCommunity(code: String!): joinCommunityMutationResponse
       deleteCommunity(communityId: ID!): deleteMutationResponse
       deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse

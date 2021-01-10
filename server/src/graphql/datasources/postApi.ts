@@ -6,16 +6,19 @@ import { mongooseId } from '../../controllers/utils';
 
 
 export default class postApi<TData> extends MongoDataSource<TData>{
-    async addPost(communityId, roomId, title, link, body, rating){
+    async addPost(communityId, roomId, title, link, body, rating, tags){
         try{
             // Grab context variables
             const { user, dataSources: { roomApi, communityApi } } = this.context;
 
             // Verify community exists and user has access
             let community = await communityApi.getCommunity(communityId);
+            let room = null;
 
-            // Verify rooms exists
-            let room = await roomApi.getRoom(communityId, roomId);
+            if(roomId){
+                // Verify rooms exists
+                room = await roomApi.getRoom(communityId, roomId);
+            }
 
             // Create post object
             let post = new Post({
@@ -25,7 +28,8 @@ export default class postApi<TData> extends MongoDataSource<TData>{
                 rating,
                 author: mongooseId(user._id),
                 community: mongooseId(communityId),
-                room: mongooseId(roomId)
+                room: room ? mongooseId(roomId) : null,
+                tags
             })
 
             await post.save();
@@ -38,12 +42,13 @@ export default class postApi<TData> extends MongoDataSource<TData>{
             user.posts.push(mongooseId(post._id));
             await user.save();
 
+            console.log('creating post: ', post);
+
             return {
                 code: 200,
                 success: true,
                 message: 'Post created successfully',
-                post: post,
-                room: room
+                post: post
             }
 
         } catch(err){

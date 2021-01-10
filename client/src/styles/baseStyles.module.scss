@@ -50,6 +50,11 @@
     border-color: var(--color-btn-primary-focus-border);
     box-shadow: var(--color-btn-primary-focus-shadow);
   }
+  &:disabled{
+    color: var(--color-btn-primary-disabled-text);
+    background-color: var(--color-btn-primary-disabled-bg);
+    border-color: var(--color-btn-primary-disabled-border);
+  }
 }
 
 ._select{

@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema({
     room: {
         type: mongoose.Types.ObjectId,
         ref: 'Room',
-        required: true
+        required: false
     },
     link: {
         type: String,
