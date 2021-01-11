@@ -32,3 +32,16 @@ export const removeCommunityFromCache = (communityId) => {
         })
     }
 }
+
+export const isValidURL = (str) => {
+    let url;
+    try {
+        url = new URL(str);
+    } catch (_) {
+        return false;  
+    }
+
+    console.log(url);
+
+    return url.protocol === "http:" || url.protocol === "https:" ? url.href : false;
+}

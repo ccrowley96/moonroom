@@ -105,6 +105,7 @@ const typeDefs = gql`
       joinCommunity(code: String!): joinCommunityMutationResponse
       deleteCommunity(communityId: ID!): deleteMutationResponse
       deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse
+      deletePost(postId: ID!): deleteMutationResponse
    }
 `;
 

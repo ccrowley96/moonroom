@@ -34,7 +34,8 @@ export const GET_ACTIVE_COMMUNITY = gql`
                 id
                 title
                 author{
-                    name
+                    id
+                    given_name
                 }
                 community{
                     name

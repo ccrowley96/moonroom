@@ -44,5 +44,8 @@ export default {
         deleteRoom: async (_, {communityId, roomId}, { dataSources: { roomApi }}) => {
             return await roomApi.deleteRoom(communityId, roomId);
         },
+        deletePost: async (_, { postId }, { dataSources: { postApi }}) => {
+            return await postApi.deletePost(postId);
+        }
     }
 }

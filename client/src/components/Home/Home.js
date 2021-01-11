@@ -8,8 +8,10 @@ import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
 import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal/RoomDetailsModal';
 import NewPostModal from '../Modal/Modals/NewPostModal/NewPostModal';
+import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
+import PostDetails from '../PostDetails/PostDetails';
 const cx = classNames.bind(require('./Home.module.scss'))
 
 export default function Home(){
@@ -35,7 +37,8 @@ export default function Home(){
             communityId: activeCommunityId
         }, 
         errorPolicy: 'all',
-        skip: !activeCommunityId
+        skip: !activeCommunityId,
+        // pollInterval: 10000
     })
 
     return(
@@ -52,6 +55,13 @@ export default function Home(){
             }
             { activeModal === modalTypes.NEW_POST &&
                 <NewPostModal activeCommunity={activeCommunityData?.community} />
+            }
+            { activeModal === modalTypes.POST_DETAILS &&
+                <PostDetails />
+            }
+            {/* Render posts */}
+            { activeCommunityData &&
+                <PostsContainer posts={activeCommunityData.community.posts}/>
             }
         </div>
     );

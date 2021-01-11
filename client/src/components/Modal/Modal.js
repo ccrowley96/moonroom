@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes } from '../../constants/constants';
 import { CgClose } from 'react-icons/cg';
@@ -8,6 +8,11 @@ const cx = classNames.bind(require('./Modal.module.scss'));
 
 const Modal = ({children, title}) => {
     const { appDispatch } = useAppState();
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => document.body.style.overflow = 'unset';
+    }, [])
 
     const closeModal = () => appDispatch({type: actionTypes.SET_ACTIVE_MODAL, payload: null});
 

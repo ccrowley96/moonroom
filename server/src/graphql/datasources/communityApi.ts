@@ -22,7 +22,7 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
             let communityCode = null;
             do{
                 communityCode = randomstring.generate({
-                    length: 8,
+                    length: 6,
                     charset: 'alphabetic',
                     readable: true,
                     capitalization: 'lowercase'

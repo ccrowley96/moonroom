@@ -1,0 +1,34 @@
+@import "../../styles/baseStyles.module.scss";
+.postWrapper{
+    margin: 8px;
+    border: 1px solid black;
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.title{
+    font-weight: 600;
+}
+
+.link{
+    width: fit-content;
+}
+
+.postPreviewFooter{
+    display: flex;
+    .author{
+        flex-grow: 1;
+    }
+    .postDate{
+        flex-grow: 1;
+        text-align: end;
+    }
+}

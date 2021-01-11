@@ -1,0 +1,19 @@
+@import "../../styles/baseStyles.module.scss";
+.filterContainer{
+    height: 48px; 
+    background-color: var(--color-scale-blue-3);
+    width: 100%;
+}
+
+.noPosts{
+    text-align: center;
+}
+
+.filterAndPosts{
+    width: 100%;
+    max-width: 800px;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+}

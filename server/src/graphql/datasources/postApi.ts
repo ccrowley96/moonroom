@@ -1,5 +1,5 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
-import { Post } from '../../db/index';
+import { Post, Community } from '../../db/index';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
@@ -42,8 +42,6 @@ export default class postApi<TData> extends MongoDataSource<TData>{
             user.posts.push(mongooseId(post._id));
             await user.save();
 
-            console.log('creating post: ', post);
-
             return {
                 code: 200,
                 success: true,
@@ -63,8 +61,43 @@ export default class postApi<TData> extends MongoDataSource<TData>{
         }
     }
 
-    async getPost(postId: string){
+    async deletePost(postId: string){
+        const { user } = this.context;
 
+        try{
+            // Ensure user is either author of post or admin of community
+            let post: any = await Post.findById({_id: mongooseId(postId)});
+            if(!post)
+                throw new ApolloError('Post does not exist!', errorCodes.postNotFound)
+
+            post = await post.populate('community').execPopulate();
+
+            let authorizedToDeleteIds = [...post.community.admins.map(m => String(m)), String(post.author)];
+
+            if(authorizedToDeleteIds.indexOf(String(user._id)) === -1){
+                throw new Error('You are not authorized to delete this post');
+            }
+
+            // Delete post
+            let toDelete = await Post.findById({_id: mongooseId(postId)});
+            await toDelete.deleteOne();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Post deleted.'
+            };
+
+        } catch(err){
+            return {
+                code: 500,
+                success: false,
+                message: err
+            };
+        }
+    }
+
+    async getPost(postId: string){
         const { dataSources: { communityApi} } = this.context;
 
         // Query post

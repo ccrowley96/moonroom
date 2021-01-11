@@ -26,3 +26,20 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.validationErrorText{
+    font-size: 12px;
+}
+
+.labelWrapper{
+    display: flex;
+    align-items: center;
+    ._sectionLabel{
+        margin-bottom: 0px;
+    }
+    .validationErrorText{
+        margin-left: 8px;
+        font-style: italic;
+    }
+    margin-bottom: 8px;
+}

@@ -7,6 +7,7 @@ import { enterPressed } from '../../../../services/utils'
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
+import { isValidURL } from '../../../../services/utils';
 
 import classNames from 'classnames/bind';
 import { GET_ACTIVE_COMMUNITY } from '../../../../queries/community';
@@ -85,10 +86,18 @@ const NewPostModal = ({activeCommunity}) => {
     const handleSubmit = async () => {
         try{
             let newErrors = {};
+            let cleanedLink = null;
             // Validate title
             if(title.length === 0){
                 newErrors.title = 'Title cannot be empty';
             }
+            // Validate link
+            if(link.length > 0 && !isValidURL(link)){
+                newErrors.link = 'URL must be valid and start with http:// or https://';
+            } else{
+                cleanedLink = isValidURL(link);
+            }
+
             setErrors({...errors, ...newErrors})
 
             if(!isErrorPresent({...errors, ...newErrors})){
@@ -97,7 +106,7 @@ const NewPostModal = ({activeCommunity}) => {
                         communityId: activeCommunity.id,
                         roomId: selectedRoom === 'Uncategorized' ? null : selectedRoom,
                         title: title,
-                        link: link.length > 0 ? link : null,
+                        link: link.length > 0 ? cleanedLink : null,
                         body: body.length > 0 ? body : null,
                         rating: rating === 'noRating' ? null : Number(rating),
                         tags: tags.length > 0 ? tags : null
@@ -115,6 +124,18 @@ const NewPostModal = ({activeCommunity}) => {
             }
         } catch(err){
             console.error(err);
+        }
+    }
+    
+    const ValidationErrorText = ({validationKey}) => {
+        if(errors[validationKey]){
+            return(
+                <span className={cx('_danger', 'validationErrorText')}>
+                    {errors[validationKey]}
+                </span>
+            )
+        } else{
+            return null;
         }
     }
 
@@ -152,7 +173,10 @@ const NewPostModal = ({activeCommunity}) => {
 
             </div>
             <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel', '_required')}>Title</div>
+                <div className={cx('labelWrapper')}>
+                    <div className={cx('_sectionLabel', '_required')}>Title</div>
+                    <ValidationErrorText validationKey={'title'}/>
+                </div>
                 <input 
                     className={cx('_input', errors.title ? '_error' : '')}
                     placeholder={'Give your post a title'}
@@ -163,11 +187,17 @@ const NewPostModal = ({activeCommunity}) => {
                 />
             </div>
             <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Link</div>
+                <div className={cx('labelWrapper')}>
+                    <div className={cx('_sectionLabel')}>Link</div>
+                    <ValidationErrorText validationKey={'link'}/>
+                </div>
                 <input 
-                    className={cx('_input')}
+                    className={cx('_input', errors.link ? '_error' : '')}
                     placeholder={'Share a link'}
-                    onChange={(e) => setLink(e.target.value)}
+                    onChange={(e) => {
+                        setLink(e.target.value)
+                        setErrors({...errors, ...{link: null}})
+                    }}
                 />
             </div>
             <div className={cx('_modalSection')}>

@@ -10,7 +10,8 @@ export const NEW_POST = gql`
                 id
                 title
                 author{
-                    name
+                    id
+                    given_name
                 }
                 link
                 date
@@ -18,6 +19,16 @@ export const NEW_POST = gql`
                 rating
                 tags
             }
+        }
+    }
+`;
+
+export const DELETE_POST = gql`
+    mutation deletePost($postId: ID!){
+        deletePost(postId: $postId){
+            code
+            success
+            message
         }
     }
 `;

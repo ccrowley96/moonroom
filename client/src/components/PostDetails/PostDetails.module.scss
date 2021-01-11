@@ -1,0 +1,34 @@
+@import "../../styles/baseStyles.module.scss";
+.postDetailsWrapper{
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    position: relative;
+    min-height: 200px;
+}
+
+.link{
+    width: fit-content;
+}
+
+.footer{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    display: flex;
+    .meta{
+        flex-grow: 1;
+    }
+    .postControls{
+        flex-grow: 4;
+        text-align: end;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        
+        .control{
+           margin-left: 16px;
+        }
+    }
+}

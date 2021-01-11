@@ -7,7 +7,8 @@ export const useAppState = () => useContext(AppStateContext);
 const initialAppState = {
     activeCommunity: null,
     activeRoom: null,
-    activeModal: null
+    activeModal: null,
+    modalData: null
 }
   
 const AppStateReducer = (state, action) =>{
@@ -17,7 +18,7 @@ const AppStateReducer = (state, action) =>{
         case actionTypes.SET_ACTIVE_ROOM:
             return {...state, activeRoom: action.payload}
         case actionTypes.SET_ACTIVE_MODAL:
-            return {...state, activeModal: action.payload}
+            return {...state, activeModal: action.payload, modalData: action?.modalData}
         default:
             throw new Error();
     }
