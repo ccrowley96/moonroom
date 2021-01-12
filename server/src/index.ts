@@ -44,7 +44,7 @@ if (process.env.NODE_ENV !== 'dev') {
 }
 
 // Serve static client build files
-app.use(express.static(path.join(__dirname, '../../client/build')));
+app.use(express.static(path.join(__dirname, '../dist/client_build')));
 
 // Auth API used for login/sign-up
 app.use('/auth', authApi);

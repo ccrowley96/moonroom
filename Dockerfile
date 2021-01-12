@@ -1,6 +1,5 @@
 # Prod docker config
-
-FROM node as prod
+FROM node as build
 
 ENV NODE_ENV=prod
 
@@ -10,7 +9,9 @@ WORKDIR /app/client
 
 COPY ./client/package*.json ./
 
-RUN npm install
+RUN npm ci --only=production
+
+ENV PATH="./node_modules/.bin:$PATH"
 
 COPY ./client ./
 
@@ -18,15 +19,21 @@ RUN npm run build
 
 # Set up server
 
+FROM node:latest
+
 WORKDIR /app/server
 
 COPY server/package*.json ./
 
-RUN npm install
+RUN npm ci --only=production
+
+ENV PATH="./node_modules/.bin:$PATH"
 
 COPY ./server ./
 
 RUN npm run build
+
+COPY --from=build /app/client/build /app/server/dist/client_build
 
 EXPOSE 5000
 

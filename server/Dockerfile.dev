@@ -8,6 +8,8 @@ COPY ./package*.json ./
 
 ENV NODE_ENV=dev
 
+RUN npm install -g nodemon
+
 RUN npm install
 
 USER node
