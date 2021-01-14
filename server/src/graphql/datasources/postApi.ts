@@ -4,18 +4,20 @@ import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
 
-
-export default class postApi<TData> extends MongoDataSource<TData>{
-    async addPost(communityId, roomId, title, link, body, rating, tags){
-        try{
+export default class postApi<TData> extends MongoDataSource<TData> {
+    async addPost(communityId, roomId, title, link, body, rating, tags) {
+        try {
             // Grab context variables
-            const { user, dataSources: { roomApi, communityApi } } = this.context;
+            const {
+                user,
+                dataSources: { roomApi, communityApi }
+            } = this.context;
 
             // Verify community exists and user has access
             let community = await communityApi.getCommunity(communityId);
             let room = null;
 
-            if(roomId){
+            if (roomId) {
                 // Verify rooms exists
                 room = await roomApi.getRoom(communityId, roomId);
             }
@@ -30,7 +32,7 @@ export default class postApi<TData> extends MongoDataSource<TData>{
                 community: mongooseId(communityId),
                 room: room ? mongooseId(roomId) : null,
                 tags
-            })
+            });
 
             await post.save();
 
@@ -47,39 +49,44 @@ export default class postApi<TData> extends MongoDataSource<TData>{
                 success: true,
                 message: 'Post created successfully',
                 post: post
-            }
-
-        } catch(err){
-            console.log(err)
+            };
+        } catch (err) {
+            console.log(err);
             return {
                 code: 500,
                 success: false,
                 message: err.message,
                 post: null,
                 room: null
-            }
+            };
         }
     }
 
-    async deletePost(postId: string){
+    async deletePost(postId: string) {
         const { user } = this.context;
 
-        try{
+        try {
             // Ensure user is either author of post or admin of community
-            let post: any = await Post.findById({_id: mongooseId(postId)});
-            if(!post)
-                throw new ApolloError('Post does not exist!', errorCodes.postNotFound)
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post)
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
 
             post = await post.populate('community').execPopulate();
 
-            let authorizedToDeleteIds = [...post.community.admins.map(m => String(m)), String(post.author)];
+            let authorizedToDeleteIds = [
+                ...post.community.admins.map((m) => String(m)),
+                String(post.author)
+            ];
 
-            if(authorizedToDeleteIds.indexOf(String(user._id)) === -1){
+            if (authorizedToDeleteIds.indexOf(String(user._id)) === -1) {
                 throw new Error('You are not authorized to delete this post');
             }
 
             // Delete post
-            let toDelete = await Post.findById({_id: mongooseId(postId)});
+            let toDelete = await Post.findById({ _id: mongooseId(postId) });
             await toDelete.deleteOne();
 
             return {
@@ -87,8 +94,7 @@ export default class postApi<TData> extends MongoDataSource<TData>{
                 success: true,
                 message: 'Post deleted.'
             };
-
-        } catch(err){
+        } catch (err) {
             return {
                 code: 500,
                 success: false,
@@ -97,13 +103,18 @@ export default class postApi<TData> extends MongoDataSource<TData>{
         }
     }
 
-    async getPost(postId: string){
-        const { dataSources: { communityApi} } = this.context;
+    async getPost(postId: string) {
+        const {
+            dataSources: { communityApi }
+        } = this.context;
 
         // Query post
-        let post: any = await Post.findById({_id: mongooseId(postId)});
-        if(!post)
-            throw new ApolloError('Post does not exist!', errorCodes.postNotFound)
+        let post: any = await Post.findById({ _id: mongooseId(postId) });
+        if (!post)
+            throw new ApolloError(
+                'Post does not exist!',
+                errorCodes.postNotFound
+            );
 
         // Check that user has access to the community
         post = await post.populate('community');

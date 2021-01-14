@@ -1,6 +1,6 @@
 @import '../../styles/baseStyles.module.scss';
 
-.modalBlocker{
+.modalBlocker {
     background-color: var(--color-bg-backdrop);
     position: absolute;
     top: 0px;
@@ -14,7 +14,7 @@
     position: fixed;
 }
 
-.modal{
+.modal {
     position: relative;
     max-width: 600px;
     width: 100%;
@@ -22,17 +22,17 @@
     background-color: var(--color-bg-canvas);
     @media screen and (min-width: '600px') {
         border-radius: 8px;
-      }
+    }
 }
 
-.modalTitle{
+.modalTitle {
     font-weight: 600;
     margin-bottom: 8px;
     width: calc(100% - 40px);
     font-size: large;
 }
 
-.closeX{
+.closeX {
     cursor: pointer;
     position: absolute;
     top: 10px;

@@ -1,17 +1,14 @@
-import React from "react";
-import {
-    useHistory,
-    useLocation
-} from "react-router-dom";
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import { GoogleLogout } from 'react-google-login';
-import { useTheme } from "../../hooks/provideTheme";
+import { useTheme } from '../../hooks/provideTheme';
 
 import classNames from 'classnames/bind';
-const cx = classNames.bind(require('./Logout.module.scss'))
+const cx = classNames.bind(require('./Logout.module.scss'));
 
-export default function Logout(){
-    const {theme} = useTheme()
+export default function Logout() {
+    const { theme } = useTheme();
     let history = useHistory();
     let location = useLocation();
     let auth = useAuth();
@@ -19,10 +16,10 @@ export default function Logout(){
     const responseGoogle = async (googleResponse) => {
         // Set auth state
         auth.deauthenticateUser(() => history.replace('/login'));
-    }
+    };
 
-    if(auth.isUserAuthenticated() && location.pathname !== '/login'){
-        return(
+    if (auth.isUserAuthenticated() && location.pathname !== '/login') {
+        return (
             <div className={cx('googleLogout')}>
                 <GoogleLogout
                     theme={theme}
@@ -32,8 +29,8 @@ export default function Logout(){
                     cookiePolicy={'single_host_origin'}
                 />
             </div>
-        ) 
-    } else{
+        );
+    } else {
         return null;
     }
 }

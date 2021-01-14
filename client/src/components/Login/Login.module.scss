@@ -1,4 +1,4 @@
-.jumboContainer{
+.jumboContainer {
     position: absolute;
     height: 400px;
     width: 100%;
@@ -10,14 +10,14 @@
     margin: auto;
 }
 
-.jumbo{
+.jumbo {
     display: flex;
     justify-content: center;
     flex-direction: column;
     text-align: center;
 }
 
-.googleLogin{
+.googleLogin {
     position: relative;
     box-sizing: border-box;
     display: flex;
@@ -25,6 +25,6 @@
     padding: 20px;
 }
 
-.loginTitle{
+.loginTitle {
     text-align: center;
 }

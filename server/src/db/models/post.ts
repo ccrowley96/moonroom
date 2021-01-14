@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { User } from '../index'
+import { User } from '../index';
 
 const postSchema = new mongoose.Schema({
     title: {
@@ -37,36 +37,43 @@ const postSchema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    tags: [{
-        type: String,
-        required: false
-    }]
-})
+    tags: [
+        {
+            type: String,
+            required: false
+        }
+    ]
+});
 
 // @ts-ignore
-postSchema.pre('remove', { document: true }, async function(){
-    
+postSchema.pre('remove', { document: true }, async function () {
     const post = this;
 
     // Remove post ref from User posts
-    await post.model('User').update({
-        _id: post.author
-    },
-    {
-        $pull: {
-            posts: post._id
-        }
-    }, {multi: true})
+    await post.model('User').update(
+        {
+            _id: post.author
+        },
+        {
+            $pull: {
+                posts: post._id
+            }
+        },
+        { multi: true }
+    );
 
     // Remove post ref from Community posts
-    await post.model('Community').update({
-        _id: post.community
-    },
-    {
-        $pull: {
-            posts: post._id
-        }
-    }, {multi: true})
-})
+    await post.model('Community').update(
+        {
+            _id: post.community
+        },
+        {
+            $pull: {
+                posts: post._id
+            }
+        },
+        { multi: true }
+    );
+});
 
 export default mongoose.model('Post', postSchema);

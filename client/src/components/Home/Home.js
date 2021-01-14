@@ -1,8 +1,8 @@
 import React from 'react';
 import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
-import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community'
-import { activeCommunityIdVar } from '../../cache'
+import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community';
+import { activeCommunityIdVar } from '../../cache';
 import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
@@ -12,21 +12,20 @@ import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
 import PostDetails from '../PostDetails/PostDetails';
-const cx = classNames.bind(require('./Home.module.scss'))
+const cx = classNames.bind(require('./Home.module.scss'));
 
-export default function Home(){
-    
+export default function Home() {
     // global app state
-    const { appState: { activeModal} } = useAppState();
+    const {
+        appState: { activeModal }
+    } = useAppState();
 
     // Grab list of all communities
-    const { 
-        data: communitiesData
-    } = useQuery(MY_COMMUNITIES, {
-        errorPolicy: 'all'    
+    const { data: communitiesData } = useQuery(MY_COMMUNITIES, {
+        errorPolicy: 'all'
     });
 
-    const activeCommunityId = useReactiveVar(activeCommunityIdVar)
+    const activeCommunityId = useReactiveVar(activeCommunityIdVar);
 
     // Query active community using activeCommunityId
     const {
@@ -35,34 +34,44 @@ export default function Home(){
     } = useQuery(GET_ACTIVE_COMMUNITY, {
         variables: {
             communityId: activeCommunityId
-        }, 
+        },
         errorPolicy: 'all',
-        skip: !activeCommunityId,
+        skip: !activeCommunityId
         // pollInterval: 10000
-    })
+    });
 
-    return(
+    return (
         <div className={cx('homeWrapper')}>
             {/* Render modals */}
-            { activeModal === modalTypes.COMMUNITY_SELECTOR &&
-                <CommunitySelector refetchActiveCommunity={() => activeCommunityId && refetchActiveCommunity()} communities={communitiesData?.myCommunities} activeCommunity={activeCommunityData?.community}/>
-            }
-            { activeModal === modalTypes.COMMUNITY_DETAILS &&
-                <CommunityDetailsModal activeCommunity={activeCommunityData?.community}/>
-            }
-            { activeModal === modalTypes.ROOM_DETAILS &&
-                <RoomDetailsModal activeCommunity={activeCommunityData?.community} />
-            }
-            { activeModal === modalTypes.NEW_POST &&
-                <NewPostModal activeCommunity={activeCommunityData?.community} />
-            }
-            { activeModal === modalTypes.POST_DETAILS &&
-                <PostDetails />
-            }
+            {activeModal === modalTypes.COMMUNITY_SELECTOR && (
+                <CommunitySelector
+                    refetchActiveCommunity={() =>
+                        activeCommunityId && refetchActiveCommunity()
+                    }
+                    communities={communitiesData?.myCommunities}
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
+            {activeModal === modalTypes.COMMUNITY_DETAILS && (
+                <CommunityDetailsModal
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
+            {activeModal === modalTypes.ROOM_DETAILS && (
+                <RoomDetailsModal
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
+            {activeModal === modalTypes.NEW_POST && (
+                <NewPostModal
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
+            {activeModal === modalTypes.POST_DETAILS && <PostDetails />}
             {/* Render posts */}
-            { activeCommunityData &&
-                <PostsContainer posts={activeCommunityData.community.posts}/>
-            }
+            {activeCommunityData && (
+                <PostsContainer posts={activeCommunityData.community.posts} />
+            )}
         </div>
     );
 }

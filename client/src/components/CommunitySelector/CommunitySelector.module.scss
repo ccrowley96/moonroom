@@ -1,6 +1,6 @@
 @import '../../styles/baseStyles.module.scss';
 
-.panelBlocker{
+.panelBlocker {
     background-color: var(--color-bg-backdrop);
     position: absolute;
     top: 0px;
@@ -10,7 +10,7 @@
     z-index: 10;
 }
 
-.communitySelector{
+.communitySelector {
     width: 80%;
     max-width: 300px;
     height: 100%;
@@ -19,31 +19,32 @@
     padding: 16px;
 }
 
-.activeCommunity{
+.activeCommunity {
     display: flex;
     flex-direction: column;
 
-    .communityName{
+    .communityName {
         margin: 0px;
         margin: 4px 0px;
     }
 
-    .roomName{
+    .roomName {
         font-weight: 600;
         margin: 4px 0px;
     }
 
-    .communityCode{
+    .communityCode {
         font-style: italic;
         margin: 4px 0px;
     }
 }
 
-.communityOption, .room{
+.communityOption,
+.room {
     margin: 4px;
 }
 
-.joinCreateContainer{
+.joinCreateContainer {
     height: 200px;
     width: 100%;
     margin-top: 20px;

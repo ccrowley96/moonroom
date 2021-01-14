@@ -1,27 +1,28 @@
-@import "../../styles/baseStyles.module.scss";
+@import '../../styles/baseStyles.module.scss';
 
-.profileWrapper{
+.profileWrapper {
     width: 100%;
     padding: 20px;
     overflow-x: hidden;
-    th, td {
+    th,
+    td {
         padding: 8px 0px;
     }
 }
 
-.profilePicture{
+.profilePicture {
     border-radius: 50%;
 }
 
-.homeLink{
+.homeLink {
     position: absolute;
     top: 20px;
     right: 20px;
-    a{
-        color: var(--color-text-primary)
+    a {
+        color: var(--color-text-primary);
     }
 }
 
-.profileBtn{
+.profileBtn {
     margin: 20px 0px;
 }

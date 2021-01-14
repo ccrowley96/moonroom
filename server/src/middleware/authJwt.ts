@@ -4,20 +4,25 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-
 // Middleware used to attach userId to to incoming request.  Currently unused.
 // this function has been replaced by Apollo context middleware
-export const authenticateToken = (req: any, res: express.Response, next: express.NextFunction) => {
+export const authenticateToken = (
+    req: any,
+    res: express.Response,
+    next: express.NextFunction
+) => {
     const token = req?.headers?.authorization?.replace('Bearer ', '');
-    if(!token) {
-        return res.status(403).send({message: "No authorization token provided!"});
+    if (!token) {
+        return res
+            .status(403)
+            .send({ message: 'No authorization token provided!' });
     }
 
-    try{
+    try {
         const user = jwt.verify(token, process.env.JWT_SECRET);
         req.userId = user._id;
         next();
-    } catch(err){
-        res.status(401).send({ message: "API access unauthorized!" });
+    } catch (err) {
+        res.status(401).send({ message: 'API access unauthorized!' });
     }
-}
+};

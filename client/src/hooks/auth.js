@@ -1,35 +1,31 @@
-import jwt_decode from "jwt-decode";
-import React, { useContext, createContext, useState } from "react";
+import jwt_decode from 'jwt-decode';
+import React, { useContext, createContext, useState } from 'react';
 import { client } from '../App';
 
 const authContext = createContext();
 
-export function ProvideAuth({children}){
+export function ProvideAuth({ children }) {
     const auth = useProvideAuth();
 
-    return(
-        <authContext.Provider value={auth}>
-            {children}
-        </authContext.Provider>
-    );
+    return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 
-export function useAuth(){
+export function useAuth() {
     return useContext(authContext);
 }
 
 const getSessionFromLocalStorage = () => {
     let sessionString = localStorage.getItem('session');
-    if(sessionString){
+    if (sessionString) {
         let session = JSON.parse(sessionString);
-        if(session){
-            return session
+        if (session) {
+            return session;
         }
     }
     return null;
-}
+};
 
-function useProvideAuth(){
+function useProvideAuth() {
     let sessionFromStorage = getSessionFromLocalStorage();
     const [session, setSession] = useState(sessionFromStorage);
 
@@ -37,40 +33,40 @@ function useProvideAuth(){
         setSession(session);
         localStorage.setItem('session', JSON.stringify(session));
         cb();
-    }
+    };
 
-    const deauthenticateUser = cb => {
+    const deauthenticateUser = (cb) => {
         localStorage.removeItem('session');
         client.clearStore();
         setSession(null);
         cb();
-    }
+    };
 
     const isUserAuthenticated = () => {
         let session = getSessionFromLocalStorage();
-        if(session){
+        if (session) {
             let token = session.token;
             const { exp } = jwt_decode(token);
-            const expirationTime = (exp * 1000);
-            if(Date.now() >= expirationTime){
+            const expirationTime = exp * 1000;
+            if (Date.now() >= expirationTime) {
                 localStorage.removeItem('session');
-            } else{
+            } else {
                 return true;
             }
         }
         return false;
-    }
+    };
 
     const getToken = () => {
         let session = getSessionFromLocalStorage();
         return session?.token;
-    }
+    };
 
     return {
-        session, 
-        authenticateUser, 
+        session,
+        authenticateUser,
         deauthenticateUser,
         isUserAuthenticated,
         getToken
-    }
+    };
 }

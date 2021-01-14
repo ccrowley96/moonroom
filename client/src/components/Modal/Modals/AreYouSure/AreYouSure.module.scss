@@ -1,19 +1,19 @@
 @import '../../../../styles/baseStyles.module.scss';
 
-.deleteContainer{
+.deleteContainer {
     margin-top: 8px;
-    .confirmInput{
+    .confirmInput {
         display: block;
         height: 32px;
         width: 232px;
         border-radius: 4px;
         margin-bottom: 8px;
     }
-    .deleteBtn{
+    .deleteBtn {
         display: block;
     }
 }
 
-.successMessage{
+.successMessage {
     margin-top: 16px;
 }

@@ -1,14 +1,14 @@
-.topBar{
+.topBar {
     height: 60px;
     width: 100%;
     display: flex;
 }
 
-.navItem{
+.navItem {
     height: 100%;
 }
 
-.communityName{
+.communityName {
     margin-right: 4px;
     font-weight: 600;
     cursor: pointer;
@@ -18,7 +18,7 @@
     font-size: 18px;
 }
 
-.roomName{
+.roomName {
     cursor: pointer;
     white-space: nowrap;
     overflow: hidden;
@@ -31,31 +31,31 @@
     }
 }
 
-.communityBurger{
+.communityBurger {
     width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    .hamburgerWrapper{
+
+    .hamburgerWrapper {
         width: 50%;
         height: 50%;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;
         cursor: pointer;
-        .burger{
+        .burger {
             border-radius: 2px;
             width: 100%;
             height: 4px;
             margin: 2px 0px;
             background-color: var(--color-bg-info-inverse);
-            opacity: .9;
+            opacity: 0.9;
         }
     }
 }
 
-.title{
+.title {
     flex-grow: 1;
     display: flex;
     color: var(--color-bg-info-inverse);
@@ -64,20 +64,19 @@
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
-        
     }
     justify-content: center;
     padding: 0px 8px;
     max-width: calc(100% - 160px);
 }
 
-.newPost{
+.newPost {
     width: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    .newPostIcon{
+    .newPostIcon {
         width: 100%;
         height: 100%;
         color: var(--color-bg-info-inverse);
@@ -85,15 +84,15 @@
     }
 }
 
-.profile{
+.profile {
     width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
-    .imgWrapper{
+    .imgWrapper {
         height: 60%;
         width: 60%;
-        .userImg{
+        .userImg {
             height: 100%;
             width: 100%;
             border-radius: 50%;

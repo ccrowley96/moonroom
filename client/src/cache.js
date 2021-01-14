@@ -1,4 +1,4 @@
-import { InMemoryCache, makeVar } from '@apollo/client'
+import { InMemoryCache, makeVar } from '@apollo/client';
 
 export const cache = new InMemoryCache({
     typePolicies: {
@@ -17,7 +17,9 @@ export const cache = new InMemoryCache({
             }
         }
     }
-})
+});
 
-export const activeCommunityIdVar = makeVar(localStorage.getItem('activeCommunityId'));
+export const activeCommunityIdVar = makeVar(
+    localStorage.getItem('activeCommunityId')
+);
 export const activeRoomIdVar = makeVar(null);

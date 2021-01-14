@@ -1,26 +1,26 @@
 @import '../../styles/baseStyles.module.scss';
 
-.section{
-    input{
+.section {
+    input {
         width: 200px;
     }
     margin: 16px 0px;
 }
 
-.submitButton{
+.submitButton {
     display: block;
     margin-top: 8px;
 }
 
-.error{
+.error {
     color: red;
 }
 
-.error{
+.error {
     margin-top: 8px;
 }
 
-.success{
+.success {
     margin-top: 8px;
     color: green;
 }

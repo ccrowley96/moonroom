@@ -1,19 +1,23 @@
 {
-  "name": "shareit.space",
-  "version": "1.0.0",
-  "description": "Private spaces for da squad",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ccrowley96/fullstack-auth-docker-boilerplate.git"
-  },
-  "author": "Cory Crowley",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ccrowley96/fullstack-auth-docker-boilerplate/issues"
-  },
-  "homepage": "https://github.com/ccrowley96/fullstack-auth-docker-boilerplate#readme"
+    "name": "shareit.space",
+    "version": "1.0.0",
+    "description": "Private spaces for da squad",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prettier:fix": "prettier --write ./**/*.{js,ts,scss}"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ccrowley96/fullstack-auth-docker-boilerplate.git"
+    },
+    "author": "Cory Crowley",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/ccrowley96/fullstack-auth-docker-boilerplate/issues"
+    },
+    "homepage": "https://github.com/ccrowley96/fullstack-auth-docker-boilerplate#readme",
+    "devDependencies": {
+        "prettier": "2.2.1"
+    }
 }

@@ -1,10 +1,10 @@
 @import '../../../../styles/baseStyles.module.scss';
 
-.tagWrapper{
+.tagWrapper {
     display: flex;
     flex-wrap: wrap;
     margin: 8px 0px;
-    .tag{
+    .tag {
         background-color: var(--color-topic-tag-bg);
         border-radius: 6px;
         margin: 4px;
@@ -12,7 +12,7 @@
         padding-right: 6px;
         display: flex;
 
-        .deleteTagWrapper{
+        .deleteTagWrapper {
             height: 100%;
             width: 16px;
             display: flex;
@@ -22,22 +22,22 @@
     }
 }
 
-.postWrapper{
+.postWrapper {
     display: flex;
     justify-content: flex-end;
 }
 
-.validationErrorText{
+.validationErrorText {
     font-size: 12px;
 }
 
-.labelWrapper{
+.labelWrapper {
     display: flex;
     align-items: center;
-    ._sectionLabel{
+    ._sectionLabel {
         margin-bottom: 0px;
     }
-    .validationErrorText{
+    .validationErrorText {
         margin-left: 8px;
         font-style: italic;
     }

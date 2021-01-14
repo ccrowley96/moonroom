@@ -18,33 +18,37 @@ const roomSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-})
+});
 
 // @ts-ignore
-roomSchema.pre('deleteOne', { document: true }, async function() {
-    
+roomSchema.pre('deleteOne', { document: true }, async function () {
     const room = this;
 
     // remove room ref from Community
-    await room.model('Community').update({
-        _id: room.community
-    },
-    {
-        $pull: {
-            rooms: room._id
-        }
-    }, {multi: true})
+    await room.model('Community').update(
+        {
+            _id: room.community
+        },
+        {
+            $pull: {
+                rooms: room._id
+            }
+        },
+        { multi: true }
+    );
 
     // remove room ref from all posts that reference it
-    await room.model('Post').update({
-        room: room._id
-    },
-    {
-        $unset: {
-            room: ""
-        }
-    }, {multi: true})
-
-})
+    await room.model('Post').update(
+        {
+            room: room._id
+        },
+        {
+            $unset: {
+                room: ''
+            }
+        },
+        { multi: true }
+    );
+});
 
 export default mongoose.model('Room', roomSchema);

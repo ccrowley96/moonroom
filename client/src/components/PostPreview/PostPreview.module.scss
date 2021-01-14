@@ -1,5 +1,5 @@
-@import "../../styles/baseStyles.module.scss";
-.postWrapper{
+@import '../../styles/baseStyles.module.scss';
+.postWrapper {
     margin: 8px;
     border: 1px solid black;
     padding: 8px;
@@ -14,20 +14,20 @@
     word-break: break-all;
 }
 
-.title{
+.title {
     font-weight: 600;
 }
 
-.link{
+.link {
     width: fit-content;
 }
 
-.postPreviewFooter{
+.postPreviewFooter {
     display: flex;
-    .author{
+    .author {
         flex-grow: 1;
     }
-    .postDate{
+    .postDate {
         flex-grow: 1;
         text-align: end;
     }

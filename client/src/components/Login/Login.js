@@ -1,49 +1,47 @@
-import React from "react";
-import {
-    useHistory,
-    useLocation
-} from "react-router-dom";
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from '../../hooks/auth';
 import { GoogleLogin } from 'react-google-login';
-import { useTheme } from "../../hooks/provideTheme";
+import { useTheme } from '../../hooks/provideTheme';
 
 import classNames from 'classnames/bind';
-const cx = classNames.bind(require('./Login.module.scss'))
+const cx = classNames.bind(require('./Login.module.scss'));
 
-export default function Login(){
-
-    const {theme} = useTheme()
+export default function Login() {
+    const { theme } = useTheme();
 
     let history = useHistory();
     let location = useLocation();
     let auth = useAuth();
 
-    let { from } = location.state || { from: { pathname: "/" } };
-    
+    let { from } = location.state || { from: { pathname: '/' } };
+
     const responseGoogle = async (googleResponse) => {
-        console.log(googleResponse)
+        console.log(googleResponse);
         let response = await fetch(`/auth/googleLogin`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({tokenId: googleResponse.tokenId})
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ tokenId: googleResponse.tokenId })
         });
 
-        if(response.status === 200){
+        if (response.status === 200) {
             let parsedResponse = await response.json();
             // Set auth state
             auth.authenticateUser(parsedResponse, () => history.push(from));
-        } else{
-            console.log('Google login failed')
+        } else {
+            console.log('Google login failed');
         }
-    }
+    };
 
-    return(
+    return (
         <div className={cx('jumboContainer')}>
             <div className={cx('jumbo')}>
                 <h2>OurStuff</h2>
-                <h4><i>Start sharing some stuff</i></h4>
+                <h4>
+                    <i>Start sharing some stuff</i>
+                </h4>
                 <div className={cx('googleLogin')}>
                     <GoogleLogin
                         theme={theme}
@@ -57,5 +55,5 @@ export default function Login(){
                 </div>
             </div>
         </div>
-    ) 
+    );
 }

@@ -1,15 +1,31 @@
 import { gql } from '@apollo/client';
 
 export const NEW_POST = gql`
-    mutation addPost($communityId: ID!, $roomId: ID, $title: String!, $link: String, $body: String, $rating: Float, $tags: [String] ){
-        addPost(communityId: $communityId, roomId: $roomId, title: $title, link: $link, body: $body, rating: $rating, tags: $tags){
+    mutation addPost(
+        $communityId: ID!
+        $roomId: ID
+        $title: String!
+        $link: String
+        $body: String
+        $rating: Float
+        $tags: [String]
+    ) {
+        addPost(
+            communityId: $communityId
+            roomId: $roomId
+            title: $title
+            link: $link
+            body: $body
+            rating: $rating
+            tags: $tags
+        ) {
             code
             success
             message
-            post{
+            post {
                 id
                 title
-                author{
+                author {
                     id
                     given_name
                 }
@@ -24,8 +40,8 @@ export const NEW_POST = gql`
 `;
 
 export const DELETE_POST = gql`
-    mutation deletePost($postId: ID!){
-        deletePost(postId: $postId){
+    mutation deletePost($postId: ID!) {
+        deletePost(postId: $postId) {
             code
             success
             message

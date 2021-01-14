@@ -5,30 +5,39 @@ import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import randomstring from 'randomstring';
 
-class CommunityApi<TData> extends MongoDataSource<TData>{
-    async addCommunity(name: String, picture?: String, description?: String){
+class CommunityApi<TData> extends MongoDataSource<TData> {
+    async addCommunity(name: String, picture?: String, description?: String) {
         const { user } = this.context;
-        try{
+        try {
             // Only add community if user doesn't already own a community with the same name
-            let communityOwner: any = await User.findById({_id: mongooseId(user._id)}).populate('communities');
-            communityOwner.communities.forEach(community => {
-                if(community.name === name)
-                    throw new ApolloError('You already have a community with that name, please choose a unique name', errorCodes.communityAlreadyExists)
-            })
+            let communityOwner: any = await User.findById({
+                _id: mongooseId(user._id)
+            }).populate('communities');
+            communityOwner.communities.forEach((community) => {
+                if (community.name === name)
+                    throw new ApolloError(
+                        'You already have a community with that name, please choose a unique name',
+                        errorCodes.communityAlreadyExists
+                    );
+            });
 
             // Generate unique community code
             // Find unique room code
             let communityCodeCheck = null;
             let communityCode = null;
-            do{
-                communityCode = randomstring.generate({
-                    length: 6,
-                    charset: 'alphabetic',
-                    readable: true,
-                    capitalization: 'lowercase'
-                }).toLowerCase();
-                communityCodeCheck = await Community.find({code: communityCode});
-            } while(communityCodeCheck.length !== 0);
+            do {
+                communityCode = randomstring
+                    .generate({
+                        length: 6,
+                        charset: 'alphabetic',
+                        readable: true,
+                        capitalization: 'lowercase'
+                    })
+                    .toLowerCase();
+                communityCodeCheck = await Community.find({
+                    code: communityCode
+                });
+            } while (communityCodeCheck.length !== 0);
 
             // Construct community object
             let community = new Community({
@@ -53,63 +62,72 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
                 community: savedCommunity,
                 user: communityOwner
             };
-        }catch(err){
+        } catch (err) {
             return {
                 code: 500,
                 success: false,
                 message: err.message,
                 community: null,
                 user: null
-            }
+            };
         }
     }
 
-    async getMyCommunities(){
+    async getMyCommunities() {
         const { user } = this.context;
-        let userQuery: any = await User.findById({_id: mongooseId(user._id)}).populate('communities');
+        let userQuery: any = await User.findById({
+            _id: mongooseId(user._id)
+        }).populate('communities');
         return userQuery.communities;
     }
 
-    async verifyCommunityExists(communityId?: string, communityCode?: string){
-
+    async verifyCommunityExists(communityId?: string, communityCode?: string) {
         let community;
 
         // Verify community exists; lookup using either communityCode or communityId
-        if(communityCode){
-            community = await Community.findOne({code: communityCode});
-        } else{ 
-            community = await Community.findById({_id: mongooseId(communityId)});
+        if (communityCode) {
+            community = await Community.findOne({ code: communityCode });
+        } else {
+            community = await Community.findById({
+                _id: mongooseId(communityId)
+            });
         }
-        
-        if(!community){
-            throw new ApolloError('Community does not exist', errorCodes.communityNotFound)
+
+        if (!community) {
+            throw new ApolloError(
+                'Community does not exist',
+                errorCodes.communityNotFound
+            );
         }
 
         return community;
     }
 
-    async verifyAccessToCommunity(communityId: string){
-        
+    async verifyAccessToCommunity(communityId: string) {
         let community = await this.verifyCommunityExists(communityId);
 
         // Verify access to community
-        let myCommunitiesIds = (await this.getMyCommunities()).map(community => String(community.id));
-        if(myCommunitiesIds.indexOf(communityId) === -1){
-            throw new ApolloError('You don\'t have access to this community!', errorCodes.communityUnauthorized)
+        let myCommunitiesIds = (
+            await this.getMyCommunities()
+        ).map((community) => String(community.id));
+        if (myCommunitiesIds.indexOf(communityId) === -1) {
+            throw new ApolloError(
+                "You don't have access to this community!",
+                errorCodes.communityUnauthorized
+            );
         }
 
         return community;
     }
 
-    async getCommunity(communityId: string){
+    async getCommunity(communityId: string) {
         return await this.verifyAccessToCommunity(communityId);
     }
 
-    async joinCommunity(code: string){
-
+    async joinCommunity(code: string) {
         const { user } = this.context;
-        
-        try{
+
+        try {
             // Verify community with given code exists
             let community: any = await this.verifyCommunityExists(null, code);
 
@@ -117,9 +135,15 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
             community = await community.populate('members').populate('admins');
 
             // Make sure user hasn't already joined community and is not an admin
-            let membersAndAdmins = [...community.members.map(m => String(m)), ...community.admins.map(a => String(a))]
-            if(membersAndAdmins.indexOf(String(user._id)) !== -1){
-                throw new ApolloError('You are already a member or admin of this community', errorCodes.communityAlreadyJoined)
+            let membersAndAdmins = [
+                ...community.members.map((m) => String(m)),
+                ...community.admins.map((a) => String(a))
+            ];
+            if (membersAndAdmins.indexOf(String(user._id)) !== -1) {
+                throw new ApolloError(
+                    'You are already a member or admin of this community',
+                    errorCodes.communityAlreadyJoined
+                );
             }
 
             //  Add user to community
@@ -137,7 +161,7 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
                 community: savedCommunity,
                 user: savedUser
             };
-        } catch(err){
+        } catch (err) {
             return {
                 code: 500,
                 success: false,
@@ -148,9 +172,9 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
         }
     }
 
-    async deleteCommunity(communityId: string){
+    async deleteCommunity(communityId: string) {
         const { user } = this.context;
-        try{
+        try {
             // Verify community exists
             let community: any = await this.verifyCommunityExists(communityId);
 
@@ -158,11 +182,15 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
             community = await community.populate('admins');
 
             // Verify user is admin of community
-            if(community.admins.indexOf(user._id) === -1)
-                throw new Error('You are not authorized to delete this community')
+            if (community.admins.indexOf(user._id) === -1)
+                throw new Error(
+                    'You are not authorized to delete this community'
+                );
 
             // Delete community
-            let toDelete = await Community.findById({_id: mongooseId(communityId)});
+            let toDelete = await Community.findById({
+                _id: mongooseId(communityId)
+            });
             await toDelete.deleteOne();
 
             return {
@@ -170,7 +198,7 @@ class CommunityApi<TData> extends MongoDataSource<TData>{
                 success: true,
                 message: 'Community deleted.'
             };
-        } catch(err){
+        } catch (err) {
             return {
                 code: 500,
                 success: false,

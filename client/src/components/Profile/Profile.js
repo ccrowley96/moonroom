@@ -8,24 +8,31 @@ import { useHistory } from 'react-router-dom';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./Profile.module.scss'));
 
-export default function Profile(){
-    
+export default function Profile() {
     const { loading, error, data } = useQuery(USER_QUERY);
-    const {toggleTheme} = useTheme();
+    const { toggleTheme } = useTheme();
     const history = useHistory();
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error :(</p>;
-        
-    if(data.me){
+
+    if (data.me) {
         let { me } = data;
         let registeredDate = new Date(Number(me.registered));
-        return(
+        return (
             <div className={cx('profileWrapper')}>
-                <button className={cx('homeLink', '_btn')} onClick={() => history.push('/home')}>
+                <button
+                    className={cx('homeLink', '_btn')}
+                    onClick={() => history.push('/home')}
+                >
                     Home
                 </button>
-                <img className={cx('profilePicture')} style={{padding: "10px"}} alt="profile" src={me.picture} />
+                <img
+                    className={cx('profilePicture')}
+                    style={{ padding: '10px' }}
+                    alt="profile"
+                    src={me.picture}
+                />
                 <table>
                     <tbody>
                         <tr>
@@ -48,15 +55,20 @@ export default function Profile(){
                 </table>
 
                 <div className={cx('profileBtn')}>
-                    <button className={cx('_btn')} onClick={() => toggleTheme()}>Change theme</button>
+                    <button
+                        className={cx('_btn')}
+                        onClick={() => toggleTheme()}
+                    >
+                        Change theme
+                    </button>
                 </div>
-                
+
                 <div className={cx('profileBtn')}>
-                    <Logout/>
+                    <Logout />
                 </div>
             </div>
-        )
-    } else{
+        );
+    } else {
         return null;
     }
 }

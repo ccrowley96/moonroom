@@ -1,5 +1,5 @@
-@import "../../styles/baseStyles.module.scss";
-.postDetailsWrapper{
+@import '../../styles/baseStyles.module.scss';
+.postDetailsWrapper {
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -8,27 +8,27 @@
     min-height: 200px;
 }
 
-.link{
+.link {
     width: fit-content;
 }
 
-.footer{
+.footer {
     position: absolute;
     bottom: 0px;
     width: 100%;
     display: flex;
-    .meta{
+    .meta {
         flex-grow: 1;
     }
-    .postControls{
+    .postControls {
         flex-grow: 4;
         text-align: end;
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        
-        .control{
-           margin-left: 16px;
+
+        .control {
+            margin-left: 16px;
         }
     }
 }

@@ -5,29 +5,29 @@ import {
     Switch,
     Route,
     Redirect
-} from "react-router-dom";
+} from 'react-router-dom';
 import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Home from '../Home/Home';
 import TopBar from '../TopBar/TopBar';
 
-export default function Routes(){
-    return(
-      <Router>
-          <Switch>
-            <Route path="/login">
-                <Login />
-            </Route>
-            <PrivateRoute path="/profile">
-              <Profile />
-            </PrivateRoute>
-            <PrivateRoute path="/">
-              <TopBar />
-              <Home />
-            </PrivateRoute>
-          </Switch>
-      </Router>
-    )
+export default function Routes() {
+    return (
+        <Router>
+            <Switch>
+                <Route path="/login">
+                    <Login />
+                </Route>
+                <PrivateRoute path="/profile">
+                    <Profile />
+                </PrivateRoute>
+                <PrivateRoute path="/">
+                    <TopBar />
+                    <Home />
+                </PrivateRoute>
+            </Switch>
+        </Router>
+    );
 }
 
 // A wrapper for <Route> that redirects to the login
@@ -35,20 +35,20 @@ export default function Routes(){
 function PrivateRoute({ children, ...rest }) {
     let auth = useAuth();
     return (
-      <Route
-        {...rest}
-        render={({ location }) =>
-          auth.isUserAuthenticated() ? (
-            children
-          ) : (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: { from: location }
-              }}
-            />
-          )
-        }
-      />
+        <Route
+            {...rest}
+            render={({ location }) =>
+                auth.isUserAuthenticated() ? (
+                    children
+                ) : (
+                    <Redirect
+                        to={{
+                            pathname: '/login',
+                            state: { from: location }
+                        }}
+                    />
+                )
+            }
+        />
     );
-  }
+}

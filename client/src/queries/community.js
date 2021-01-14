@@ -1,43 +1,43 @@
 import { gql } from '@apollo/client';
 
 export const DELETE_COMMUNITY = gql`
-    mutation deleteCommunity($communityId: ID!){
-        deleteCommunity(communityId: $communityId){
+    mutation deleteCommunity($communityId: ID!) {
+        deleteCommunity(communityId: $communityId) {
             code
             success
             message
         }
     }
-`
+`;
 
 export const GET_ACTIVE_COMMUNITY = gql`
-    query getCommunity($communityId: ID!){
-        community(communityId: $communityId){
+    query getCommunity($communityId: ID!) {
+        community(communityId: $communityId) {
             id
             code
             name
             picture
-            admins{
+            admins {
                 id
                 name
                 email
             }
-            members{
+            members {
                 name
                 email
             }
-            rooms{
+            rooms {
                 name
                 id
             }
-            posts{
+            posts {
                 id
                 title
-                author{
+                author {
                     id
                     given_name
                 }
-                community{
+                community {
                     name
                 }
                 room {
@@ -56,12 +56,12 @@ export const GET_ACTIVE_COMMUNITY = gql`
 `;
 
 export const JOIN_COMMUNITY = gql`
-    mutation joinCommunity($code: String!){
-        joinCommunity(code: $code){
+    mutation joinCommunity($code: String!) {
+        joinCommunity(code: $code) {
             code
             success
             message
-            community{
+            community {
                 id
                 name
             }
@@ -70,12 +70,12 @@ export const JOIN_COMMUNITY = gql`
 `;
 
 export const CREATE_COMMUNITY = gql`
-    mutation addNewCommunity($name: String!, $description: String){
-        addCommunity(name: $name, description: $description){
+    mutation addNewCommunity($name: String!, $description: String) {
+        addCommunity(name: $name, description: $description) {
             code
             success
             message
-            community{
+            community {
                 id
                 name
             }
@@ -84,8 +84,8 @@ export const CREATE_COMMUNITY = gql`
 `;
 
 export const MY_COMMUNITIES = gql`
-    query myCommunities{
-        myCommunities{
+    query myCommunities {
+        myCommunities {
             name
             id
         }
