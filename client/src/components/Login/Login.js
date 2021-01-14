@@ -49,6 +49,7 @@ export default function Login() {
                         buttonText="Login with Google"
                         onSuccess={responseGoogle}
                         onFailure={responseGoogle}
+                        prompt="select_account"
                         // isSignedIn={true} auto logs in user
                         cookiePolicy={'single_host_origin'}
                     />

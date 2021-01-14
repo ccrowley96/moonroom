@@ -43,8 +43,6 @@ export const isValidURL = (str) => {
         return false;
     }
 
-    console.log(url);
-
     return url.protocol === 'http:' || url.protocol === 'https:'
         ? url.href
         : false;
