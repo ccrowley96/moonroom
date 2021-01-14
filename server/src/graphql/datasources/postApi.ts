@@ -62,6 +62,69 @@ export default class postApi<TData> extends MongoDataSource<TData> {
         }
     }
 
+    async editPost(
+        postId,
+        communityId,
+        roomId,
+        title,
+        link,
+        body,
+        rating,
+        tags
+    ) {
+        try {
+            // Grab context variables
+            const {
+                user,
+                dataSources: { roomApi, communityApi }
+            } = this.context;
+
+            // Verify community exists and user has access
+            let community = await communityApi.getCommunity(communityId);
+            let room = null;
+
+            if (roomId) {
+                // Verify rooms exists
+                room = await roomApi.getRoom(communityId, roomId);
+            }
+
+            // Verify post exists
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post) {
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
+            }
+
+            // Update post fields
+            post.title = title;
+            post.link = link;
+            post.body = body;
+            post.rating = rating;
+            post.room = room ? mongooseId(roomId) : null;
+            post.tags = tags;
+
+            await post.save();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Post updated successfully',
+                post: post
+            };
+        } catch (err) {
+            console.log(err);
+            return {
+                code: 500,
+                success: false,
+                message: err.message,
+                post: null,
+                room: null
+            };
+        }
+    }
+
     async deletePost(postId: string) {
         const { user } = this.context;
 

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { modalTypes, actionTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 
 import classNames from 'classnames/bind';
-import PostDetails from '../PostDetails/PostDetails';
 const cx = classNames.bind(require('./PostPreview.module.scss'));
 
 const PostPreview = ({ post }) => {

@@ -63,6 +63,22 @@ export default {
                 tags
             );
         },
+        editPost: async (
+            _,
+            { postId, communityId, roomId, title, link, body, rating, tags },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.editPost(
+                postId,
+                communityId,
+                roomId,
+                title,
+                link,
+                body,
+                rating,
+                tags
+            );
+        },
         joinCommunity: async (
             _,
             { code },

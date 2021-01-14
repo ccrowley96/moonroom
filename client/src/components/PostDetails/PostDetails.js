@@ -4,7 +4,7 @@ import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
 import { activeCommunityIdVar } from '../../cache';
-import { actionTypes } from '../../constants/constants';
+import { actionTypes, modalTypes } from '../../constants/constants';
 
 import classNames from 'classnames/bind';
 import { useMutation, useReactiveVar } from '@apollo/client';
@@ -74,7 +74,17 @@ const PostDetails = () => {
                     </div>
                     {post.author.id === auth.session.user._id && (
                         <div className={cx('postControls')}>
-                            <button className={cx('control', '_btn')}>
+                            <button
+                                className={cx('control', '_btn')}
+                                onClick={() => {
+                                    // Open edit post modal
+                                    appDispatch({
+                                        type: actionTypes.SET_ACTIVE_MODAL,
+                                        payload: modalTypes.NEW_POST,
+                                        modalData: post
+                                    });
+                                }}
+                            >
                                 Edit
                             </button>
                             <button

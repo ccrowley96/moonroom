@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 
 import classNames from 'classnames/bind';

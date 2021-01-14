@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation } from '@apollo/client';
-import { NEW_POST } from '../../../../queries/post';
+import { EDIT_POST, NEW_POST } from '../../../../queries/post';
 import { enterPressed } from '../../../../services/utils';
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
@@ -11,24 +11,43 @@ import { isValidURL } from '../../../../services/utils';
 
 import classNames from 'classnames/bind';
 import { GET_ACTIVE_COMMUNITY } from '../../../../queries/community';
-const cx = classNames.bind(require('./NewPostModal.module.scss'));
+const cx = classNames.bind(require('./AddEditPostModal.module.scss'));
 
-const NewPostModal = ({ activeCommunity, postEdit = null }) => {
+const AddEditPostModal = ({ activeCommunity }) => {
     const noRoomSelected = 'Uncategorized';
     const activeRoomId = useReactiveVar(activeRoomIdVar);
-    const [selectedRoom, setSelectedRoom] = useState(
-        activeRoomId ? activeRoomId : noRoomSelected
-    );
-    const { appDispatch } = useAppState();
+    const {
+        appState: { modalData: postEdit },
+        appDispatch
+    } = useAppState();
+
+    const getPostRoom = () => {
+        let postRoom = noRoomSelected;
+        if (postEdit?.room) {
+            let roomInCommunity = activeCommunity.rooms.find((room) => {
+                return room.id === postEdit.room;
+            });
+            if (roomInCommunity) {
+                postRoom = roomInCommunity;
+            }
+        } else if (activeRoomId) {
+            postRoom = activeRoomId;
+        }
+        return postRoom;
+    };
+
+    const [selectedRoom, setSelectedRoom] = useState(getPostRoom());
 
     // Input field state
-    const [title, setTitle] = useState(postEdit ? postEdit.title : '');
-    const [link, setLink] = useState(postEdit ? postEdit.link : '');
-    const [body, setBody] = useState(postEdit ? postEdit.body : '');
+    const [title, setTitle] = useState(postEdit?.title ? postEdit.title : '');
+    const [link, setLink] = useState(postEdit?.link ? postEdit.link : '');
+    const [body, setBody] = useState(postEdit?.body ? postEdit.body : '');
     const [newTag, setNewTag] = useState('');
-    const [tags, setTags] = useState(postEdit ? postEdit.tags : []);
+    const [tags, setTags] = useState(
+        postEdit && Array.isArray(postEdit.tags) ? postEdit.tags : []
+    );
     const [rating, setRating] = useState(
-        postEdit ? postEdit.rating : 'noRating'
+        postEdit?.rating ? postEdit.rating : 'noRating'
     );
     const [errors, setErrors] = useState({});
 
@@ -53,6 +72,40 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
                             ...activeCommunityData.community.posts,
                             data.data.addPost.post
                         ]
+                    }
+                }
+            });
+        }
+    });
+
+    // Edit post mutation
+    const [editPost] = useMutation(EDIT_POST, {
+        update: (cache, data) => {
+            // Update post in active community's post list
+            // Read active community
+            const activeCommunityData = cache.readQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: { communityId: activeCommunity.id }
+            });
+
+            let activeCommunityPosts = [
+                ...activeCommunityData.community.posts
+            ].map((post) => {
+                if (post.id === data.data.editPost.post.id) {
+                    return data.data.editPost.post;
+                } else {
+                    return post;
+                }
+            });
+
+            // Overwrite cached query with post updated
+            cache.writeQuery({
+                query: GET_ACTIVE_COMMUNITY,
+                variables: { communityId: activeCommunity.id },
+                data: {
+                    community: {
+                        ...activeCommunityData.community,
+                        posts: [...activeCommunityPosts]
                     }
                 }
             });
@@ -110,29 +163,52 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
             setErrors({ ...errors, ...newErrors });
 
             if (!isErrorPresent({ ...errors, ...newErrors })) {
-                let result = await createNewPost({
-                    variables: {
-                        communityId: activeCommunity.id,
-                        roomId:
-                            selectedRoom === 'Uncategorized'
-                                ? null
-                                : selectedRoom,
-                        title: title,
-                        link: link.length > 0 ? cleanedLink : null,
-                        body: body.length > 0 ? body : null,
-                        rating: rating === 'noRating' ? null : Number(rating),
-                        tags: tags.length > 0 ? tags : null
-                    }
-                });
+                let result;
+                if (postEdit) {
+                    result = await editPost({
+                        variables: {
+                            postId: postEdit.id,
+                            communityId: activeCommunity.id,
+                            roomId:
+                                selectedRoom === 'Uncategorized'
+                                    ? null
+                                    : selectedRoom,
+                            title: title,
+                            link: link.length > 0 ? cleanedLink : null,
+                            body: body.length > 0 ? body : null,
+                            rating:
+                                rating === 'noRating' ? null : Number(rating),
+                            tags: tags.length > 0 ? tags : null
+                        }
+                    });
+                } else {
+                    result = await createNewPost({
+                        variables: {
+                            communityId: activeCommunity.id,
+                            roomId:
+                                selectedRoom === 'Uncategorized'
+                                    ? null
+                                    : selectedRoom,
+                            title: title,
+                            link: link.length > 0 ? cleanedLink : null,
+                            body: body.length > 0 ? body : null,
+                            rating:
+                                rating === 'noRating' ? null : Number(rating),
+                            tags: tags.length > 0 ? tags : null
+                        }
+                    });
+                }
 
-                if (result.data['addPost'].success) {
+                let dataKey = postEdit ? 'editPost' : 'addPost';
+
+                if (result.data[dataKey].success) {
                     // TODO add post succeeded messsage, animation / timeout here
                     appDispatch({
                         type: actionTypes.SET_ACTIVE_MODAL,
                         payload: null
                     });
                 } else {
-                    throw new Error(result.data['addPost'].message);
+                    throw new Error(result.data[dataKey].message);
                 }
             } else {
                 return;
@@ -157,7 +233,11 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
     if (!activeCommunity) return null;
 
     return (
-        <Modal title={`Posting to ${activeCommunity.name}`}>
+        <Modal
+            title={
+                postEdit ? 'Editing post' : `Posting to ${activeCommunity.name}`
+            }
+        >
             <div className={cx('_modalSection')}>
                 <div className={cx('_sectionLabel')}>Select room</div>
                 <select
@@ -206,6 +286,7 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
                 <input
                     className={cx('_input', errors.title ? '_error' : '')}
                     placeholder={'Give your post a title'}
+                    value={title}
                     onChange={(e) => {
                         setTitle(e.target.value);
                         setErrors({ ...errors, ...{ title: null } });
@@ -220,6 +301,7 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
                 <input
                     className={cx('_input', errors.link ? '_error' : '')}
                     placeholder={'Share a link'}
+                    value={link}
                     onChange={(e) => {
                         setLink(e.target.value);
                         setErrors({ ...errors, ...{ link: null } });
@@ -231,6 +313,7 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
                 <input
                     className={cx('_input')}
                     placeholder={'What are the deetz?'}
+                    value={body}
                     onChange={(e) => setBody(e.target.value)}
                 />
             </div>
@@ -297,11 +380,11 @@ const NewPostModal = ({ activeCommunity, postEdit = null }) => {
                     onClick={handleSubmit}
                     disabled={isErrorPresent()}
                 >
-                    Post
+                    {postEdit ? 'Confirm' : 'Post'}
                 </button>
             </div>
         </Modal>
     );
 };
 
-export default NewPostModal;
+export default AddEditPostModal;

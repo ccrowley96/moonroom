@@ -7,7 +7,7 @@ import { modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
 import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal/RoomDetailsModal';
-import NewPostModal from '../Modal/Modals/NewPostModal/NewPostModal';
+import AddEditPostModal from '../Modal/Modals/AddEditPostModal/AddEditPostModal';
 import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
@@ -63,7 +63,7 @@ export default function Home() {
                 />
             )}
             {activeModal === modalTypes.NEW_POST && (
-                <NewPostModal
+                <AddEditPostModal
                     activeCommunity={activeCommunityData?.community}
                 />
             )}

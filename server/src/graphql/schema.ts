@@ -91,7 +91,7 @@ const typeDefs = gql`
         community: Community
     }
 
-    type addPostMutationResponse implements MutationResponse {
+    type addEditPostMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
         message: String!
@@ -117,7 +117,17 @@ const typeDefs = gql`
             body: String
             rating: Float
             tags: [String]
-        ): addPostMutationResponse
+        ): addEditPostMutationResponse
+        editPost(
+            postId: ID!
+            communityId: ID!
+            roomId: ID
+            title: String!
+            link: String
+            body: String
+            rating: Float
+            tags: [String]
+        ): addEditPostMutationResponse
         joinCommunity(code: String!): joinCommunityMutationResponse
         deleteCommunity(communityId: ID!): deleteMutationResponse
         deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse
