@@ -5,6 +5,7 @@ import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { DELETE_COMMUNITY } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
+import CommunityCodeLink from '../../../CommunityCodeLink/CommunityCodeLink';
 
 import classNames from 'classnames/bind';
 import { removeCommunityFromCache } from '../../../../services/utils';
@@ -25,11 +26,8 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
 
     return (
         <Modal title={activeCommunity.name}>
-            <div className={cx('m_odalSection')}>
-                <div className={cx('_sectionLabel')}>Community code</div>
-                <div className={cx('_sectionValue')}>
-                    {activeCommunity.code}
-                </div>
+            <div className={cx('_modalSection')}>
+                <CommunityCodeLink code={activeCommunity.code} />
             </div>
             {activeCommunity.members.length > 0 && (
                 <div className={cx('_modalSection')}>

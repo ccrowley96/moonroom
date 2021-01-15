@@ -7,7 +7,8 @@ import {
     MY_COMMUNITIES
 } from '../../queries/community';
 import MutationInput from '../MutationInput/MutationInput';
-import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
+import { selectCommunity } from '../../services/utils';
+import CommunityCodeLink from '../CommunityCodeLink/CommunityCodeLink';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./CommunitySelector.module.scss'));
@@ -33,12 +34,6 @@ const CommunitySelector = ({
     useEffect(() => {
         setSelectedCommunity(activeCommunity ? activeCommunity.id : 'none');
     }, [activeCommunity]);
-
-    const selectCommunity = (communityId) => {
-        localStorage.setItem('activeCommunityId', communityId);
-        activeCommunityIdVar(communityId);
-        activeRoomIdVar(null);
-    };
 
     const handleCommunitySelectChange = (e) => {
         let selection = e.target.value;
@@ -73,9 +68,9 @@ const CommunitySelector = ({
                                     <h3 className={cx('communityName')}>
                                         Community: {activeCommunity.name}
                                     </h3>
-                                    <p className={cx('communityCode')}>
-                                        Join code: {activeCommunity.code}
-                                    </p>
+                                    <CommunityCodeLink
+                                        code={activeCommunity.code}
+                                    />
                                 </div>
                             </div>
                         ) : null}

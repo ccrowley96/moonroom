@@ -1,4 +1,4 @@
-import { cache } from '../cache';
+import { activeCommunityIdVar, activeRoomIdVar, cache } from '../cache';
 import { GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../queries/community';
 
 export const enterPressed = (e, targetFunc) => {
@@ -6,6 +6,12 @@ export const enterPressed = (e, targetFunc) => {
     if (code === 13) {
         targetFunc();
     }
+};
+
+export const selectCommunity = (communityId) => {
+    localStorage.setItem('activeCommunityId', communityId);
+    activeCommunityIdVar(communityId);
+    activeRoomIdVar(null);
 };
 
 export const removeCommunityFromCache = (communityId) => {

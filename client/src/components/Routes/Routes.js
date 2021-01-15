@@ -10,6 +10,7 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import Home from '../Home/Home';
 import TopBar from '../TopBar/TopBar';
+import JoinCommunityLink from '../JoinCommunityLink/JoinCommunityLink';
 
 export default function Routes() {
     return (
@@ -20,6 +21,9 @@ export default function Routes() {
                 </Route>
                 <PrivateRoute path="/profile">
                     <Profile />
+                </PrivateRoute>
+                <PrivateRoute path="/community/:code">
+                    <JoinCommunityLink />
                 </PrivateRoute>
                 <PrivateRoute path="/">
                     <TopBar />

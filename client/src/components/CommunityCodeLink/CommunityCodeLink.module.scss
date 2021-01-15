@@ -1,0 +1,32 @@
+@import '../../styles/baseStyles.module.scss';
+
+.linkLine {
+    display: flex;
+    align-items: center;
+}
+
+.codeTitle {
+    font-weight: 600;
+}
+
+.copyWrapper {
+    width: fit-content;
+    cursor: pointer;
+}
+
+.code {
+    font-weight: 600;
+    margin-right: 4px;
+    margin-left: 4px;
+    text-decoration: underline;
+}
+
+.code,
+.linkIcon {
+    color: var(--color-text-link);
+}
+
+.clickInfo {
+    font-style: italic;
+    font-size: small;
+}
