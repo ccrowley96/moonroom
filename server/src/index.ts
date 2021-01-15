@@ -101,7 +101,7 @@ server.applyMiddleware({ app });
 // Default catch all -> to index.html (for react-router)
 app.get('/*', (_, res: express.Response) => {
     res.sendFile(
-        path.join(__dirname, '../../client/build/index.html'),
+        path.join(__dirname, '../dist/client_build/index.html'),
         function (err) {
             if (err) {
                 res.status(500).send(err);

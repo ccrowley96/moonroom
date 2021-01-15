@@ -12,6 +12,7 @@ const JoinCommunityLink = () => {
 
     useEffect(() => {
         triggerJoin();
+        // eslint-disable-next-line
     }, []);
 
     const triggerJoin = async () => {

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-const postDataFragment = gql`
+export const postDataFragment = gql`
     fragment postData on Post {
         id
         title

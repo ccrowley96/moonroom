@@ -25,10 +25,16 @@
 .postPreviewFooter {
     display: flex;
     .author {
+        display: flex;
+        align-items: center;
         flex-grow: 1;
     }
     .postDate {
         flex-grow: 1;
         text-align: end;
     }
+}
+
+.inRoomIcon {
+    margin-top: 4px;
 }

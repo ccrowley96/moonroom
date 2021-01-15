@@ -23,14 +23,14 @@ const AddEditPostModal = ({ activeCommunity }) => {
 
     const getPostRoom = () => {
         let postRoom = noRoomSelected;
-        if (postEdit?.room) {
+        if (postEdit?.room?.id) {
             let roomInCommunity = activeCommunity.rooms.find((room) => {
-                return room.id === postEdit.room;
+                return room.id === postEdit.room.id;
             });
             if (roomInCommunity) {
-                postRoom = roomInCommunity;
+                postRoom = roomInCommunity.id;
             }
-        } else if (activeRoomId) {
+        } else if (activeRoomId && !postEdit) {
             postRoom = activeRoomId;
         }
         return postRoom;
@@ -246,7 +246,6 @@ const AddEditPostModal = ({ activeCommunity }) => {
                     onChange={(e) => {
                         let val = e.target.value;
                         setSelectedRoom(val);
-                        activeRoomIdVar(val === noRoomSelected ? null : val);
                     }}
                 >
                     {/* Default option */}
@@ -255,7 +254,6 @@ const AddEditPostModal = ({ activeCommunity }) => {
                         value={noRoomSelected}
                         onClick={() => {
                             setSelectedRoom(noRoomSelected);
-                            activeRoomIdVar(null);
                         }}
                     >
                         {noRoomSelected}
@@ -267,7 +265,6 @@ const AddEditPostModal = ({ activeCommunity }) => {
                                 value={room.id}
                                 onClick={() => {
                                     setSelectedRoom(room.id);
-                                    activeRoomIdVar(room.id);
                                 }}
                             >
                                 {room.name}
