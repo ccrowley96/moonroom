@@ -93,8 +93,12 @@ export const DELETE_POST = gql`
 `;
 
 export const POST_SEARCH = gql`
-    query PostSearch($filter: String!) {
-        post(filter: $filter) {
+    query PostSearch($filter: String!, $communityId: ID!, $roomId: ID) {
+        postSearch(
+            filter: $filter
+            communityId: $communityId
+            roomId: $roomId
+        ) {
             ...postData
         }
     }

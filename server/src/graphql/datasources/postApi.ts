@@ -5,6 +5,33 @@ import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
 
 export default class postApi<TData> extends MongoDataSource<TData> {
+    async searchPosts(filter, communityId, roomId) {
+        const where =
+            filter !== ''
+                ? {
+                      $and: [
+                          {
+                              community: mongooseId(communityId),
+                              ...(roomId && { room: roomId })
+                          },
+                          {
+                              $or: [
+                                  { title: { $regex: filter, $options: 'i' } },
+                                  { body: { $regex: filter, $options: 'i' } },
+                                  { link: { $regex: filter, $options: 'i' } }
+                              ]
+                          }
+                      ]
+                  }
+                : {
+                      community: mongooseId(communityId),
+                      ...(roomId && { room: roomId })
+                  };
+
+        let postsFound = await Post.find(where);
+        return postsFound;
+    }
+
     async addPost(communityId, roomId, title, link, body, rating, tags) {
         try {
             // Grab context variables

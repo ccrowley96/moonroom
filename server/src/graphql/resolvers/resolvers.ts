@@ -32,8 +32,12 @@ export default {
         post: async (_, { postId }, { dataSources: { postApi } }) => {
             return await postApi.getPost(postId);
         },
-        postSearch: async (_, { filter }, { dataSources: { postApi } }) => {
-            return null;
+        postSearch: async (
+            _,
+            { filter, communityId, roomId },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.searchPosts(filter, communityId, roomId);
         }
     },
     Mutation: {
