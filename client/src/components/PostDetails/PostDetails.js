@@ -1,5 +1,5 @@
 import React from 'react';
-import { DELETE_POST } from '../../queries/post';
+import { DELETE_POST, FEED_QUERY } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
@@ -25,22 +25,17 @@ const PostDetails = () => {
             const queryVars = { communityId: activeCommunityId };
 
             // Read active community
-            let activeCommunityData = cache.readQuery({
-                query: GET_ACTIVE_COMMUNITY,
+            let feedData = cache.readQuery({
+                query: FEED_QUERY,
                 variables: queryVars
             });
 
             // Write new community and filter out deleted post
             cache.writeQuery({
-                query: GET_ACTIVE_COMMUNITY,
+                query: FEED_QUERY,
                 variables: queryVars,
                 data: {
-                    community: {
-                        ...activeCommunityData.community,
-                        posts: activeCommunityData.community.posts.filter(
-                            (p) => p.id !== post.id
-                        )
-                    }
+                    feed: [...feedData.feed.filter((p) => p.id !== post.id)]
                 }
             });
 

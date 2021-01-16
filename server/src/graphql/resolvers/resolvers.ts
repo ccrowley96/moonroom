@@ -32,12 +32,12 @@ export default {
         post: async (_, { postId }, { dataSources: { postApi } }) => {
             return await postApi.getPost(postId);
         },
-        postSearch: async (
+        feed: async (
             _,
-            { filter, communityId, roomId },
+            { communityId, filter, roomId },
             { dataSources: { postApi } }
         ) => {
-            return await postApi.searchPosts(filter, communityId, roomId);
+            return await postApi.searchPosts(communityId, filter, roomId);
         }
     },
     Mutation: {

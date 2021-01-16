@@ -5,9 +5,9 @@ import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
 
 export default class postApi<TData> extends MongoDataSource<TData> {
-    async searchPosts(filter, communityId, roomId) {
+    async searchPosts(communityId, filter, roomId) {
         const where =
-            filter !== ''
+            filter && filter !== ''
                 ? {
                       $and: [
                           {

@@ -53,7 +53,7 @@ const typeDefs = gql`
         community(communityId: ID!): Community
         room(communityId: ID!, roomId: ID!): Room
         post(postId: ID!): Post
-        postSearch(filter: String!, communityId: ID!, roomId: ID): [Post]
+        feed(communityId: ID!, filter: String, roomId: ID): [Post]
     }
 
     interface MutationResponse {

@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { postDataFragment } from './post';
 
 export const DELETE_COMMUNITY = gql`
     mutation deleteCommunity($communityId: ID!) {
@@ -31,14 +30,10 @@ export const GET_ACTIVE_COMMUNITY = gql`
                 name
                 id
             }
-            posts {
-                ...postData
-            }
             description
             createdAt
         }
     }
-    ${postDataFragment}
 `;
 
 export const JOIN_COMMUNITY = gql`

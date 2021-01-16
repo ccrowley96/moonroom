@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation } from '@apollo/client';
-import { EDIT_POST, NEW_POST } from '../../../../queries/post';
+import { EDIT_POST, FEED_QUERY, NEW_POST } from '../../../../queries/post';
 import { enterPressed } from '../../../../services/utils';
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
@@ -53,26 +53,27 @@ const AddEditPostModal = ({ activeCommunity }) => {
 
     // New post mutation
     const [createNewPost] = useMutation(NEW_POST, {
-        update: (cache, data) => {
+        update: (
+            cache,
+            {
+                data: {
+                    addPost: { post }
+                }
+            }
+        ) => {
             // Add post to active community's post list
             // Read active community
-            const activeCommunityData = cache.readQuery({
-                query: GET_ACTIVE_COMMUNITY,
+            const feedData = cache.readQuery({
+                query: FEED_QUERY,
                 variables: { communityId: activeCommunity.id }
             });
 
             // Overwrite cached query with new post added
             cache.writeQuery({
-                query: GET_ACTIVE_COMMUNITY,
+                query: FEED_QUERY,
                 variables: { communityId: activeCommunity.id },
                 data: {
-                    community: {
-                        ...activeCommunityData.community,
-                        posts: [
-                            ...activeCommunityData.community.posts,
-                            data.data.addPost.post
-                        ]
-                    }
+                    feed: [...feedData.feed, post]
                 }
             });
         }
@@ -80,33 +81,35 @@ const AddEditPostModal = ({ activeCommunity }) => {
 
     // Edit post mutation
     const [editPost] = useMutation(EDIT_POST, {
-        update: (cache, data) => {
+        update: (
+            cache,
+            {
+                data: {
+                    editPost: { post }
+                }
+            }
+        ) => {
             // Update post in active community's post list
             // Read active community
-            const activeCommunityData = cache.readQuery({
-                query: GET_ACTIVE_COMMUNITY,
+            const feedData = cache.readQuery({
+                query: FEED_QUERY,
                 variables: { communityId: activeCommunity.id }
             });
 
-            let activeCommunityPosts = [
-                ...activeCommunityData.community.posts
-            ].map((post) => {
-                if (post.id === data.data.editPost.post.id) {
-                    return data.data.editPost.post;
-                } else {
+            let posts = [...feedData.feed].map((p) => {
+                if (p.id === post.id) {
                     return post;
+                } else {
+                    return p;
                 }
             });
 
             // Overwrite cached query with post updated
             cache.writeQuery({
-                query: GET_ACTIVE_COMMUNITY,
+                query: FEED_QUERY,
                 variables: { communityId: activeCommunity.id },
                 data: {
-                    community: {
-                        ...activeCommunityData.community,
-                        posts: [...activeCommunityPosts]
-                    }
+                    feed: [...posts]
                 }
             });
         }
