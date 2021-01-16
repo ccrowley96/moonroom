@@ -1,0 +1,24 @@
+@import '../../styles/baseStyles.module.scss';
+.searchWrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0px 20px;
+    justify-content: flex-end;
+}
+.searchLabel {
+    width: 60px;
+    margin: 0px 10px;
+    text-align: center;
+}
+.searchBox {
+    flex-grow: 1;
+    min-width: 80px;
+    max-width: 300px;
+}
+.searchButton {
+    width: 80px;
+    justify-self: flex-end;
+    margin-left: 10px;
+}

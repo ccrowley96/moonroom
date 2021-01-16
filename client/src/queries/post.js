@@ -91,3 +91,12 @@ export const DELETE_POST = gql`
         }
     }
 `;
+
+export const POST_SEARCH = gql`
+    query PostSearch($filter: String!) {
+        post(filter: $filter) {
+            ...postData
+        }
+    }
+    ${postDataFragment}
+`;

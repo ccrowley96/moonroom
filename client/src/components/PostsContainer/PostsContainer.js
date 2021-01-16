@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
+import Search from '../Search/Search';
 
 import classNames from 'classnames/bind';
 import { useReactiveVar } from '@apollo/client';
@@ -29,7 +30,9 @@ const PostsContainer = ({ posts }) => {
 
     return (
         <div className={cx('filterAndPosts')}>
-            <div className={cx('filterContainer')}></div>
+            <div className={cx('filterContainer')}>
+                <Search />
+            </div>
             <div className={cx('postsContainer')}>
                 {activePosts.map((post) => {
                     return <PostPreview key={post.id} post={post} />;

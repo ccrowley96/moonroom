@@ -12,7 +12,7 @@ export const ProvideTheme = ({ children }) => {
 const useProvideTheme = () => {
     const initialTheme = localStorage.getItem('theme')
         ? localStorage.getItem('theme')
-        : themes.light;
+        : themes.dark;
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', initialTheme);
