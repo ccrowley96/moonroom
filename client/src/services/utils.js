@@ -2,6 +2,27 @@ import { activeCommunityIdVar, activeRoomIdVar, cache } from '../cache';
 import { GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../queries/community';
 import { POSTS_PER_PAGE } from '../constants/constants';
 
+export const formatDateTimeString = (milliString) => {
+    let date = new Date(Number(milliString)).toLocaleString('en', {
+        weekday: 'short',
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    return date;
+};
+
+export const formatShortDateString = (milliString) => {
+    let date = new Date(Number(milliString)).toLocaleDateString('en', {
+        weekday: 'short',
+        month: 'short',
+        day: '2-digit'
+    });
+    return date;
+};
+
 export const enterPressed = (e, targetFunc) => {
     let code = e.keyCode || e.which;
     if (code === 13) {

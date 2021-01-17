@@ -28,7 +28,7 @@ const CommunityCodeLink = ({ code }) => {
                     <div className={cx('linkLine')}>
                         <span className={cx('codeTitle')}>Unique code:</span>
                         <span className={cx('code')}>{code}</span>
-                        <FiLink className="linkIcon" />
+                        <FiLink className={cx('linkIcon')} />
                     </div>
                     <div className={cx('clickInfo')}>
                         {copied

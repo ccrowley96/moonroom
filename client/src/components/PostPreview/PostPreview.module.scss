@@ -1,9 +1,9 @@
 @import '../../styles/baseStyles.module.scss';
 .postWrapper {
+    background-color: var(--color-bg-canvas-inset);
     margin: 8px;
-    border: 1px solid black;
     padding: 8px;
-    border-radius: 4px;
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;

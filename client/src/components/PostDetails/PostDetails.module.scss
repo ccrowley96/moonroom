@@ -6,19 +6,51 @@
     word-break: break-all;
     position: relative;
     min-height: 200px;
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.ratingWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.tagWrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 8px 0px;
+    .tag {
+        background-color: var(--color-topic-tag-bg);
+        border-radius: 6px;
+        margin: 4px;
+        padding: 5px 12px;
+        display: flex;
+    }
+}
+
+.postDetails {
+    flex-grow: 1;
+    overflow: scroll;
 }
 
 .link {
     width: fit-content;
+    color: var(--color-text-link);
 }
 
 .footer {
-    position: absolute;
-    bottom: 0px;
+    justify-self: flex-end;
     width: 100%;
     display: flex;
+    margin-top: 8px;
     .meta {
         flex-grow: 1;
+        .author,
+        .date {
+            font-weight: 600;
+        }
     }
     .postControls {
         flex-grow: 4;

@@ -4,6 +4,7 @@ import { useAppState } from '../../hooks/provideAppState';
 import { BsArrowRightShort } from 'react-icons/bs';
 
 import classNames from 'classnames/bind';
+import { formatShortDateString } from '../../services/utils';
 const cx = classNames.bind(require('./PostPreview.module.scss'));
 
 const PostPreview = ({ post }) => {
@@ -42,12 +43,7 @@ const PostPreview = ({ post }) => {
                     ) : null}
                 </div>
                 <div className={cx('postDate')}>
-                    <span className={cx('date')}>
-                        {new Date(Number(post.date)).toLocaleDateString()}
-                    </span>
-                    <span className={cx('time')}>
-                        {new Date(Number(post.date)).toLocaleTimeString()}
-                    </span>
+                    {formatShortDateString(post.date)}
                 </div>
             </div>
         </div>
