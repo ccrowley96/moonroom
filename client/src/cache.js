@@ -1,4 +1,5 @@
 import { InMemoryCache, makeVar } from '@apollo/client';
+import { relayStylePagination } from '@apollo/client/utilities';
 
 export const cache = new InMemoryCache({
     typePolicies: {
@@ -14,28 +15,7 @@ export const cache = new InMemoryCache({
                         return activeRoomIdVar();
                     }
                 },
-                feed: {
-                    keyArgs: false,
-                    merge(existing = null, incoming) {
-                        let mergedEdges = [];
-                        if (existing) {
-                            mergedEdges = [...existing.edges];
-                        }
-                        mergedEdges = [...mergedEdges, ...incoming.edges];
-
-                        console.log({
-                            existing,
-                            incoming,
-                            merged: mergedEdges
-                        });
-
-                        return {
-                            __typename: incoming.__typename,
-                            edges: mergedEdges,
-                            pageInfo: { ...incoming.pageInfo }
-                        };
-                    }
-                }
+                feed: relayStylePagination()
             }
         }
     }

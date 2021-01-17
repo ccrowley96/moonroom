@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
-import { useReactiveVar, useMutation } from '@apollo/client';
+import { useReactiveVar, useMutation, gql } from '@apollo/client';
 import { EDIT_POST, FEED_QUERY, NEW_POST } from '../../../../queries/post';
 import {
     enterPressed,
@@ -64,29 +64,34 @@ const AddEditPostModal = ({ activeCommunity }) => {
                 }
             }
         ) => {
-            // Add post to active community's post list
-            // Read active community
-            const feedData = cache.readQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunity.id)
-            });
+            cache.modify({
+                fields: {
+                    feed(currentFeed) {
+                        const newPostRef = cache.writeFragment({
+                            data: post,
+                            fragment: gql`
+                                fragment NewPost on Post {
+                                    id
+                                    title
+                                }
+                            `
+                        });
 
-            console.log(feedData);
-
-            // Overwrite cached query with new post added
-            cache.writeQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunity.id, 1),
-                data: {
-                    feed: {
-                        ...feedData.feed,
-                        edges: [
-                            {
-                                cursor: post.date,
-                                node: post,
-                                __typename: 'FeedEdge'
+                        return {
+                            ...currentFeed,
+                            edges: [
+                                {
+                                    cursor: post.date,
+                                    node: newPostRef,
+                                    __typename: 'FeedEdge'
+                                },
+                                ...currentFeed.edges
+                            ],
+                            pageInfo: {
+                                ...currentFeed.pageInfo,
+                                startCursor: post.date
                             }
-                        ]
+                        };
                     }
                 }
             });
@@ -94,40 +99,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
     });
 
     // Edit post mutation
-    const [editPost] = useMutation(EDIT_POST, {
-        update: (
-            cache,
-            {
-                data: {
-                    editPost: { post }
-                }
-            }
-        ) => {
-            // Update post in active community's post list
-            // Read active community
-            const feedData = cache.readQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunity.id, 1)
-            });
-
-            let posts = [...feedData.feed.posts].map((p) => {
-                if (p.id === post.id) {
-                    return post;
-                } else {
-                    return p;
-                }
-            });
-
-            // Overwrite cached query with post updated
-            cache.writeQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunity.id, 1),
-                data: {
-                    feed: { posts: [...posts] }
-                }
-            });
-        }
-    });
+    const [editPost] = useMutation(EDIT_POST);
 
     const isErrorPresent = (customErrObj) => {
         let errorObj = customErrObj ? customErrObj : errors;

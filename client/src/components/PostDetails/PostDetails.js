@@ -1,56 +1,32 @@
 import React from 'react';
-import { DELETE_POST, FEED_QUERY } from '../../queries/post';
+import { DELETE_POST } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
-import { activeCommunityIdVar } from '../../cache';
 import { actionTypes, modalTypes } from '../../constants/constants';
 
 import classNames from 'classnames/bind';
 import { useMutation, useReactiveVar } from '@apollo/client';
-import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
-import { getFeedQueryVariables } from '../../services/utils';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = () => {
     const {
-        appState: { modalData: post, page },
+        appState: { modalData: post },
         appDispatch
     } = useAppState();
     const auth = useAuth();
-    const activeCommunityId = useReactiveVar(activeCommunityIdVar);
 
     const [deletePost] = useMutation(DELETE_POST, {
         update(cache) {
-            // Remove post from active community
-            const queryVars = { communityId: activeCommunityId };
-
-            // Read active community
-            let feedData = cache.readQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunityId, page)
-            });
-
-            let currentPage = feedData.feed.currentPage;
-            let totalPages = feedData.feed.totalPages;
-
-            // Calculate new current page & total pages (on client cache)
-            if (feedData.feed.posts.length <= 1) {
-                // deleting last post on page
-                appDispatch({ type: actionTypes.DECREMENT_PAGE });
-            }
-
-            // Write new community and filter out deleted post
-            cache.writeQuery({
-                query: FEED_QUERY,
-                variables: getFeedQueryVariables(activeCommunityId, page),
-                data: {
-                    feed: {
-                        posts: [
-                            ...feedData.feed.posts.filter(
-                                (p) => p.id !== post.id
-                            )
-                        ]
+            cache.modify({
+                fields: {
+                    feed(currentFeed) {
+                        return {
+                            ...currentFeed,
+                            edges: currentFeed.edges.filter((edgeRef) => {
+                                return edgeRef.cursor !== post.date;
+                            })
+                        };
                     }
                 }
             });

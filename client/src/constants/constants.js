@@ -6,9 +6,7 @@ export const themes = {
 export const actionTypes = {
     SET_ACTIVE_COMMUNITY: 'SET_ACTIVE_COMMUNITY',
     SET_ACTIVE_ROOM: 'SET_ACTIVE_ROOM',
-    SET_ACTIVE_MODAL: 'SET_ACTIVE_MODAL',
-    INCREMENT_PAGE: 'INCREMENT_PAGE',
-    DECREMENT_PAGE: 'DECREMENT_PAGE'
+    SET_ACTIVE_MODAL: 'SET_ACTIVE_MODAL'
 };
 
 export const modalTypes = {

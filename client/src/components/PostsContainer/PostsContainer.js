@@ -17,39 +17,10 @@ const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
-    const {
-        appState: { page },
-        appDispatch
-    } = useAppState();
 
     const { loading, data, error, fetchMore } = useQuery(FEED_QUERY, {
         variables: getFeedQueryVariables(activeCommunityId)
     });
-
-    // const fetchFeed = () => {
-    //     executeFeed({
-    //         variables: {
-    //             filter: searchFilter,
-    //             communityId: activeCommunityId,
-    //             ...(activeRoomId && { roomId: activeRoomId })
-    //         }
-    //     });
-    // };
-
-    // Fetch on initial load
-    // useEffect(() => {
-    //     fetchFeed();
-    // }, []);
-
-    useEffect(() => {
-        if (data) {
-            console.log(
-                'New Data:',
-                data.feed.edges.map((e) => e.cursor.slice(e.cursor.length - 3)),
-                '\n\n'
-            );
-        }
-    }, [data]);
 
     return (
         <div className={cx('filterAndPosts')}>
@@ -87,9 +58,7 @@ const PostPreviews = ({ loading, data, activeCommunityId, fetchMore }) => {
                     data.feed.pageInfo.hasNextPage && (
                         <Waypoint
                             onEnter={() => {
-                                console.log(
-                                    `Hit waypoint ${i}, trying to fetch more`
-                                );
+                                console.log(`fetching more posts...`);
                                 fetchMore({
                                     variables: getFeedQueryVariables(
                                         activeCommunityId,
