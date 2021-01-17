@@ -1,24 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
 import { FEED_QUERY } from '../../queries/post';
-import { useLazyQuery, useQuery, useReactiveVar } from '@apollo/client';
-import { activeRoomIdVar, activeCommunityIdVar } from '../../cache';
-import { useParams } from 'react-router-dom';
-import { actionTypes, POSTS_PER_PAGE } from '../../constants/constants';
+import { useQuery, useReactiveVar } from '@apollo/client';
+import { activeCommunityIdVar } from '../../cache';
 import { Waypoint } from 'react-waypoint';
 
 import classNames from 'classnames/bind';
 import { getFeedQueryVariables } from '../../services/utils';
-import { useAppState } from '../../hooks/provideAppState';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
-    const activeRoomId = useReactiveVar(activeRoomIdVar);
 
-    const { loading, data, error, fetchMore } = useQuery(FEED_QUERY, {
+    const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
         variables: getFeedQueryVariables(activeCommunityId)
     });
 

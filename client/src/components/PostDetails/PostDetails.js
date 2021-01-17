@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes } from '../../constants/constants';
 
 import classNames from 'classnames/bind';
-import { useMutation, useReactiveVar } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = () => {

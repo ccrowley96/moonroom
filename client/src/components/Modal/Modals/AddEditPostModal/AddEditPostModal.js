@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation, gql } from '@apollo/client';
-import { EDIT_POST, FEED_QUERY, NEW_POST } from '../../../../queries/post';
-import {
-    enterPressed,
-    getFeedQueryVariables
-} from '../../../../services/utils';
+import { EDIT_POST, NEW_POST } from '../../../../queries/post';
+import { enterPressed } from '../../../../services/utils';
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
 import { isValidURL } from '../../../../services/utils';
 
 import classNames from 'classnames/bind';
-import { GET_ACTIVE_COMMUNITY } from '../../../../queries/community';
 const cx = classNames.bind(require('./AddEditPostModal.module.scss'));
 
 const AddEditPostModal = ({ activeCommunity }) => {
@@ -339,9 +335,9 @@ const AddEditPostModal = ({ activeCommunity }) => {
                     disabled={tags.length >= 10 ? 'disabled' : ''}
                 />
                 <div className={cx('tagWrapper')}>
-                    {tags.map((tag) => {
+                    {tags.map((tag, idx) => {
                         return (
-                            <div className={cx('tag')}>
+                            <div className={cx('tag')} key={idx}>
                                 <div className={cx('tagText')}>{tag}</div>
                                 <div className={cx('deleteTagWrapper')}>
                                     <CgClose
