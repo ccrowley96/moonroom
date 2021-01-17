@@ -13,6 +13,28 @@ export const cache = new InMemoryCache({
                     read() {
                         return activeRoomIdVar();
                     }
+                },
+                feed: {
+                    keyArgs: false,
+                    merge(existing = null, incoming) {
+                        let mergedEdges = [];
+                        if (existing) {
+                            mergedEdges = [...existing.edges];
+                        }
+                        mergedEdges = [...mergedEdges, ...incoming.edges];
+
+                        console.log({
+                            existing,
+                            incoming,
+                            merged: mergedEdges
+                        });
+
+                        return {
+                            __typename: incoming.__typename,
+                            edges: mergedEdges,
+                            pageInfo: { ...incoming.pageInfo }
+                        };
+                    }
                 }
             }
         }

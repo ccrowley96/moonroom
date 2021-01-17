@@ -37,7 +37,12 @@ const PostPreview = ({ post }) => {
                     ) : null}
                 </div>
                 <div className={cx('postDate')}>
-                    {new Date(Number(post.date)).toLocaleDateString()}
+                    <span className={cx('date')}>
+                        {new Date(Number(post.date)).toLocaleDateString()}
+                    </span>
+                    <span className={cx('time')}>
+                        {new Date(Number(post.date)).toLocaleTimeString()}
+                    </span>
                 </div>
             </div>
         </div>

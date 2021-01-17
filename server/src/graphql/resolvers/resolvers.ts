@@ -34,10 +34,16 @@ export default {
         },
         feed: async (
             _,
-            { communityId, filter, roomId },
+            { communityId, roomId, filter, first = 5, after },
             { dataSources: { postApi } }
         ) => {
-            return await postApi.searchPosts(communityId, filter, roomId);
+            return await postApi.feedQuery(
+                communityId,
+                roomId,
+                filter,
+                first,
+                after
+            );
         }
     },
     Mutation: {

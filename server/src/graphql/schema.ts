@@ -47,13 +47,33 @@ const typeDefs = gql`
         createdAt: String
     }
 
+    type PageInfo {
+        hasNextPage: Boolean
+    }
+
+    type FeedEdge {
+        cursor: ID
+        node: Post
+    }
+
+    type FeedConnection {
+        edges: [FeedEdge]
+        pageInfo: PageInfo!
+    }
+
     type Query {
         me: User
         myCommunities: [Community]!
         community(communityId: ID!): Community
         room(communityId: ID!, roomId: ID!): Room
         post(postId: ID!): Post
-        feed(communityId: ID!, filter: String, roomId: ID): [Post]
+        feed(
+            communityId: ID!
+            roomId: ID
+            filter: String
+            first: Int
+            after: String
+        ): FeedConnection
     }
 
     interface MutationResponse {

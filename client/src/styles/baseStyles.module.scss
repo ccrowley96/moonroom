@@ -19,6 +19,11 @@
         border-color: var(--color-select-menu-backdrop-bg);
         transition-duration: 0.1s;
     }
+    &:disabled {
+        color: var(--color-text-disabled);
+        background-color: var(--color-input-disabled-bg);
+        border-color: var(--color-input-disabled-border);
+    }
 }
 
 ._btn-danger {

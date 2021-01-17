@@ -1,5 +1,6 @@
 import { activeCommunityIdVar, activeRoomIdVar, cache } from '../cache';
 import { GET_ACTIVE_COMMUNITY, MY_COMMUNITIES } from '../queries/community';
+import { POSTS_PER_PAGE } from '../constants/constants';
 
 export const enterPressed = (e, targetFunc) => {
     let code = e.keyCode || e.which;
@@ -52,4 +53,16 @@ export const isValidURL = (str) => {
     return url.protocol === 'http:' || url.protocol === 'https:'
         ? url.href
         : false;
+};
+
+export const getFeedQueryVariables = (
+    communityId,
+    cursor,
+    first = POSTS_PER_PAGE
+) => {
+    return {
+        communityId,
+        first,
+        after: cursor
+    };
 };

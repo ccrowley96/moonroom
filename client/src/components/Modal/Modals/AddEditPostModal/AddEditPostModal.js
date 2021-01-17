@@ -3,7 +3,10 @@ import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation } from '@apollo/client';
 import { EDIT_POST, FEED_QUERY, NEW_POST } from '../../../../queries/post';
-import { enterPressed } from '../../../../services/utils';
+import {
+    enterPressed,
+    getFeedQueryVariables
+} from '../../../../services/utils';
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
@@ -65,15 +68,26 @@ const AddEditPostModal = ({ activeCommunity }) => {
             // Read active community
             const feedData = cache.readQuery({
                 query: FEED_QUERY,
-                variables: { communityId: activeCommunity.id }
+                variables: getFeedQueryVariables(activeCommunity.id)
             });
+
+            console.log(feedData);
 
             // Overwrite cached query with new post added
             cache.writeQuery({
                 query: FEED_QUERY,
-                variables: { communityId: activeCommunity.id },
+                variables: getFeedQueryVariables(activeCommunity.id, 1),
                 data: {
-                    feed: [...feedData.feed, post]
+                    feed: {
+                        ...feedData.feed,
+                        edges: [
+                            {
+                                cursor: post.date,
+                                node: post,
+                                __typename: 'FeedEdge'
+                            }
+                        ]
+                    }
                 }
             });
         }
@@ -93,10 +107,10 @@ const AddEditPostModal = ({ activeCommunity }) => {
             // Read active community
             const feedData = cache.readQuery({
                 query: FEED_QUERY,
-                variables: { communityId: activeCommunity.id }
+                variables: getFeedQueryVariables(activeCommunity.id, 1)
             });
 
-            let posts = [...feedData.feed].map((p) => {
+            let posts = [...feedData.feed.posts].map((p) => {
                 if (p.id === post.id) {
                     return post;
                 } else {
@@ -107,9 +121,9 @@ const AddEditPostModal = ({ activeCommunity }) => {
             // Overwrite cached query with post updated
             cache.writeQuery({
                 query: FEED_QUERY,
-                variables: { communityId: activeCommunity.id },
+                variables: getFeedQueryVariables(activeCommunity.id, 1),
                 data: {
-                    feed: [...posts]
+                    feed: { posts: [...posts] }
                 }
             });
         }

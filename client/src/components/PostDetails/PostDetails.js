@@ -9,11 +9,12 @@ import { actionTypes, modalTypes } from '../../constants/constants';
 import classNames from 'classnames/bind';
 import { useMutation, useReactiveVar } from '@apollo/client';
 import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
+import { getFeedQueryVariables } from '../../services/utils';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = () => {
     const {
-        appState: { modalData: post },
+        appState: { modalData: post, page },
         appDispatch
     } = useAppState();
     const auth = useAuth();
@@ -27,15 +28,30 @@ const PostDetails = () => {
             // Read active community
             let feedData = cache.readQuery({
                 query: FEED_QUERY,
-                variables: queryVars
+                variables: getFeedQueryVariables(activeCommunityId, page)
             });
+
+            let currentPage = feedData.feed.currentPage;
+            let totalPages = feedData.feed.totalPages;
+
+            // Calculate new current page & total pages (on client cache)
+            if (feedData.feed.posts.length <= 1) {
+                // deleting last post on page
+                appDispatch({ type: actionTypes.DECREMENT_PAGE });
+            }
 
             // Write new community and filter out deleted post
             cache.writeQuery({
                 query: FEED_QUERY,
-                variables: queryVars,
+                variables: getFeedQueryVariables(activeCommunityId, page),
                 data: {
-                    feed: [...feedData.feed.filter((p) => p.id !== post.id)]
+                    feed: {
+                        posts: [
+                            ...feedData.feed.posts.filter(
+                                (p) => p.id !== post.id
+                            )
+                        ]
+                    }
                 }
             });
 

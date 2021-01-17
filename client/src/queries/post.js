@@ -12,6 +12,9 @@ export const postDataFragment = gql`
             id
             name
         }
+        community {
+            name
+        }
         link
         date
         body
@@ -93,9 +96,17 @@ export const DELETE_POST = gql`
 `;
 
 export const FEED_QUERY = gql`
-    query Feed($communityId: ID!) {
-        feed(communityId: $communityId) {
-            ...postData
+    query Feed($communityId: ID!, $first: Int, $after: String) {
+        feed(communityId: $communityId, first: $first, after: $after) {
+            edges {
+                cursor
+                node {
+                    ...postData
+                }
+            }
+            pageInfo {
+                hasNextPage
+            }
         }
     }
     ${postDataFragment}

@@ -8,7 +8,8 @@ const initialAppState = {
     activeCommunity: null,
     activeRoom: null,
     activeModal: null,
-    modalData: null
+    modalData: null,
+    page: 1
 };
 
 const AppStateReducer = (state, action) => {
@@ -26,6 +27,16 @@ const AppStateReducer = (state, action) => {
                 ...state,
                 activeModal: action.payload,
                 modalData: action?.modalData
+            };
+        case actionTypes.INCREMENT_PAGE:
+            return {
+                ...state,
+                page: state.page + 1
+            };
+        case actionTypes.DECREMENT_PAGE:
+            return {
+                ...state,
+                page: state.page <= 1 ? 1 : state.page - 1
             };
         default:
             throw new Error();

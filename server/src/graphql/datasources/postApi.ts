@@ -1,18 +1,24 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
-import { Post, Community } from '../../db/index';
+import { Post } from '../../db/index';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
 
 export default class postApi<TData> extends MongoDataSource<TData> {
-    async searchPosts(communityId, filter, roomId) {
-        const where =
+    // First === limit, after === cursor ID
+    async feedQuery(communityId, roomId, filter, first, after) {
+        const searchQuery =
             filter && filter !== ''
                 ? {
                       $and: [
                           {
                               community: mongooseId(communityId),
-                              ...(roomId && { room: roomId })
+                              ...(roomId && { room: roomId }),
+                              ...(after && {
+                                  date: {
+                                      $lt: new Date(Number(after)).toISOString()
+                                  }
+                              })
                           },
                           {
                               $or: [
@@ -25,11 +31,29 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                   }
                 : {
                       community: mongooseId(communityId),
-                      ...(roomId && { room: roomId })
+                      ...(roomId && { room: roomId }),
+                      ...(after && {
+                          date: { $lt: new Date(Number(after)).toISOString() }
+                      })
                   };
 
-        let postsFound = await Post.find(where);
-        return postsFound;
+        const count = await Post.countDocuments(searchQuery);
+
+        let postsFound: any = await Post.find(searchQuery)
+            .limit(first)
+            .sort({ date: 'descending' });
+
+        const feedEdges = postsFound.map((doc: any) => ({
+            cursor: doc.date,
+            node: doc
+        }));
+
+        return {
+            edges: feedEdges,
+            pageInfo: {
+                hasNextPage: count > feedEdges.length
+            }
+        };
     }
 
     async addPost(communityId, roomId, title, link, body, rating, tags) {
