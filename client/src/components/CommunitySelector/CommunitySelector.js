@@ -35,6 +35,12 @@ const CommunitySelector = ({
         setSelectedCommunity(activeCommunity ? activeCommunity.id : 'none');
     }, [activeCommunity]);
 
+    // Prevent scroll while open
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => (document.body.style.overflow = 'unset');
+    }, []);
+
     const handleCommunitySelectChange = (e) => {
         let selection = e.target.value;
         if (communityIds.indexOf(selection) === -1) {

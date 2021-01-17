@@ -17,6 +17,10 @@
     overflow-y: scroll;
     background-color: var(--color-bg-canvas);
     padding: 16px;
+    &::-webkit-scrollbar {
+        width: 0px; /* Remove scrollbar space */
+        background: transparent; /* Optional: just make scrollbar invisible */
+    }
 }
 
 .activeCommunity {

@@ -62,8 +62,8 @@ const PostDetails = () => {
                         <div className={cx('_modalSection')}>
                             <div className={cx('ratingWrapper')}>
                                 {Array.from(Array(Math.floor(post.rating))).map(
-                                    (_) => {
-                                        return <AiOutlineStar />;
+                                    (_, idx) => {
+                                        return <AiOutlineStar key={idx} />;
                                     }
                                 )}
                             </div>

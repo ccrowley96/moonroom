@@ -9,6 +9,7 @@ const cx = classNames.bind(require('./Modal.module.scss'));
 const Modal = ({ children, title }) => {
     const { appDispatch } = useAppState();
 
+    // Prevent scroll while open
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => (document.body.style.overflow = 'unset');
