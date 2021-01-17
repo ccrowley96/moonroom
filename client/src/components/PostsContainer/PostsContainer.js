@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
 import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
@@ -8,7 +8,7 @@ import {
     useQuery,
     useReactiveVar
 } from '@apollo/client';
-import { activeCommunityIdVar } from '../../cache';
+import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
 import { Waypoint } from 'react-waypoint';
 
 import classNames from 'classnames/bind';
@@ -21,6 +21,7 @@ const cx = classNames.bind(require('./PostsContainer.module.scss'));
 const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
+    const activeRoomId = useReactiveVar(activeRoomIdVar);
     const client = useApolloClient();
 
     const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
@@ -29,10 +30,18 @@ const PostsContainer = () => {
 
     const [searchData, setSearchData] = useState(null);
 
+    useEffect(() => {
+        feedSearch();
+    }, [activeRoomId]);
+
     const feedSearch = async () => {
         const { data } = await client.query({
             query: FEED_SEARCH,
-            variables: getFeedSearchVariables(activeCommunityId, searchFilter),
+            variables: getFeedSearchVariables(
+                activeCommunityId,
+                searchFilter,
+                activeRoomId
+            ),
             fetchPolicy: 'network-only'
         });
 

@@ -13,7 +13,7 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                       $and: [
                           {
                               community: mongooseId(communityId),
-                              ...(roomId && { room: roomId }),
+                              ...(roomId && { room: mongooseId(roomId) }),
                               ...(after && {
                                   date: {
                                       $lt: new Date(Number(after)).toISOString()
@@ -31,7 +31,7 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                   }
                 : {
                       community: mongooseId(communityId),
-                      ...(roomId && { room: roomId }),
+                      ...(roomId && { room: mongooseId(roomId) }),
                       ...(after && {
                           date: { $lt: new Date(Number(after)).toISOString() }
                       })

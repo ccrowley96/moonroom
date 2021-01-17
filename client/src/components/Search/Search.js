@@ -1,6 +1,7 @@
 import React from 'react';
 
 import classNames from 'classnames/bind';
+import { enterPressed } from '../../services/utils';
 const cx = classNames.bind(require('./Search.module.scss'));
 
 const Search = ({ searchFilter, setSearchFilter, feedSearch }) => {
@@ -21,6 +22,7 @@ const Search = ({ searchFilter, setSearchFilter, feedSearch }) => {
                     onChange={handleSearchChange}
                     placeholder={'Search...'}
                     value={searchFilter}
+                    onKeyPress={(e) => enterPressed(e, feedSearch)}
                 />
                 <button
                     className={cx('_btn', 'searchButton')}

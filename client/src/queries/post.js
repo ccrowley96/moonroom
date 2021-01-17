@@ -119,12 +119,14 @@ export const FEED_SEARCH = gql`
         $first: Int
         $after: String
         $filter: String
+        $roomId: ID
     ) {
         feed(
             communityId: $communityId
             first: $first
             after: $after
             filter: $filter
+            roomId: $roomId
         ) {
             edges {
                 cursor

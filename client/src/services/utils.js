@@ -70,12 +70,14 @@ export const getFeedQueryVariables = (
 export const getFeedSearchVariables = (
     communityId,
     filter = '',
+    roomId,
     cursor,
     first = POSTS_PER_PAGE
 ) => {
     return {
         communityId,
         first,
+        roomId,
         after: cursor,
         filter
     };
