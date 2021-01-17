@@ -11,6 +11,7 @@ import {
     getFeedQueryVariables,
     getFeedSearchVariables
 } from '../../services/utils';
+import { useDidUpdateEffect } from '../../hooks/misc';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
@@ -20,13 +21,15 @@ const PostsContainer = () => {
     const client = useApolloClient();
 
     const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
-        variables: getFeedQueryVariables(activeCommunityId)
+        variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
     });
 
     const [searchData, setSearchData] = useState(null);
 
-    useEffect(() => {
-        feedSearch();
+    useDidUpdateEffect(() => {
+        fetchMore({
+            variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
+        });
     }, [activeRoomId]);
 
     const feedSearch = async () => {
@@ -59,6 +62,7 @@ const PostsContainer = () => {
                     loading={loading}
                     data={data}
                     activeCommunityId={activeCommunityId}
+                    activeRoomId={activeRoomId}
                     fetchMore={fetchMore}
                 />
             </div>
@@ -66,7 +70,13 @@ const PostsContainer = () => {
     );
 };
 
-const PostPreviews = ({ loading, data, activeCommunityId, fetchMore }) => {
+const PostPreviews = ({
+    loading,
+    data,
+    activeCommunityId,
+    activeRoomId,
+    fetchMore
+}) => {
     const posts = data?.feed?.edges;
     if (loading) {
         return <div className={cx('noPosts')}>Loading...</div>;
@@ -85,6 +95,7 @@ const PostPreviews = ({ loading, data, activeCommunityId, fetchMore }) => {
                                 fetchMore({
                                     variables: getFeedQueryVariables(
                                         activeCommunityId,
+                                        activeRoomId,
                                         data.feed.edges[
                                             data.feed.edges.length - 1
                                         ].cursor

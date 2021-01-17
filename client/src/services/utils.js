@@ -57,11 +57,13 @@ export const isValidURL = (str) => {
 
 export const getFeedQueryVariables = (
     communityId,
+    roomId,
     cursor,
     first = POSTS_PER_PAGE
 ) => {
     return {
         communityId,
+        roomId,
         first,
         after: cursor
     };

@@ -96,9 +96,13 @@ export const DELETE_POST = gql`
 `;
 
 export const FEED_QUERY = gql`
-    query Feed($communityId: ID!, $first: Int, $after: String) {
-        feed(communityId: $communityId, first: $first, after: $after)
-            @connection(key: "feed", filter: ["type"]) {
+    query Feed($communityId: ID!, $roomId: ID, $first: Int, $after: String) {
+        feed(
+            communityId: $communityId
+            roomId: $roomId
+            first: $first
+            after: $after
+        ) @connection(key: "feed", filter: ["type"]) {
             edges {
                 cursor
                 node {
