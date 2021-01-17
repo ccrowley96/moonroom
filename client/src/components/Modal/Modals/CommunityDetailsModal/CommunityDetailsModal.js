@@ -15,9 +15,17 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
     const { appDispatch } = useAppState();
 
     const [deleteCommunity] = useMutation(DELETE_COMMUNITY, {
-        update() {
+        update(cache) {
             const communityId = activeCommunity.id;
             removeCommunityFromCache(communityId);
+
+            cache.modify({
+                fields: {
+                    feed: (_, { DELETE }) => {
+                        return DELETE;
+                    }
+                }
+            });
 
             // Close modal
             appDispatch({ type: actionTypes.SET_ACTIVE_MODAL, payload: null });

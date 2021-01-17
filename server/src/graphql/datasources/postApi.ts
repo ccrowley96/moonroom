@@ -3,6 +3,7 @@ import { Post } from '../../db/index';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
+import escape from 'escape-regexp';
 
 export default class postApi<TData> extends MongoDataSource<TData> {
     // First === limit, after === cursor ID
@@ -22,9 +23,24 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                           },
                           {
                               $or: [
-                                  { title: { $regex: filter, $options: 'i' } },
-                                  { body: { $regex: filter, $options: 'i' } },
-                                  { link: { $regex: filter, $options: 'i' } }
+                                  {
+                                      title: {
+                                          $regex: escape(filter),
+                                          $options: 'i'
+                                      }
+                                  },
+                                  {
+                                      body: {
+                                          $regex: escape(filter),
+                                          $options: 'i'
+                                      }
+                                  },
+                                  {
+                                      link: {
+                                          $regex: escape(filter),
+                                          $options: 'i'
+                                      }
+                                  }
                               ]
                           }
                       ]

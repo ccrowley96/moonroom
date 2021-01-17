@@ -2,12 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
 import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
-import {
-    useApolloClient,
-    useLazyQuery,
-    useQuery,
-    useReactiveVar
-} from '@apollo/client';
+import { useApolloClient, useQuery, useReactiveVar } from '@apollo/client';
 import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
 import { Waypoint } from 'react-waypoint';
 
