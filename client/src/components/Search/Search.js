@@ -1,15 +1,23 @@
 import React from 'react';
 
 import classNames from 'classnames/bind';
-import { enterPressed } from '../../services/utils';
+import { enterPressed, getFeedQueryVariables } from '../../services/utils';
 const cx = classNames.bind(require('./Search.module.scss'));
 
-const Search = ({ searchFilter, setSearchFilter, feedSearch }) => {
+const Search = ({
+    searchFilter,
+    setSearchFilter,
+    feedSearch,
+    refetchFeed,
+    activeCommunityId
+}) => {
     const handleSearchChange = (e) => {
         setSearchFilter(e.target.value);
         if (e.target.value === '') {
             // Re-query on empty search
-            feedSearch();
+            refetchFeed({
+                variables: getFeedQueryVariables(activeCommunityId)
+            });
         }
     };
 

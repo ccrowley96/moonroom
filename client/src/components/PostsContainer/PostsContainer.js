@@ -55,6 +55,8 @@ const PostsContainer = () => {
                     searchFilter={searchFilter}
                     setSearchFilter={setSearchFilter}
                     feedSearch={feedSearch}
+                    refetchFeed={fetchMore}
+                    activeCommunityId={activeCommunityId}
                 />
             </div>
             <div className={cx('postsContainer')}>
