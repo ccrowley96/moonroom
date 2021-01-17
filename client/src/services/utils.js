@@ -66,3 +66,17 @@ export const getFeedQueryVariables = (
         after: cursor
     };
 };
+
+export const getFeedSearchVariables = (
+    communityId,
+    filter = '',
+    cursor,
+    first = POSTS_PER_PAGE
+) => {
+    return {
+        communityId,
+        first,
+        after: cursor,
+        filter
+    };
+};

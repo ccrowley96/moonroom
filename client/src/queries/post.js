@@ -112,3 +112,30 @@ export const FEED_QUERY = gql`
     }
     ${postDataFragment}
 `;
+
+export const FEED_SEARCH = gql`
+    query FeedSearch(
+        $communityId: ID!
+        $first: Int
+        $after: String
+        $filter: String
+    ) {
+        feed(
+            communityId: $communityId
+            first: $first
+            after: $after
+            filter: $filter
+        ) {
+            edges {
+                cursor
+                node {
+                    ...postData
+                }
+            }
+            pageInfo {
+                hasNextPage
+            }
+        }
+    }
+    ${postDataFragment}
+`;

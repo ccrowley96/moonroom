@@ -3,12 +3,12 @@ import React from 'react';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./Search.module.scss'));
 
-const Search = ({ searchFilter, setSearchFilter, fetchFeed }) => {
+const Search = ({ searchFilter, setSearchFilter, feedSearch }) => {
     const handleSearchChange = (e) => {
         setSearchFilter(e.target.value);
         if (e.target.value === '') {
             // Re-query on empty search
-            fetchFeed();
+            feedSearch();
         }
     };
 
@@ -24,7 +24,7 @@ const Search = ({ searchFilter, setSearchFilter, fetchFeed }) => {
                 />
                 <button
                     className={cx('_btn', 'searchButton')}
-                    onClick={(e) => fetchFeed()}
+                    onClick={(e) => feedSearch()}
                 >
                     OK
                 </button>

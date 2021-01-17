@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
-import { FEED_QUERY } from '../../queries/post';
-import { useQuery, useReactiveVar } from '@apollo/client';
+import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
+import {
+    useApolloClient,
+    useLazyQuery,
+    useQuery,
+    useReactiveVar
+} from '@apollo/client';
 import { activeCommunityIdVar } from '../../cache';
 import { Waypoint } from 'react-waypoint';
 
 import classNames from 'classnames/bind';
-import { getFeedQueryVariables } from '../../services/utils';
+import {
+    getFeedQueryVariables,
+    getFeedSearchVariables
+} from '../../services/utils';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
+    const client = useApolloClient();
 
     const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
         variables: getFeedQueryVariables(activeCommunityId)
     });
+
+    const [searchData, setSearchData] = useState(null);
+
+    const feedSearch = async () => {
+        const { data } = await client.query({
+            query: FEED_SEARCH,
+            variables: getFeedSearchVariables(activeCommunityId, searchFilter),
+            fetchPolicy: 'network-only'
+        });
+
+        setSearchData(data);
+    };
 
     return (
         <div className={cx('filterAndPosts')}>
@@ -24,7 +45,7 @@ const PostsContainer = () => {
                 <Search
                     searchFilter={searchFilter}
                     setSearchFilter={setSearchFilter}
-                    // fetchFeed={fetchFeed}
+                    feedSearch={feedSearch}
                 />
             </div>
             <div className={cx('postsContainer')}>
