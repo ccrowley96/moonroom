@@ -22,7 +22,12 @@ const PostPreview = ({ post }) => {
         >
             <div className={cx('title')}>{post.title}</div>
             {post.link && (
-                <a href={post.link} className={cx('link')}>
+                <a
+                    href={post.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cx('link')}
+                >
                     {post.link}
                 </a>
             )}

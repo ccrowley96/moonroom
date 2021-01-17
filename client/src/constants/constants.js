@@ -6,7 +6,8 @@ export const themes = {
 export const actionTypes = {
     SET_ACTIVE_COMMUNITY: 'SET_ACTIVE_COMMUNITY',
     SET_ACTIVE_ROOM: 'SET_ACTIVE_ROOM',
-    SET_ACTIVE_MODAL: 'SET_ACTIVE_MODAL'
+    SET_ACTIVE_MODAL: 'SET_ACTIVE_MODAL',
+    SET_SEARCH_ACTIVE: 'SET_SEARCH_ACTIVE'
 };
 
 export const modalTypes = {

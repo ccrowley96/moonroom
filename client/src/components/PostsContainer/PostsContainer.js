@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
 import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
@@ -12,38 +12,41 @@ import {
     getFeedSearchVariables
 } from '../../services/utils';
 import { useDidUpdateEffect } from '../../hooks/misc';
+import { useAppState } from '../../hooks/provideAppState';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
+    const { appState } = useAppState();
     const client = useApolloClient();
 
     const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
         variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
     });
 
-    const [searchData, setSearchData] = useState(null);
-
-    useDidUpdateEffect(() => {
+    const fetchMoreNoCursor = () => {
         fetchMore({
             variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
         });
+    };
+
+    useDidUpdateEffect(() => {
+        fetchMoreNoCursor();
     }, [activeRoomId]);
 
-    const feedSearch = async () => {
-        const { data } = await client.query({
+    const feedSearch = async (cursor = null) => {
+        await client.query({
             query: FEED_SEARCH,
             variables: getFeedSearchVariables(
                 activeCommunityId,
                 searchFilter,
-                activeRoomId
+                activeRoomId,
+                cursor
             ),
             fetchPolicy: 'network-only'
         });
-
-        setSearchData(data);
     };
 
     return (
@@ -53,7 +56,7 @@ const PostsContainer = () => {
                     searchFilter={searchFilter}
                     setSearchFilter={setSearchFilter}
                     feedSearch={feedSearch}
-                    refetchFeed={fetchMore}
+                    fetchMoreNoCursor={fetchMoreNoCursor}
                     activeCommunityId={activeCommunityId}
                 />
             </div>
@@ -63,7 +66,41 @@ const PostsContainer = () => {
                     data={data}
                     activeCommunityId={activeCommunityId}
                     activeRoomId={activeRoomId}
-                    fetchMore={fetchMore}
+                    fetchMore={() => {
+                        // Fetch more posts using search query
+                        if (appState.searchActive) {
+                            let cursor =
+                                data.feed.edges[data.feed.edges.length - 1]
+                                    .cursor;
+                            console.log(
+                                `fetching more posts matching [${searchFilter}] before ${new Date(
+                                    Number(cursor)
+                                ).toLocaleDateString()} | ${new Date(
+                                    Number(cursor)
+                                ).toLocaleTimeString()}...`
+                            );
+                            feedSearch(cursor);
+                        } else {
+                            // Fetch more paginated posts in community
+                            let cursor =
+                                data.feed.edges[data.feed.edges.length - 1]
+                                    .cursor;
+                            console.log(
+                                `fetching more posts before ${new Date(
+                                    Number(cursor)
+                                ).toLocaleDateString()} | ${new Date(
+                                    Number(cursor)
+                                ).toLocaleTimeString()}...`
+                            );
+                            fetchMore({
+                                variables: getFeedQueryVariables(
+                                    activeCommunityId,
+                                    activeRoomId,
+                                    cursor
+                                )
+                            });
+                        }
+                    }}
                 />
             </div>
         </div>
@@ -89,20 +126,7 @@ const PostPreviews = ({
             <React.Fragment key={post.node.id}>
                 {i === data.feed.edges.length - 3 &&
                     data.feed.pageInfo.hasNextPage && (
-                        <Waypoint
-                            onEnter={() => {
-                                console.log(`fetching more posts...`);
-                                fetchMore({
-                                    variables: getFeedQueryVariables(
-                                        activeCommunityId,
-                                        activeRoomId,
-                                        data.feed.edges[
-                                            data.feed.edges.length - 1
-                                        ].cursor
-                                    )
-                                });
-                            }}
-                        />
+                        <Waypoint onEnter={fetchMore} />
                     )}
                 <PostPreview post={post.node} />
             </React.Fragment>

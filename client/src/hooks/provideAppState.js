@@ -8,7 +8,8 @@ const initialAppState = {
     activeCommunity: null,
     activeRoom: null,
     activeModal: null,
-    modalData: null
+    modalData: null,
+    searchActive: false
 };
 
 const AppStateReducer = (state, action) => {
@@ -26,6 +27,11 @@ const AppStateReducer = (state, action) => {
                 ...state,
                 activeModal: action.payload,
                 modalData: action?.modalData
+            };
+        case actionTypes.SET_SEARCH_ACTIVE:
+            return {
+                ...state,
+                searchActive: action.payload
             };
         default:
             throw new Error();

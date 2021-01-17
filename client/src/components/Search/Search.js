@@ -1,22 +1,61 @@
 import React from 'react';
 
 import classNames from 'classnames/bind';
-import { enterPressed, getFeedQueryVariables } from '../../services/utils';
+import { enterPressed } from '../../services/utils';
+import { useAppState } from '../../hooks/provideAppState';
+import { actionTypes } from '../../constants/constants';
+import { useQuery, useReactiveVar } from '@apollo/client';
+import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
+import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
 const cx = classNames.bind(require('./Search.module.scss'));
 
 const Search = ({
     searchFilter,
     setSearchFilter,
     feedSearch,
-    refetchFeed,
-    activeCommunityId
+    fetchMoreNoCursor
 }) => {
+    const { appDispatch } = useAppState();
+
+    const activeRoomId = useReactiveVar(activeRoomIdVar);
+    const activeCommunityId = useReactiveVar(activeCommunityIdVar);
+
+    const { data: activeCommunityData } = useQuery(GET_ACTIVE_COMMUNITY, {
+        variables: { communityId: activeCommunityId },
+        skip: !activeCommunityId
+    });
+
+    const roomPlaceholder =
+        activeRoomId && activeCommunityData?.community
+            ? `Searching in ${
+                  activeCommunityData?.community.rooms.find(
+                      (room) => room.id === activeRoomId
+                  ).name
+              }...`
+            : 'Searching all posts...';
+
     const handleSearchChange = (e) => {
         setSearchFilter(e.target.value);
         if (e.target.value === '') {
-            // Re-query on empty search
-            refetchFeed({
-                variables: getFeedQueryVariables(activeCommunityId)
+            appDispatch({
+                type: actionTypes.SET_SEARCH_ACTIVE,
+                payload: false
+            });
+            fetchMoreNoCursor();
+        }
+    };
+
+    const handleSearchSubmit = () => {
+        if (searchFilter !== '') {
+            appDispatch({
+                type: actionTypes.SET_SEARCH_ACTIVE,
+                payload: true
+            });
+            feedSearch();
+        } else {
+            appDispatch({
+                type: actionTypes.SET_SEARCH_ACTIVE,
+                payload: false
             });
         }
     };
@@ -28,13 +67,13 @@ const Search = ({
                     type="text"
                     className={cx('_input', 'searchBox')}
                     onChange={handleSearchChange}
-                    placeholder={'Search...'}
+                    placeholder={roomPlaceholder}
                     value={searchFilter}
-                    onKeyPress={(e) => enterPressed(e, feedSearch)}
+                    onKeyPress={(e) => enterPressed(e, handleSearchSubmit)}
                 />
                 <button
                     className={cx('_btn', 'searchButton')}
-                    onClick={(e) => feedSearch()}
+                    onClick={handleSearchSubmit}
                 >
                     OK
                 </button>

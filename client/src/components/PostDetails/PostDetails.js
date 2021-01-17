@@ -44,7 +44,12 @@ const PostDetails = () => {
         <Modal title={post.title}>
             <div className={cx('postDetailsWrapper')}>
                 {post.link && (
-                    <a href={post.link} className={cx('link')}>
+                    <a
+                        href={post.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cx('link')}
+                    >
                         {post.link}
                     </a>
                 )}
