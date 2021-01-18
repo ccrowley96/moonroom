@@ -6,7 +6,13 @@ import { CgClose } from 'react-icons/cg';
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./Modal.module.scss'));
 
-const Modal = ({ children, title }) => {
+const Modal = ({
+    children,
+    title,
+    isConfirmOpen,
+    setIsConfirmOpen,
+    onConfirmed
+}) => {
     const { appDispatch } = useAppState();
 
     // Prevent scroll while open
@@ -24,6 +30,30 @@ const Modal = ({ children, title }) => {
                 <div className={cx('modalTitle')}>{title}</div>
                 <CgClose className={cx('closeX')} onClick={closeModal} />
                 {children}
+                {isConfirmOpen && (
+                    <div className={cx('confirmDialogWrapper')}>
+                        <div className={cx('confirmTitle')}>Are you sure?</div>
+                        <div className={cx('confirmDialog')}>
+                            <button
+                                className={cx('_btn', 'dialogBtn')}
+                                onClick={() => {
+                                    setIsConfirmOpen(false);
+                                }}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className={cx('_btn', 'dialogBtn', '_danger')}
+                                onClick={() => {
+                                    setIsConfirmOpen(false);
+                                    onConfirmed();
+                                }}
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

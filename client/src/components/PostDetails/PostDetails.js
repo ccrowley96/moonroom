@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DELETE_POST } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
@@ -17,6 +17,7 @@ const PostDetails = () => {
         appDispatch
     } = useAppState();
     const auth = useAuth();
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
     const [deletePost] = useMutation(DELETE_POST, {
         update(cache) {
@@ -42,8 +43,18 @@ const PostDetails = () => {
         }
     });
 
+    const confirmDelete = () => {
+        deletePost({
+            variables: { postId: post.id }
+        });
+    };
+
     return (
-        <Modal>
+        <Modal
+            isConfirmOpen={isConfirmOpen}
+            setIsConfirmOpen={setIsConfirmOpen}
+            onConfirmed={confirmDelete}
+        >
             <div className={cx('postDetailsWrapper')}>
                 <div className={cx('postDetails')}>
                     <div className={cx('_modalSection')}>
@@ -117,11 +128,7 @@ const PostDetails = () => {
                             </button>
                             <button
                                 className={cx('control', '_btn')}
-                                onClick={() => {
-                                    deletePost({
-                                        variables: { postId: post.id }
-                                    });
-                                }}
+                                onClick={() => setIsConfirmOpen(true)}
                             >
                                 Delete
                             </button>
