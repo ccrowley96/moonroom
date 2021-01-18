@@ -105,3 +105,11 @@ export const getFeedSearchVariables = (
         filter
     };
 };
+
+export const trimToMaxLenWithEllipsis = (str, maxLen) => {
+    if (str.length < maxLen) {
+        return str;
+    } else {
+        return str.slice(0, maxLen) + '...';
+    }
+};

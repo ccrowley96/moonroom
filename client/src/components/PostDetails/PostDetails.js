@@ -43,9 +43,12 @@ const PostDetails = () => {
     });
 
     return (
-        <Modal title={post.title}>
+        <Modal>
             <div className={cx('postDetailsWrapper')}>
                 <div className={cx('postDetails')}>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('title')}>{post.title}</div>
+                    </div>
                     {post.link && (
                         <div className={cx('_modalSection')}>
                             <a

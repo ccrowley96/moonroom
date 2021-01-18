@@ -6,20 +6,31 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+}
+
+.title {
+    font-weight: 600;
     white-space: pre-wrap;
     word-wrap: break-word;
     word-break: break-all;
 }
 
-.title {
-    font-weight: 600;
-}
-
 .link {
-    width: fit-content;
+    margin: 8px 0px;
+    display: flex;
+    align-items: center;
+    .linkText {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 90%;
+    }
+
+    .linkIcon {
+        margin-left: 4px;
+        width: 16px;
+        height: 16px;
+    }
 }
 
 .postPreviewFooter {
@@ -28,6 +39,9 @@
         display: flex;
         align-items: center;
         flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .postDate {
         flex-grow: 1;

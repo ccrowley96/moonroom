@@ -2,6 +2,7 @@ import React from 'react';
 import { modalTypes, actionTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import { BsArrowRightShort } from 'react-icons/bs';
+import { FiLink } from 'react-icons/fi';
 
 import classNames from 'classnames/bind';
 import { formatShortDateString } from '../../services/utils';
@@ -29,7 +30,8 @@ const PostPreview = ({ post }) => {
                     rel="noreferrer"
                     className={cx('link')}
                 >
-                    {post.link}
+                    <div className={cx('linkText')}>{post.link}</div>
+                    <FiLink className={cx('linkIcon')} />
                 </a>
             )}
             <div className={cx('postPreviewFooter')}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostPreview from '../PostPreview/PostPreview';
 import Search from '../Search/Search';
 import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
@@ -32,9 +32,16 @@ const PostsContainer = () => {
         });
     };
 
+    // Re-fetch on room change
     useDidUpdateEffect(() => {
         fetchMoreNoCursor();
     }, [activeRoomId]);
+
+    // Re-fetch on community change
+    useEffect(() => {
+        fetchMoreNoCursor();
+        setSearchFilter('');
+    }, [activeCommunityId]);
 
     const feedSearch = async (cursor = null) => {
         await client.query({
