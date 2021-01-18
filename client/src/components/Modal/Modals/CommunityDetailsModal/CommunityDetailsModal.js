@@ -33,7 +33,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
     });
 
     return (
-        <Modal title={activeCommunity.name}>
+        <Modal title={'Community: ' + activeCommunity.name}>
             <div className={cx('_modalSection')}>
                 <CommunityCodeLink code={activeCommunity.code} />
             </div>

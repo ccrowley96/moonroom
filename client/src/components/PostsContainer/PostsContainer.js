@@ -13,6 +13,7 @@ import {
 } from '../../services/utils';
 import { useDidUpdateEffect } from '../../hooks/misc';
 import { useAppState } from '../../hooks/provideAppState';
+import RoomSelectorList from '../RoomSelectorList/RoomSelectorList';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
@@ -67,6 +68,7 @@ const PostsContainer = () => {
                     activeCommunityId={activeCommunityId}
                 />
             </div>
+            <RoomSelectorList />
             <div className={cx('postsContainer')}>
                 <PostPreviews
                     loading={loading}
@@ -126,7 +128,7 @@ const PostPreviews = ({
         return <div className={cx('noPosts')}>Loading...</div>;
     }
     if (!posts || posts?.length === 0) {
-        return <div className={cx('noPosts')}>No posts found.</div>;
+        return <div className={cx('noPosts')}>No posts found :/</div>;
     }
     return posts.map((post, i) => {
         return (

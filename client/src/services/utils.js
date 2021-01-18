@@ -113,3 +113,12 @@ export const trimToMaxLenWithEllipsis = (str, maxLen) => {
         return str.slice(0, maxLen) + '...';
     }
 };
+
+export const isOverflown = ({
+    clientWidth,
+    clientHeight,
+    scrollWidth,
+    scrollHeight
+}) => {
+    return scrollHeight > clientHeight || scrollWidth > clientWidth;
+};

@@ -68,7 +68,7 @@ const RoomDetailsModal = ({ activeCommunity }) => {
     let room = activeRoomData?.room;
 
     return (
-        <Modal title={room ? room.name : 'All'}>
+        <Modal title={room ? 'Room: ' + room.name : 'Room: All'}>
             {room && (
                 <div className={cx('activeRoomDetails')}>
                     <div className={cx('_modalSection')}>

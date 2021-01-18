@@ -1,0 +1,52 @@
+@import '../../styles/baseStyles.module.scss';
+
+.scrollIcon {
+    margin-left: 8px;
+    font-size: 24px;
+    display: flex;
+    color: var(--color-bg-info-inverse);
+    cursor: w-resize;
+}
+
+.roomSelectorWrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: flex-end;
+    margin: 0px 24px;
+    margin-bottom: 16px;
+}
+
+.roomSelector {
+    background-color: var(--color-bg-canvas-inset);
+    border-radius: 8px;
+    align-items: center;
+    height: 32px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    display: inline-flex;
+    &::-webkit-scrollbar {
+        width: 0px; /* Remove scrollbar space */
+        height: 0px;
+        background: transparent; /* Optional: just make scrollbar invisible */
+        display: none;
+    }
+}
+
+.rooms {
+    display: inline-flex;
+    padding: 0px 12px;
+}
+
+.roomName {
+    cursor: pointer;
+    color: var(--color-bg-info-inverse);
+    margin: 0px 4px;
+    &.active {
+        font-weight: 600;
+        text-decoration: underline;
+    }
+}
