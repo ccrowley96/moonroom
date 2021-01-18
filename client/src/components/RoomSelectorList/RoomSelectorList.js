@@ -1,9 +1,7 @@
 import { useQuery, useReactiveVar } from '@apollo/client';
 import classNames from 'classnames/bind';
-import { useRef } from 'react';
 import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
 import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
-import { isOverflown } from '../../services/utils';
 import { CgScrollH } from 'react-icons/cg';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes, modalTypes } from '../../constants/constants';
@@ -18,7 +16,6 @@ const RoomSelectorList = () => {
     });
     const { appDispatch } = useAppState();
 
-    const roomSelectorRef = useRef();
     let rooms = activeCommunityData?.community?.rooms?.slice(0);
 
     if (rooms && rooms.length > 0) {
@@ -30,12 +27,9 @@ const RoomSelectorList = () => {
 
         rooms = [{ name: 'All', id: 'all' }, ...rooms];
 
-        if (roomSelectorRef.current)
-            console.log(isOverflown(roomSelectorRef.current));
-
         return (
             <div className={cx('roomSelectorWrapper')}>
-                <div className={cx('roomSelector')} ref={roomSelectorRef}>
+                <div className={cx('roomSelector')}>
                     <div className={cx('rooms')}>
                         {rooms.map((room, idx) => {
                             return (
