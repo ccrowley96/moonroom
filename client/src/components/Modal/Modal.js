@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes } from '../../constants/constants';
 import { CgClose } from 'react-icons/cg';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./Modal.module.scss'));
@@ -15,10 +16,14 @@ const Modal = ({
 }) => {
     const { appDispatch } = useAppState();
 
+    const targetRef = useRef();
+
     // Prevent scroll while open
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => (document.body.style.overflow = 'unset');
+        if (targetRef.current) {
+            disableBodyScroll(targetRef.current, { reserveScrollBarGap: true });
+        }
+        return () => clearAllBodyScrollLocks();
     }, []);
 
     const closeModal = () =>
@@ -26,7 +31,11 @@ const Modal = ({
 
     return (
         <div className={cx('modalBlocker')} onClick={closeModal}>
-            <div className={cx('modal')} onClick={(e) => e.stopPropagation()}>
+            <div
+                className={cx('modal')}
+                onClick={(e) => e.stopPropagation()}
+                ref={targetRef}
+            >
                 <div className={cx('modalTitle')}>{title}</div>
                 <CgClose className={cx('closeX')} onClick={closeModal} />
                 {children}

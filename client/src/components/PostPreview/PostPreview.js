@@ -24,15 +24,22 @@ const PostPreview = ({ post }) => {
         >
             <div className={cx('title')}>{post.title}</div>
             {post.link && (
-                <a
+                <div
                     href={post.link}
                     target="_blank"
                     rel="noreferrer"
                     className={cx('link')}
                 >
-                    <div className={cx('linkText')}>{post.link}</div>
+                    <a
+                        href={post.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={cx('linkText')}
+                    >
+                        {post.link}
+                    </a>
                     <FiLink className={cx('linkIcon')} />
-                </a>
+                </div>
             )}
             <div className={cx('postPreviewFooter')}>
                 <div className={cx('author')}>

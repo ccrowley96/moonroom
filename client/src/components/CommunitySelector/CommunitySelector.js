@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes } from '../../constants/constants';
 import {
@@ -9,6 +9,7 @@ import {
 import MutationInput from '../MutationInput/MutationInput';
 import { selectCommunity } from '../../services/utils';
 import CommunityCodeLink from '../CommunityCodeLink/CommunityCodeLink';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./CommunitySelector.module.scss'));
@@ -36,9 +37,14 @@ const CommunitySelector = ({
     }, [activeCommunity]);
 
     // Prevent scroll while open
+    const targetRef = useRef();
+
+    // Prevent scroll while open
     useEffect(() => {
-        document.body.style.overflow = 'hidden';
-        return () => (document.body.style.overflow = 'unset');
+        if (targetRef.current) {
+            disableBodyScroll(targetRef.current, { reserveScrollBarGap: true });
+        }
+        return () => clearAllBodyScrollLocks();
     }, []);
 
     const handleCommunitySelectChange = (e) => {
@@ -65,6 +71,7 @@ const CommunitySelector = ({
             <div
                 className={cx('communitySelector', '_base-slideRight')}
                 onClick={(e) => e.stopPropagation()}
+                ref={targetRef}
             >
                 {communities && communities.length > 0 && (
                     <>

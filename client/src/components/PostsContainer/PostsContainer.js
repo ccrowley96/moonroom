@@ -42,6 +42,7 @@ const PostsContainer = () => {
     useEffect(() => {
         fetchMoreNoCursor();
         setSearchFilter('');
+        // eslint-disable-next-line
     }, [activeCommunityId]);
 
     const feedSearch = async (cursor = null) => {
