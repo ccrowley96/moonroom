@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation, gql } from '@apollo/client';
@@ -8,6 +8,7 @@ import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
 import { actionTypes } from '../../../../constants/constants';
 import { isValidURL } from '../../../../services/utils';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./AddEditPostModal.module.scss'));
@@ -49,6 +50,16 @@ const AddEditPostModal = ({ activeCommunity }) => {
         postEdit?.rating ? postEdit.rating : 'noRating'
     );
     const [errors, setErrors] = useState({});
+
+    const targetRef = useRef();
+
+    // Prevent scroll while open
+    useEffect(() => {
+        if (targetRef.current) {
+            disableBodyScroll(targetRef.current, { reserveScrollBarGap: true });
+        }
+        return () => clearAllBodyScrollLocks();
+    }, []);
 
     // New post mutation
     const [createNewPost] = useMutation(NEW_POST, {
@@ -223,147 +234,164 @@ const AddEditPostModal = ({ activeCommunity }) => {
                 postEdit ? 'Editing post' : `Posting to ${activeCommunity.name}`
             }
         >
-            <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Select room</div>
-                <select
-                    className={cx('_select')}
-                    value={selectedRoom}
-                    onChange={(e) => {
-                        let val = e.target.value;
-                        setSelectedRoom(val);
-                    }}
-                >
-                    {/* Default option */}
-                    <option
-                        key={'default'}
-                        value={noRoomSelected}
-                        onClick={() => {
-                            setSelectedRoom(noRoomSelected);
-                        }}
-                    >
-                        {noRoomSelected}
-                    </option>
-                    {activeCommunity.rooms.map((room, idx) => {
-                        return (
+            <div className={cx('addEditWrapper')} ref={targetRef}>
+                <div className={cx('fieldWrapper')}>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>Select room</div>
+                        <select
+                            className={cx('_select')}
+                            value={selectedRoom}
+                            onChange={(e) => {
+                                let val = e.target.value;
+                                setSelectedRoom(val);
+                            }}
+                        >
+                            {/* Default option */}
                             <option
-                                key={idx}
-                                value={room.id}
+                                key={'default'}
+                                value={noRoomSelected}
                                 onClick={() => {
-                                    setSelectedRoom(room.id);
+                                    setSelectedRoom(noRoomSelected);
                                 }}
                             >
-                                {room.name}
+                                {noRoomSelected}
                             </option>
-                        );
-                    })}
-                </select>
-            </div>
-            <div className={cx('_modalSection')}>
-                <div className={cx('labelWrapper')}>
-                    <div className={cx('_sectionLabel', '_required')}>
-                        Title
-                    </div>
-                    <ValidationErrorText validationKey={'title'} />
-                </div>
-                <input
-                    className={cx('_input', errors.title ? '_error' : '')}
-                    placeholder={'Give your post a title'}
-                    value={title}
-                    onChange={(e) => {
-                        setTitle(e.target.value);
-                        setErrors({ ...errors, ...{ title: null } });
-                    }}
-                />
-            </div>
-            <div className={cx('_modalSection')}>
-                <div className={cx('labelWrapper')}>
-                    <div className={cx('_sectionLabel')}>Link</div>
-                    <ValidationErrorText validationKey={'link'} />
-                </div>
-                <input
-                    className={cx('_input', errors.link ? '_error' : '')}
-                    placeholder={'Share a link'}
-                    value={link}
-                    onChange={(e) => {
-                        setLink(e.target.value);
-                        setErrors({ ...errors, ...{ link: null } });
-                    }}
-                />
-            </div>
-            <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Body</div>
-                <input
-                    className={cx('_input')}
-                    placeholder={'What are the deetz?'}
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                />
-            </div>
-            <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>
-                    Rating{' '}
-                    {rating === 'noRating' ? '(out of 5)' : `(${rating} / 5)`}
-                </div>
-                <select
-                    className={cx('_select')}
-                    value={rating}
-                    onChange={(e) => {
-                        setRating(e.target.value);
-                    }}
-                >
-                    {/* Default option */}
-                    <option key={'default'} value={'noRating'}>
-                        No rating
-                    </option>
-                    {ratings.map((rating, idx) => {
-                        return (
-                            <option key={idx} value={rating}>
-                                {rating} / 5
-                            </option>
-                        );
-                    })}
-                </select>
-            </div>
-            <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Tags</div>
-                <input
-                    className={cx('_input')}
-                    placeholder={'Enter some tags'}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={(e) => enterPressed(e, handleNewTag)}
-                    value={newTag}
-                    disabled={tags.length >= 10 ? 'disabled' : ''}
-                />
-                <div className={cx('tagWrapper')}>
-                    {tags.map((tag, idx) => {
-                        return (
-                            <div className={cx('tag')} key={idx}>
-                                <div className={cx('tagText')}>{tag}</div>
-                                <div className={cx('deleteTagWrapper')}>
-                                    <CgClose
-                                        className={cx('deleteTag')}
+                            {activeCommunity.rooms.map((room, idx) => {
+                                return (
+                                    <option
+                                        key={idx}
+                                        value={room.id}
                                         onClick={() => {
-                                            setTags(
-                                                tags.filter(
-                                                    (tagText) => tagText !== tag
-                                                )
-                                            );
+                                            setSelectedRoom(room.id);
                                         }}
-                                    />
-                                </div>
+                                    >
+                                        {room.name}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('labelWrapper')}>
+                            <div className={cx('_sectionLabel', '_required')}>
+                                Title
                             </div>
-                        );
-                    })}
+                            <ValidationErrorText validationKey={'title'} />
+                        </div>
+                        <input
+                            className={cx(
+                                '_input',
+                                'addEditInput',
+                                errors.title ? '_error' : ''
+                            )}
+                            placeholder={'Give your post a title'}
+                            value={title}
+                            onChange={(e) => {
+                                setTitle(e.target.value);
+                                setErrors({ ...errors, ...{ title: null } });
+                            }}
+                        />
+                    </div>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('labelWrapper')}>
+                            <div className={cx('_sectionLabel')}>Link</div>
+                            <ValidationErrorText validationKey={'link'} />
+                        </div>
+                        <input
+                            className={cx(
+                                '_input',
+                                'addEditInput',
+                                errors.link ? '_error' : ''
+                            )}
+                            placeholder={'Share a link'}
+                            value={link}
+                            onChange={(e) => {
+                                setLink(e.target.value);
+                                setErrors({ ...errors, ...{ link: null } });
+                            }}
+                        />
+                    </div>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>Body</div>
+                        <textarea
+                            className={cx('_input', 'addEditTextarea')}
+                            placeholder={'What are the deetz?'}
+                            value={body}
+                            onChange={(e) => setBody(e.target.value)}
+                        />
+                    </div>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>
+                            Rating{' '}
+                            {rating === 'noRating'
+                                ? '(out of 5)'
+                                : `(${rating} / 5)`}
+                        </div>
+                        <select
+                            className={cx('_select')}
+                            value={rating}
+                            onChange={(e) => {
+                                setRating(e.target.value);
+                            }}
+                        >
+                            {/* Default option */}
+                            <option key={'default'} value={'noRating'}>
+                                No rating
+                            </option>
+                            {ratings.map((rating, idx) => {
+                                return (
+                                    <option key={idx} value={rating}>
+                                        {rating} / 5
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className={cx('_modalSection')}>
+                        <div className={cx('_sectionLabel')}>Tags</div>
+                        <input
+                            className={cx('_input')}
+                            placeholder={'Enter some tags'}
+                            onChange={(e) => setNewTag(e.target.value)}
+                            onKeyPress={(e) => enterPressed(e, handleNewTag)}
+                            value={newTag}
+                            disabled={tags.length >= 10 ? 'disabled' : ''}
+                        />
+                        <div className={cx('tagWrapper')}>
+                            {tags.map((tag, idx) => {
+                                return (
+                                    <div className={cx('tag')} key={idx}>
+                                        <div className={cx('tagText')}>
+                                            {tag}
+                                        </div>
+                                        <div className={cx('deleteTagWrapper')}>
+                                            <CgClose
+                                                className={cx('deleteTag')}
+                                                onClick={() => {
+                                                    setTags(
+                                                        tags.filter(
+                                                            (tagText) =>
+                                                                tagText !== tag
+                                                        )
+                                                    );
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div className={cx('postWrapper')}>
-                <button
-                    className={cx('_btn-success')}
-                    onClick={handleSubmit}
-                    disabled={isErrorPresent()}
-                >
-                    {postEdit ? 'Confirm' : 'Post'}
-                </button>
+                <div className={cx('postWrapper')}>
+                    <button
+                        className={cx('_btn-success')}
+                        onClick={handleSubmit}
+                        disabled={isErrorPresent()}
+                    >
+                        {postEdit ? 'Confirm' : 'Post'}
+                    </button>
+                </div>
             </div>
         </Modal>
     );
