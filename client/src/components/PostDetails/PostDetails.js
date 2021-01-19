@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DELETE_POST } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes } from '../../constants/constants';
 import { AiOutlineStar } from 'react-icons/ai';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 import { useMutation } from '@apollo/client';
@@ -18,6 +19,16 @@ const PostDetails = () => {
     } = useAppState();
     const auth = useAuth();
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+    const targetRef = useRef();
+
+    // Prevent scroll while open
+    useEffect(() => {
+        if (targetRef.current) {
+            disableBodyScroll(targetRef.current, { reserveScrollBarGap: true });
+        }
+        return () => clearAllBodyScrollLocks();
+    }, []);
 
     const [deletePost] = useMutation(DELETE_POST, {
         update(cache) {
@@ -56,7 +67,7 @@ const PostDetails = () => {
             onConfirmed={confirmDelete}
         >
             <div className={cx('postDetailsWrapper')}>
-                <div className={cx('postDetails')}>
+                <div className={cx('postDetails')} ref={targetRef}>
                     <div className={cx('_modalSection')}>
                         <div className={cx('title')}>{post.title}</div>
                     </div>

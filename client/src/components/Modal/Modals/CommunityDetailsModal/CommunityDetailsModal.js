@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Modal from '../../Modal';
 import { useMutation } from '@apollo/client';
 import { actionTypes } from '../../../../constants/constants';
@@ -6,6 +6,7 @@ import { useAppState } from '../../../../hooks/provideAppState';
 import { DELETE_COMMUNITY } from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
 import CommunityCodeLink from '../../../CommunityCodeLink/CommunityCodeLink';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 import { removeCommunityFromCache } from '../../../../services/utils';
@@ -32,22 +33,37 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
         }
     });
 
+    const targetRef = useRef();
+
+    // Prevent scroll while open
+    useEffect(() => {
+        if (targetRef.current) {
+            disableBodyScroll(targetRef.current, { reserveScrollBarGap: true });
+        }
+        return () => clearAllBodyScrollLocks();
+    }, []);
+
     return (
         <Modal title={'Community: ' + activeCommunity.name}>
             <div className={cx('_modalSection')}>
                 <CommunityCodeLink code={activeCommunity.code} />
             </div>
             {activeCommunity.members.length > 0 && (
-                <div className={cx('_modalSection')}>
+                <>
                     <div className={cx('_sectionLabel')}>Members</div>
-                    {activeCommunity.members.map((member, idx) => {
-                        return (
-                            <div key={idx} className={cx('sectionValue')}>
-                                {member.name}
-                            </div>
-                        );
-                    })}
-                </div>
+                    <div
+                        className={cx('_modalSection', 'memberList')}
+                        ref={targetRef}
+                    >
+                        {activeCommunity.members.map((member, idx) => {
+                            return (
+                                <div key={idx} className={cx('sectionValue')}>
+                                    {member.name}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </>
             )}
             <div className={cx('_modalSection')}>
                 <div className={cx('_sectionLabel')}>Admins</div>

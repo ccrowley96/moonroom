@@ -1,1 +1,11 @@
 @import '../../../../styles/baseStyles.module.scss';
+
+.memberList {
+    overflow: scroll;
+    &::-webkit-scrollbar {
+        width: 0px; /* Remove scrollbar space */
+        background: transparent; /* Optional: just make scrollbar invisible */
+    }
+    max-height: 162px;
+    margin-bottom: 0px;
+}
