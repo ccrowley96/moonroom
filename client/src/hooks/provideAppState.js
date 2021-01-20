@@ -9,7 +9,8 @@ const initialAppState = {
     activeRoom: null,
     activeModal: null,
     modalData: null,
-    searchActive: false
+    searchActive: false,
+    triggerRefresh: false
 };
 
 const AppStateReducer = (state, action) => {
@@ -32,6 +33,11 @@ const AppStateReducer = (state, action) => {
             return {
                 ...state,
                 searchActive: action.payload
+            };
+        case actionTypes.TRIGGER_REFRESH:
+            return {
+                ...state,
+                triggerRefresh: action.payload
             };
         default:
             throw new Error();

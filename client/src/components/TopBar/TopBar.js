@@ -7,6 +7,7 @@ import { actionTypes, modalTypes } from '../../constants/constants';
 import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
 import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
 import { BsPlus } from 'react-icons/bs';
+import { MdRefresh } from 'react-icons/md';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./TopBar.module.scss'));
@@ -78,11 +79,23 @@ const TopBar = () => {
                     </>
                 )}
             </div>
-
-            <div className={cx('newPost', 'navItem')}>
+            <div className={cx('action', 'navItem')}>
+                {activeCommunity && (
+                    <MdRefresh
+                        className={cx('actionIcon', 'refreshIcon')}
+                        onClick={() => {
+                            appDispatch({
+                                type: actionTypes.TRIGGER_REFRESH,
+                                payload: true
+                            });
+                        }}
+                    />
+                )}
+            </div>
+            <div className={cx('action', 'navItem')}>
                 {activeCommunity && (
                     <BsPlus
-                        className={cx('newPostIcon')}
+                        className={cx('actionIcon')}
                         onClick={() =>
                             appDispatch({
                                 type: actionTypes.SET_ACTIVE_MODAL,

@@ -14,14 +14,16 @@ import {
 import { useDidUpdateEffect } from '../../hooks/misc';
 import { useAppState } from '../../hooks/provideAppState';
 import RoomSelectorList from '../RoomSelectorList/RoomSelectorList';
+import { actionTypes } from '../../constants/constants';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = () => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
-    const { appState } = useAppState();
+    const { appState, appDispatch } = useAppState();
     const client = useApolloClient();
+    const triggerRefresh = appState.triggerRefresh;
 
     const { loading, data, fetchMore } = useQuery(FEED_QUERY, {
         variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
@@ -37,6 +39,18 @@ const PostsContainer = () => {
     useDidUpdateEffect(() => {
         fetchMoreNoCursor();
     }, [activeRoomId]);
+
+    // Re-fetch on refresh trigger
+    useDidUpdateEffect(() => {
+        if (appState.triggerRefresh) {
+            if (appState.searchActive) {
+                feedSearch();
+            } else {
+                fetchMoreNoCursor();
+            }
+            appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
+        }
+    }, [triggerRefresh]);
 
     // Re-fetch on community change
     useEffect(() => {
