@@ -349,14 +349,34 @@ const AddEditPostModal = ({ activeCommunity }) => {
                     </div>
                     <div className={cx('_modalSection')}>
                         <div className={cx('_sectionLabel')}>Tags</div>
-                        <input
-                            className={cx('_input')}
-                            placeholder={'Enter some tags'}
-                            onChange={(e) => setNewTag(e.target.value)}
-                            onKeyPress={(e) => enterPressed(e, handleNewTag)}
-                            value={newTag}
-                            disabled={tags.length >= 10 ? 'disabled' : ''}
-                        />
+                        <div className={cx('tagInputWrapper')}>
+                            <input
+                                className={cx('_input')}
+                                placeholder={'Enter some tags'}
+                                onChange={(e) =>
+                                    setNewTag(
+                                        e.target.value
+                                            .replace(/[^A-Za-z-]/gi, '')
+                                            .toLowerCase()
+                                    )
+                                }
+                                onKeyPress={(e) =>
+                                    enterPressed(e, handleNewTag)
+                                }
+                                maxLength={20}
+                                value={newTag}
+                                disabled={tags.length >= 10 ? 'disabled' : ''}
+                            />
+                            <button
+                                className={cx('_btn', 'addTag')}
+                                disabled={
+                                    tags.indexOf(newTag) !== -1 || newTag === ''
+                                }
+                                onClick={handleNewTag}
+                            >
+                                Add
+                            </button>
+                        </div>
                         <div className={cx('tagWrapper')}>
                             {tags.map((tag, idx) => {
                                 return (

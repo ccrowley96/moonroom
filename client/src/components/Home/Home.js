@@ -69,7 +69,11 @@ export default function Home() {
             )}
             {activeModal === modalTypes.POST_DETAILS && <PostDetails />}
             {/* Render posts */}
-            {activeCommunityData?.community && <PostsContainer />}
+            {activeCommunityData?.community && (
+                <PostsContainer
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
         </div>
     );
 }

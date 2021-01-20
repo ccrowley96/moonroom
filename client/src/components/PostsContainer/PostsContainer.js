@@ -4,7 +4,9 @@ import Search from '../Search/Search';
 import { FEED_QUERY, FEED_SEARCH } from '../../queries/post';
 import { useApolloClient, useQuery, useReactiveVar } from '@apollo/client';
 import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
+import CommunityCodeLink from '../CommunityCodeLink/CommunityCodeLink';
 import { Waypoint } from 'react-waypoint';
+import { FiShare } from 'react-icons/fi';
 
 import classNames from 'classnames/bind';
 import {
@@ -17,7 +19,7 @@ import RoomSelectorList from '../RoomSelectorList/RoomSelectorList';
 import { actionTypes } from '../../constants/constants';
 const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
-const PostsContainer = () => {
+const PostsContainer = ({ activeCommunity }) => {
     const [searchFilter, setSearchFilter] = useState('');
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
@@ -37,7 +39,7 @@ const PostsContainer = () => {
 
     // Re-fetch on room change
     useDidUpdateEffect(() => {
-        fetchMoreNoCursor();
+        if (fetchMore) fetchMoreNoCursor();
     }, [activeRoomId]);
 
     // Re-fetch on refresh trigger
@@ -90,6 +92,7 @@ const PostsContainer = () => {
                     data={data}
                     activeCommunityId={activeCommunityId}
                     activeRoomId={activeRoomId}
+                    communityCode={activeCommunity?.code}
                     fetchMore={() => {
                         // Fetch more posts using search query
                         if (appState.searchActive) {
@@ -131,19 +134,13 @@ const PostsContainer = () => {
     );
 };
 
-const PostPreviews = ({
-    loading,
-    data,
-    activeCommunityId,
-    activeRoomId,
-    fetchMore
-}) => {
+const PostPreviews = ({ loading, data, fetchMore, communityCode }) => {
     const posts = data?.feed?.edges;
     if (loading) {
         return <div className={cx('noPosts')}>Loading...</div>;
     }
     if (!posts || posts?.length === 0) {
-        return <div className={cx('noPosts')}>No posts found :/</div>;
+        return <NoPostsFound communityCode={communityCode} />;
     }
     return posts.map((post, i) => {
         return (
@@ -156,6 +153,21 @@ const PostPreviews = ({
             </React.Fragment>
         );
     });
+};
+
+const NoPostsFound = ({ communityCode }) => {
+    return (
+        <div className={cx('noPostsFoundWrapper')}>
+            <div className={cx('noPosts')}>No posts found...</div>
+            <div className={cx('info')}>
+                <FiShare className={cx('infoIcon')} />
+                <div>Add this app to your homescreen</div>
+            </div>
+            <div className={cx('info', 'communityCodeLink')}>
+                <CommunityCodeLink code={communityCode} />
+            </div>
+        </div>
+    );
 };
 
 export default PostsContainer;

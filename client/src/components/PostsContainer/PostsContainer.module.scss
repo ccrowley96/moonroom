@@ -4,10 +4,6 @@
     width: 100%;
 }
 
-.noPosts {
-    text-align: center;
-}
-
 .filterAndPosts {
     width: 100%;
     max-width: 800px;
@@ -15,4 +11,38 @@
     right: 0;
     margin-left: auto;
     margin-right: auto;
+}
+
+.noPostsFoundWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    height: 200px;
+    max-width: 400px;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin: auto;
+    display: flex;
+
+    .noPosts {
+        text-align: center;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .info {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .infoIcon {
+            margin-right: 8px;
+        }
+    }
+    .communityCodeLink {
+        margin-top: 12px;
+    }
 }
