@@ -40,6 +40,12 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                                           $regex: escape(filter),
                                           $options: 'i'
                                       }
+                                  },
+                                  {
+                                      tags: {
+                                          $regex: escape(filter),
+                                          $options: 'i'
+                                      }
                                   }
                               ]
                           }
