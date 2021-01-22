@@ -1,14 +1,40 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useReactiveVar } from '@apollo/client';
 import classNames from 'classnames/bind';
 import { useState } from 'react';
+import { activeCommunityIdVar } from '../../cache';
+import { NEW_REPLY } from '../../queries/post';
 import { enterPressed } from '../../services/utils';
 const cx = classNames.bind(require('./Reply.module.scss'));
 
-const Reply = () => {
+const Reply = ({ postId }) => {
     const [reply, setReply] = useState('');
-    // const [sendReply] = useMutation();
+    const [sendReply] = useMutation(NEW_REPLY);
+    const communityId = useReactiveVar(activeCommunityIdVar);
 
-    const handleSubmitReply = () => {};
+    const handleSubmitReply = async () => {
+        try {
+            if (reply === '') {
+                return;
+            }
+
+            let result = await sendReply({
+                variables: {
+                    postId,
+                    communityId,
+                    body: reply
+                }
+            });
+
+            setReply('');
+
+            if (result.data.addComment.success) {
+            } else {
+                throw new Error(result.data.addComment.message);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <div className={cx('replyForm')}>
@@ -17,8 +43,12 @@ const Reply = () => {
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
                 onKeyPress={(e) => enterPressed(e, handleSubmitReply)}
-            ></input>
-            <button className={cx('replyBtn')} onClick={handleSubmitReply}>
+            />
+            <button
+                className={cx('replyBtn')}
+                onClick={handleSubmitReply}
+                disabled={reply === ''}
+            >
                 Reply
             </button>
         </div>

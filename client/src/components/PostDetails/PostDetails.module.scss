@@ -5,6 +5,32 @@
     margin-bottom: 8px;
 }
 
+.commentHeader {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    .commentMeta {
+        display: flex;
+        .commentAuthor {
+            font-weight: 600;
+        }
+        .commentDate {
+            font-style: italic;
+            margin-left: 8px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+        }
+    }
+    .commentBody {
+        margin-left: 16px;
+    }
+}
+
 .postDetailsWrapper {
     overflow: hidden;
     white-space: pre-wrap;
@@ -91,9 +117,7 @@
             padding: 4px;
             &.edit {
                 padding: 6px;
-                color: var(--color-btn-primary-text);
                 &:hover {
-                    color: var(--color-btn-danger-hover-text);
                     background-color: var(--color-btn-primary-hover-bg);
                     border-color: var(--color-btn-primary-hover-border);
                 }

@@ -5,7 +5,8 @@ export const commentDataFragment = gql`
         id
         body
         author {
-            name
+            id
+            given_name
         }
         date
         editDate
@@ -38,6 +39,20 @@ export const postDataFragment = gql`
     }
 
     ${commentDataFragment}
+`;
+
+export const NEW_REPLY = gql`
+    mutation addComment($postId: ID!, $communityId: ID!, $body: String) {
+        addComment(postId: $postId, communityId: $communityId, body: $body) {
+            code
+            success
+            message
+            post {
+                ...postData
+            }
+        }
+    }
+    ${postDataFragment}
 `;
 
 export const NEW_POST = gql`

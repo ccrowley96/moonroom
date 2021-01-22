@@ -17,11 +17,8 @@ import {
 import Reply from '../Reply/Reply';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
-const PostDetails = () => {
-    const {
-        appState: { modalData: post },
-        appDispatch
-    } = useAppState();
+const PostDetails = ({ post }) => {
+    const { appDispatch } = useAppState();
     const auth = useAuth();
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
@@ -122,9 +119,48 @@ const PostDetails = () => {
                             </div>
                         </div>
                     )}
-                    <div className={cx('_modalSection')}>
-                        <div className={cx('body')}>{post.body}</div>
-                    </div>
+                    {post.body && (
+                        <div className={cx('_modalSection')}>
+                            <div className={cx('body')}>{post.body}</div>
+                        </div>
+                    )}
+                    {post.comments && post.comments.length > 0 && (
+                        <div className={cx('_modalSection')}>
+                            <div className={cx('commentHeader')}>Replies: </div>
+                            <div className={cx('commentsWrapper')}>
+                                {post.comments.map((comment, idx) => {
+                                    return (
+                                        <div
+                                            key={idx}
+                                            className={cx('comment')}
+                                        >
+                                            <div className={cx('commentMeta')}>
+                                                <div
+                                                    className={cx(
+                                                        'commentAuthor'
+                                                    )}
+                                                >
+                                                    {comment.author.given_name}
+                                                </div>
+                                                <div
+                                                    className={cx(
+                                                        'commentDate'
+                                                    )}
+                                                >
+                                                    {formatDateTimeString(
+                                                        comment.date
+                                                    )}
+                                                </div>
+                                            </div>
+                                            <div className={cx('commentBody')}>
+                                                {comment.body}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <div className={cx('footer')}>
                     {post.author.id === auth.session.user._id && (
@@ -146,7 +182,7 @@ const PostDetails = () => {
                         </div>
                     )}
                     <div className={cx('replyWrapper')}>
-                        <Reply />
+                        <Reply postId={post.id} />
                     </div>
                 </div>
             </div>

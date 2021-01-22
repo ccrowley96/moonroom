@@ -11,7 +11,6 @@ import AddEditPostModal from '../Modal/Modals/AddEditPostModal/AddEditPostModal'
 import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
-import PostDetails from '../PostDetails/PostDetails';
 const cx = classNames.bind(require('./Home.module.scss'));
 
 export default function Home() {
@@ -67,7 +66,6 @@ export default function Home() {
                     activeCommunity={activeCommunityData?.community}
                 />
             )}
-            {activeModal === modalTypes.POST_DETAILS && <PostDetails />}
             {/* Render posts */}
             {activeCommunityData?.community && (
                 <PostsContainer
