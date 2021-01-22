@@ -290,6 +290,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
                                 setTitle(e.target.value);
                                 setErrors({ ...errors, ...{ title: null } });
                             }}
+                            maxLength={140}
                         />
                     </div>
                     <div className={cx('_modalSection')}>

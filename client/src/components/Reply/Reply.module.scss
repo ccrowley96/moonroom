@@ -1,0 +1,19 @@
+@import '../../styles/baseStyles.module.scss';
+
+.replyForm {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+
+    .replyInput {
+        flex-grow: 1;
+        width: 100%;
+        max-width: 260px;
+    }
+
+    .replyBtn {
+        @extend ._btn-success;
+        margin-left: 8px;
+    }
+}

@@ -4,12 +4,17 @@ import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes } from '../../constants/constants';
-import { AiOutlineStar } from 'react-icons/ai';
+import { AiOutlineStar, AiOutlineDelete } from 'react-icons/ai';
+import { FiEdit2 } from 'react-icons/fi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 import { useMutation } from '@apollo/client';
-import { formatDateTimeString } from '../../services/utils';
+import {
+    formatDateTimeString,
+    formatShortDateString
+} from '../../services/utils';
+import Reply from '../Reply/Reply';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = () => {
@@ -65,11 +70,19 @@ const PostDetails = () => {
             isConfirmOpen={isConfirmOpen}
             setIsConfirmOpen={setIsConfirmOpen}
             onConfirmed={confirmDelete}
+            title={post.title}
         >
             <div className={cx('postDetailsWrapper')}>
                 <div className={cx('postDetails')} ref={targetRef}>
                     <div className={cx('_modalSection')}>
-                        <div className={cx('title')}>{post.title}</div>
+                        <div className={cx('meta')}>
+                            <div className={cx('author')}>
+                                {post.author.given_name}
+                            </div>
+                            <div className={cx('date')}>
+                                - {formatDateTimeString(post.date)}
+                            </div>
+                        </div>
                     </div>
                     {post.link && (
                         <div className={cx('_modalSection')}>
@@ -114,37 +127,27 @@ const PostDetails = () => {
                     </div>
                 </div>
                 <div className={cx('footer')}>
-                    <div className={cx('meta')}>
-                        <div className={cx('author')}>
-                            {post.author.given_name}
-                        </div>
-                        <div className={cx('date')}>
-                            {formatDateTimeString(post.date)}
-                        </div>
-                    </div>
                     {post.author.id === auth.session.user._id && (
                         <div className={cx('postControls')}>
-                            <button
-                                className={cx('control', '_btn')}
+                            <FiEdit2
+                                className={cx('control', 'edit')}
                                 onClick={() => {
-                                    // Open edit post modal
                                     appDispatch({
                                         type: actionTypes.SET_ACTIVE_MODAL,
                                         payload: modalTypes.NEW_POST,
                                         modalData: post
                                     });
                                 }}
-                            >
-                                Edit
-                            </button>
-                            <button
-                                className={cx('control', '_btn')}
+                            />
+                            <AiOutlineDelete
+                                className={cx('control', 'delete')}
                                 onClick={() => setIsConfirmOpen(true)}
-                            >
-                                Delete
-                            </button>
+                            />
                         </div>
                     )}
+                    <div className={cx('replyWrapper')}>
+                        <Reply />
+                    </div>
                 </div>
             </div>
         </Modal>

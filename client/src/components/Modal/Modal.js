@@ -37,6 +37,7 @@ const Modal = ({
                 ref={targetRef}
             >
                 <div className={cx('modalTitle')}>{title}</div>
+
                 <CgClose className={cx('closeX')} onClick={closeModal} />
                 {children}
                 {isConfirmOpen && (

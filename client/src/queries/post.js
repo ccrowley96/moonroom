@@ -1,5 +1,17 @@
 import { gql } from '@apollo/client';
 
+export const commentDataFragment = gql`
+    fragment commentData on Comment {
+        id
+        body
+        author {
+            name
+        }
+        date
+        editDate
+    }
+`;
+
 export const postDataFragment = gql`
     fragment postData on Post {
         id
@@ -20,7 +32,12 @@ export const postDataFragment = gql`
         body
         rating
         tags
+        comments {
+            ...commentData
+        }
     }
+
+    ${commentDataFragment}
 `;
 
 export const NEW_POST = gql`

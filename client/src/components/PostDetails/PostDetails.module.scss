@@ -1,4 +1,10 @@
 @import '../../styles/baseStyles.module.scss';
+
+// Override margin bottom (this scope only)
+._modalSection {
+    margin-bottom: 8px;
+}
+
 .postDetailsWrapper {
     overflow: hidden;
     white-space: pre-wrap;
@@ -9,6 +15,14 @@
     max-height: 60vh;
     display: flex;
     flex-direction: column;
+}
+
+.meta {
+    display: flex;
+    .author {
+        font-weight: 600;
+        margin-right: 8px;
+    }
 }
 
 .title {
@@ -37,6 +51,9 @@
 .postDetails {
     flex-grow: 1;
     overflow: scroll;
+    border-radius: 4px;
+    background-color: var(--color-bg-canvas-inset);
+    padding: 8px;
     &::-webkit-scrollbar {
         width: 0px; /* Remove scrollbar space */
         background: transparent; /* Optional: just make scrollbar invisible */
@@ -49,27 +66,46 @@
 }
 
 .footer {
-    justify-self: flex-end;
+    flex-direction: row;
     width: 100%;
     display: flex;
     margin-top: 8px;
-    min-height: 42px;
-    .meta {
-        flex-grow: 1;
-        .author,
-        .date {
-            font-weight: 600;
-        }
+    height: 42px;
+    .replyWrapper {
+        height: 42px;
+        width: 100%;
     }
+
     .postControls {
-        flex-grow: 4;
-        text-align: end;
+        width: 80px;
         display: flex;
+        align-items: center;
         flex-direction: row;
-        justify-content: flex-end;
+        justify-content: flex-start;
 
         .control {
-            margin-left: 16px;
+            width: 32px;
+            height: 32px;
+            margin-right: 8px;
+            border-radius: 4px;
+            padding: 4px;
+            &.edit {
+                padding: 6px;
+                color: var(--color-btn-primary-text);
+                &:hover {
+                    color: var(--color-btn-danger-hover-text);
+                    background-color: var(--color-btn-primary-hover-bg);
+                    border-color: var(--color-btn-primary-hover-border);
+                }
+            }
+            &.delete {
+                color: var(--color-btn-danger-text);
+                &:hover {
+                    color: var(--color-btn-danger-hover-text);
+                    background-color: var(--color-btn-danger-hover-bg);
+                    border-color: var(--color-btn-danger-hover-border);
+                }
+            }
         }
     }
 }
