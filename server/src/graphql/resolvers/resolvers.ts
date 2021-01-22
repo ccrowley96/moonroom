@@ -2,12 +2,14 @@ import communityResolvers from './communityResolvers';
 import userResolvers from './userResolvers';
 import roomResolvers from './roomResolvers';
 import postResolvers from './postResolvers';
+import commentResolvers from './commentResolvers';
 
 export default {
     Community: communityResolvers,
     User: userResolvers,
     Room: roomResolvers,
     Post: postResolvers,
+    Comment: commentResolvers,
     Query: {
         me: async (_, __, { user }) => {
             return user;
@@ -92,6 +94,25 @@ export default {
                 tags
             );
         },
+        addComment: async (
+            _,
+            { postId, communityId, body },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.addComment(postId, communityId, body);
+        },
+        editComment: async (
+            _,
+            { postId, communityId, commentId, body },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.editComment(
+                postId,
+                communityId,
+                commentId,
+                body
+            );
+        },
         joinCommunity: async (
             _,
             { code },
@@ -115,6 +136,13 @@ export default {
         },
         deletePost: async (_, { postId }, { dataSources: { postApi } }) => {
             return await postApi.deletePost(postId);
+        },
+        deleteComment: async (
+            _,
+            { postId, commentId },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.deleteComment(postId, commentId);
         }
     }
 };

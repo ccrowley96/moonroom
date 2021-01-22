@@ -1,5 +1,5 @@
 import { MongoDataSource } from 'apollo-datasource-mongodb';
-import { Post } from '../../db/index';
+import { Post, User } from '../../db/index';
 import { ApolloError } from 'apollo-server-express';
 import { errorCodes } from '../../constants/constants';
 import { mongooseId } from '../../controllers/utils';
@@ -259,5 +259,188 @@ export default class postApi<TData> extends MongoDataSource<TData> {
 
         // Return post
         return post;
+    }
+
+    async addComment(postId, communityId, body) {
+        try {
+            // Grab context variables
+            const {
+                user,
+                dataSources: { communityApi }
+            } = this.context;
+
+            // Verify community exists and user has access
+            await communityApi.getCommunity(communityId);
+
+            // Verify post exists
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post) {
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
+            }
+
+            // Push comment to post
+            post.comments.push({
+                body,
+                author: mongooseId(user._id)
+            });
+
+            post = await post.save();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Comment added successfully',
+                post
+            };
+        } catch (err) {
+            console.log(err);
+            return {
+                code: 500,
+                success: false,
+                message: err.message,
+                post: null
+            };
+        }
+    }
+
+    async editComment(postId, communityId, commentId, body) {
+        try {
+            // Grab context variables
+            const {
+                user,
+                dataSources: { communityApi }
+            } = this.context;
+
+            // Verify community exists and user has access
+            await communityApi.getCommunity(communityId);
+
+            // Ensure post exists
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post)
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
+
+            // Ensure comment exists
+            let comment = post.comments.find(
+                (comment) => String(comment._id) === commentId
+            );
+
+            if (!comment) {
+                throw new ApolloError(
+                    'Comment not found!',
+                    errorCodes.commentNotFound
+                );
+            }
+
+            // Verify user is comment author
+            let author = await User.findById({
+                _id: mongooseId(comment.author)
+            });
+            if (String(author._id) !== String(user._id)) {
+                throw new ApolloError(
+                    "You don't have permission to edit this comment!",
+                    errorCodes.commentUnauthorized
+                );
+            }
+
+            // Edit comment with matching ID
+            post = await Post.findOneAndUpdate(
+                {
+                    _id: mongooseId(postId),
+                    'comments._id': mongooseId(commentId)
+                },
+                {
+                    $set: {
+                        'comments.$.body': body,
+                        'comments.$.editDate': new Date()
+                    }
+                },
+                { new: true }
+            );
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Comment updated',
+                post
+            };
+        } catch (err) {
+            console.log(err);
+            return {
+                code: 500,
+                success: false,
+                message: err.message,
+                post: null
+            };
+        }
+    }
+
+    async deleteComment(postId, commentId) {
+        const { user } = this.context;
+
+        try {
+            // Ensure post exists
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post)
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
+
+            // Ensure comment exists
+            let comment = post.comments.find(
+                (comment) => String(comment._id) === commentId
+            );
+
+            if (!comment) {
+                throw new ApolloError(
+                    'Comment not found!',
+                    errorCodes.commentNotFound
+                );
+            }
+
+            // Verify user is comment author
+            let author = await User.findById({
+                _id: mongooseId(comment.author)
+            });
+            if (String(author._id) !== String(user._id)) {
+                throw new ApolloError(
+                    "You don't have permission to edit this comment!",
+                    errorCodes.commentUnauthorized
+                );
+            }
+
+            // Pull comment from post
+            post = await Post.findOneAndUpdate(
+                { _id: mongooseId(postId) },
+                {
+                    $pull: {
+                        comments: {
+                            _id: mongooseId(commentId)
+                        }
+                    }
+                },
+                { new: true }
+            );
+
+            return {
+                code: 200,
+                success: true,
+                message: 'comment deleted.',
+                post
+            };
+        } catch (err) {
+            return {
+                code: 500,
+                success: false,
+                message: err,
+                post: null
+            };
+        }
     }
 }

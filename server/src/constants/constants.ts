@@ -5,5 +5,7 @@ export const errorCodes = {
     communityAlreadyJoined: 'COMMUNITY_ALREADY_JOINED',
     roomAlreadyExists: 'ROOM_ALREADY_EXISTS',
     roomNotFound: 'ROOM_NOT_FOUND',
-    postNotFound: 'POST_NOT_FOUND'
+    postNotFound: 'POST_NOT_FOUND',
+    commentUnauthorized: 'COMMENT_UNAUTHORIZED',
+    commentNotFound: 'COMMENT_NOT_FOUND'
 };

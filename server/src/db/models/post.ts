@@ -42,6 +42,24 @@ const postSchema = new mongoose.Schema({
             type: String,
             required: false
         }
+    ],
+    comments: [
+        {
+            body: String,
+            author: {
+                type: mongoose.Types.ObjectId,
+                ref: 'User',
+                required: true
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            },
+            editDate: {
+                type: Date,
+                required: false
+            }
+        }
     ]
 });
 

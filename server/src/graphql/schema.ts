@@ -24,6 +24,15 @@ const typeDefs = gql`
         body: String
         rating: Float
         tags: [String]
+        comments: [Comment]
+    }
+
+    type Comment {
+        id: ID!
+        body: String
+        author: User
+        date: String
+        editDate: String
     }
 
     type Community {
@@ -88,6 +97,13 @@ const typeDefs = gql`
         message: String!
     }
 
+    type deleteCommentResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        post: Post
+    }
+
     type addCommunityMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
@@ -113,6 +129,13 @@ const typeDefs = gql`
     }
 
     type addEditPostMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        post: Post
+    }
+
+    type addEditCommentMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
         message: String!
@@ -149,10 +172,22 @@ const typeDefs = gql`
             rating: Float
             tags: [String]
         ): addEditPostMutationResponse
+        addComment(
+            postId: ID!
+            communityId: ID!
+            body: String
+        ): addEditCommentMutationResponse
+        editComment(
+            postId: ID!
+            communityId: ID!
+            commentId: ID!
+            body: String
+        ): addEditCommentMutationResponse
         joinCommunity(code: String!): joinCommunityMutationResponse
         deleteCommunity(communityId: ID!): deleteMutationResponse
         deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse
         deletePost(postId: ID!): deleteMutationResponse
+        deleteComment(postId: ID!, commentId: ID!): deleteCommentResponse
     }
 `;
 
