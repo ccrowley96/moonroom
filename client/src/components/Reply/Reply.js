@@ -1,15 +1,20 @@
 import { useMutation, useReactiveVar } from '@apollo/client';
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { activeCommunityIdVar } from '../../cache';
-import { NEW_REPLY } from '../../queries/post';
+import { EDIT_REPLY, NEW_REPLY } from '../../queries/post';
 import { enterPressed } from '../../services/utils';
 const cx = classNames.bind(require('./Reply.module.scss'));
 
-const Reply = ({ postId }) => {
+const Reply = ({ postId, editReplyData, clearData }) => {
     const [reply, setReply] = useState('');
     const [sendReply] = useMutation(NEW_REPLY);
+    const [editReply] = useMutation(EDIT_REPLY);
     const communityId = useReactiveVar(activeCommunityIdVar);
+
+    useEffect(() => {
+        if (editReplyData?.body) setReply(editReplyData.body);
+    }, [editReplyData]);
 
     const handleSubmitReply = async () => {
         try {
@@ -17,19 +22,35 @@ const Reply = ({ postId }) => {
                 return;
             }
 
-            let result = await sendReply({
-                variables: {
-                    postId,
-                    communityId,
-                    body: reply
-                }
-            });
+            let result;
+            let dataKey = 'addComment';
+
+            if (editReplyData) {
+                dataKey = 'editComment';
+                result = await editReply({
+                    variables: {
+                        postId,
+                        communityId,
+                        commentId: editReplyData.id,
+                        body: reply
+                    }
+                });
+            } else {
+                result = await sendReply({
+                    variables: {
+                        postId,
+                        communityId,
+                        body: reply
+                    }
+                });
+            }
 
             setReply('');
+            clearData();
 
-            if (result.data.addComment.success) {
+            if (result.data[dataKey].success) {
             } else {
-                throw new Error(result.data.addComment.message);
+                throw new Error(result.data[dataKey].message);
             }
         } catch (err) {
             console.error(err);
@@ -49,7 +70,7 @@ const Reply = ({ postId }) => {
                 onClick={handleSubmitReply}
                 disabled={reply === ''}
             >
-                Reply
+                {editReplyData ? 'Edit' : 'Reply'}
             </button>
         </div>
     );

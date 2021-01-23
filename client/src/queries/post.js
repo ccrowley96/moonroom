@@ -55,6 +55,44 @@ export const NEW_REPLY = gql`
     ${postDataFragment}
 `;
 
+export const DELETE_REPLY = gql`
+    mutation deleteComment($postId: ID!, $commentId: ID!) {
+        deleteComment(postId: $postId, commentId: $commentId) {
+            code
+            success
+            message
+            post {
+                ...postData
+            }
+        }
+    }
+    ${postDataFragment}
+`;
+
+export const EDIT_REPLY = gql`
+    mutation editComment(
+        $postId: ID!
+        $communityId: ID!
+        $commentId: ID!
+        $body: String
+    ) {
+        editComment(
+            postId: $postId
+            communityId: $communityId
+            commentId: $commentId
+            body: $body
+        ) {
+            code
+            success
+            message
+            post {
+                ...postData
+            }
+        }
+    }
+    ${postDataFragment}
+`;
+
 export const NEW_POST = gql`
     mutation addPost(
         $communityId: ID!

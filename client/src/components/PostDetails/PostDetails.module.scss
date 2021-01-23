@@ -25,6 +25,18 @@
             display: flex;
             align-items: center;
         }
+        .commentAdmin {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            justify-content: flex-end;
+            .adminBtn {
+                margin-right: 8px;
+                font-size: 0.7rem;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
     }
     .commentBody {
         margin-left: 16px;

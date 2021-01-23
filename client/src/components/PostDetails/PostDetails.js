@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DELETE_POST } from '../../queries/post';
+import { DELETE_POST, DELETE_REPLY, EDIT_REPLY } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
@@ -20,7 +20,20 @@ const cx = classNames.bind(require('./PostDetails.module.scss'));
 const PostDetails = ({ post }) => {
     const { appDispatch } = useAppState();
     const auth = useAuth();
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState({
+        postDelete: false,
+        commentDelete: false,
+        data: null
+    });
+    const [editReplyData, setEditReplyData] = useState(null);
+
+    const setConfirmClosedFromModal = (_) => {
+        setIsConfirmOpen({
+            postDelete: false,
+            commentDelete: false,
+            data: null
+        });
+    };
 
     const targetRef = useRef();
 
@@ -56,17 +69,36 @@ const PostDetails = ({ post }) => {
         }
     });
 
+    const [editReply] = useMutation(EDIT_REPLY);
+    const [deleteReply] = useMutation(DELETE_REPLY);
+
     const confirmDelete = () => {
         deletePost({
             variables: { postId: post.id }
         });
     };
 
+    const confirmDeleteReply = (commentId) => {
+        deleteReply({
+            variables: { postId: post.id, commentId }
+        });
+    };
+
+    const onConfirmed = () => {
+        if (isConfirmOpen.postDelete) {
+            confirmDelete();
+        } else if (isConfirmOpen.commentDelete) {
+            confirmDeleteReply(isConfirmOpen.data);
+        }
+    };
+
     return (
         <Modal
-            isConfirmOpen={isConfirmOpen}
-            setIsConfirmOpen={setIsConfirmOpen}
-            onConfirmed={confirmDelete}
+            isConfirmOpen={
+                isConfirmOpen.postDelete || isConfirmOpen.commentDelete
+            }
+            setIsConfirmOpen={setConfirmClosedFromModal}
+            onConfirmed={onConfirmed}
             title={post.title}
         >
             <div className={cx('postDetailsWrapper')}>
@@ -151,6 +183,44 @@ const PostDetails = ({ post }) => {
                                                         comment.date
                                                     )}
                                                 </div>
+                                                {comment.author.id ===
+                                                    auth.session.user._id && (
+                                                    <div
+                                                        className={cx(
+                                                            'commentAdmin'
+                                                        )}
+                                                    >
+                                                        <div
+                                                            className={cx(
+                                                                'adminBtn'
+                                                            )}
+                                                            onClick={() => {
+                                                                setEditReplyData(
+                                                                    comment
+                                                                );
+                                                            }}
+                                                        >
+                                                            edit
+                                                        </div>
+                                                        <div
+                                                            className={cx(
+                                                                'adminBtn'
+                                                            )}
+                                                            onClick={() => {
+                                                                setIsConfirmOpen(
+                                                                    {
+                                                                        commentDelete: true,
+                                                                        postDelete: false,
+                                                                        data:
+                                                                            comment.id
+                                                                    }
+                                                                );
+                                                            }}
+                                                        >
+                                                            delete
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                             <div className={cx('commentBody')}>
                                                 {comment.body}
@@ -177,12 +247,22 @@ const PostDetails = ({ post }) => {
                             />
                             <AiOutlineDelete
                                 className={cx('control', 'delete')}
-                                onClick={() => setIsConfirmOpen(true)}
+                                onClick={() => {
+                                    setIsConfirmOpen({
+                                        commentDelete: false,
+                                        postDelete: true,
+                                        data: null
+                                    });
+                                }}
                             />
                         </div>
                     )}
                     <div className={cx('replyWrapper')}>
-                        <Reply postId={post.id} />
+                        <Reply
+                            postId={post.id}
+                            editReplyData={editReplyData}
+                            clearData={() => setEditReplyData(null)}
+                        />
                     </div>
                 </div>
             </div>
