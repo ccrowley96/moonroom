@@ -126,6 +126,7 @@ const RoomDetailsModal = ({ activeCommunity }) => {
                     <MutationInput
                         mutationType={CREATE_ROOM}
                         cacheUpdate={(cache, data) => {
+                            if (!data.data.addRoom.success) return;
                             const queryVars = {
                                 communityId: activeCommunity.id
                             };
@@ -175,8 +176,8 @@ const RoomDetailsModal = ({ activeCommunity }) => {
             {room && (
                 <div className={cx('_modalSection')}>
                     <AreYouSure
-                        mutation={() =>
-                            deleteRoom({
+                        mutation={async () =>
+                            await deleteRoom({
                                 variables: {
                                     communityId: activeCommunity.id,
                                     roomId: activeRoomId

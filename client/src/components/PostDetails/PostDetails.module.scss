@@ -47,7 +47,7 @@
     overflow: hidden;
     white-space: pre-wrap;
     word-wrap: break-word;
-    word-break: break-all;
+    word-break: break-word;
     position: relative;
     min-height: 200px;
     max-height: 60vh;
@@ -57,9 +57,15 @@
 
 .meta {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+
     .author {
         font-weight: 600;
         margin-right: 8px;
+    }
+    .date {
+        font-size: small;
     }
 }
 
@@ -70,19 +76,31 @@
 .ratingWrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.ratingStar {
+    fill: var(--color-scale-yellow-5);
 }
 
 .tagWrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     margin: 8px 0px;
+
+    .tagIcon {
+        font-size: 20px;
+        margin-right: 4px;
+    }
     .tag {
-        background-color: var(--color-topic-tag-bg);
+        background-color: var(--color-topic-tag-hover-bg);
         border-radius: 6px;
         margin: 4px;
-        padding: 5px 12px;
+        padding: 5px 8px;
         display: flex;
+        align-items: center;
     }
 }
 
@@ -98,9 +116,15 @@
     }
 }
 
+.linkWrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .link {
     width: fit-content;
     color: var(--color-text-link);
+    text-align: center;
 }
 
 .footer {

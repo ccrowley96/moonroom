@@ -37,7 +37,7 @@
             var(--color-btn-danger-hover-inset-shadow);
     }
     &:disabled {
-        color: var(--color-btn-danger-disabled-text);
+        color: var(--color-text-disabled);
         background-color: var(--color-btn-danger-disabled-bg);
     }
 }

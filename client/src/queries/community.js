@@ -10,6 +10,16 @@ export const DELETE_COMMUNITY = gql`
     }
 `;
 
+export const LEAVE_COMMUNITY = gql`
+    mutation leaveCommunity($communityId: ID!) {
+        leaveCommunity(communityId: $communityId) {
+            code
+            success
+            message
+        }
+    }
+`;
+
 export const GET_ACTIVE_COMMUNITY = gql`
     query getCommunity($communityId: ID!) {
         community(communityId: $communityId) {
@@ -23,6 +33,7 @@ export const GET_ACTIVE_COMMUNITY = gql`
                 email
             }
             members {
+                id
                 name
                 email
             }

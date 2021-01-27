@@ -143,6 +143,13 @@ export default {
             { dataSources: { postApi } }
         ) => {
             return await postApi.deleteComment(postId, commentId);
+        },
+        leaveCommunity: async (
+            _,
+            { communityId },
+            { dataSources: { communityApi } }
+        ) => {
+            return await communityApi.leaveCommunity(communityId);
         }
     }
 };

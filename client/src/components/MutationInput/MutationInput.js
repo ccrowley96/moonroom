@@ -18,6 +18,7 @@ const MutationInput = ({
     onSuccess
 }) => {
     const [text, setText] = useState('');
+    const [loading, setLoading] = useState(false);
     const [errorState, setError] = useState(null);
     const [mutation] = useMutation(mutationType, {
         ...(cacheUpdate && { update: cacheUpdate })
@@ -58,7 +59,11 @@ const MutationInput = ({
                 ...(refetchQueries && { refetchQueries })
             };
 
+            setLoading(true);
+
             let result = await mutation(mutationOptions);
+
+            setLoading(false);
 
             setText('');
 
@@ -82,12 +87,13 @@ const MutationInput = ({
                 value={text}
                 onChange={(e) => handleTextChange(e)}
                 placeholder={placeholder}
-                onKeyPress={(e) => enterPressed(e, handleSubmit)}
+                onKeyPress={(e) => !loading && enterPressed(e, handleSubmit)}
                 className={cx('_input')}
             />
             <button
                 className={cx('_btn', 'submitButton')}
                 onClick={() => handleSubmit()}
+                disabled={loading}
             >
                 {dataTitle}
             </button>

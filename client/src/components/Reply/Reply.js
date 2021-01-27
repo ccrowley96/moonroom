@@ -8,6 +8,7 @@ const cx = classNames.bind(require('./Reply.module.scss'));
 
 const Reply = ({ postId, editReplyData, clearData }) => {
     const [reply, setReply] = useState('');
+    const [loading, setLoading] = useState(false);
     const [sendReply] = useMutation(NEW_REPLY);
     const [editReply] = useMutation(EDIT_REPLY);
     const communityId = useReactiveVar(activeCommunityIdVar);
@@ -24,6 +25,7 @@ const Reply = ({ postId, editReplyData, clearData }) => {
 
             let result;
             let dataKey = 'addComment';
+            setLoading(true);
 
             if (editReplyData) {
                 dataKey = 'editComment';
@@ -44,6 +46,7 @@ const Reply = ({ postId, editReplyData, clearData }) => {
                     }
                 });
             }
+            setLoading(false);
 
             setReply('');
             clearData();
@@ -63,12 +66,14 @@ const Reply = ({ postId, editReplyData, clearData }) => {
                 className={cx('_input', 'replyInput')}
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
-                onKeyPress={(e) => enterPressed(e, handleSubmitReply)}
+                onKeyPress={(e) =>
+                    !loading && enterPressed(e, handleSubmitReply)
+                }
             />
             <button
                 className={cx('replyBtn')}
                 onClick={handleSubmitReply}
-                disabled={reply === ''}
+                disabled={reply === '' || loading}
             >
                 {editReplyData ? 'Edit' : 'Reply'}
             </button>

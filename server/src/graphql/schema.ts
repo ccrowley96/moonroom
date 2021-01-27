@@ -188,6 +188,7 @@ const typeDefs = gql`
         deleteRoom(communityId: ID!, roomId: ID!): deleteMutationResponse
         deletePost(postId: ID!): deleteMutationResponse
         deleteComment(postId: ID!, commentId: ID!): deleteCommentResponse
+        leaveCommunity(communityId: ID!): deleteMutationResponse
     }
 `;
 

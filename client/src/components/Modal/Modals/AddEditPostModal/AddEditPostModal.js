@@ -37,6 +37,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
     };
 
     const [selectedRoom, setSelectedRoom] = useState(getPostRoom());
+    const [loading, setLoading] = useState(false);
 
     // Input field state
     const [title, setTitle] = useState(postEdit?.title ? postEdit.title : '');
@@ -160,6 +161,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
 
             if (!isErrorPresent({ ...errors, ...newErrors })) {
                 let result;
+                setLoading(true);
                 if (postEdit) {
                     result = await editPost({
                         variables: {
@@ -194,6 +196,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
                         }
                     });
                 }
+                setLoading(false);
 
                 let dataKey = postEdit ? 'editPost' : 'addPost';
 
@@ -408,7 +411,7 @@ const AddEditPostModal = ({ activeCommunity }) => {
                     <button
                         className={cx('_btn-success')}
                         onClick={handleSubmit}
-                        disabled={isErrorPresent()}
+                        disabled={isErrorPresent() || loading}
                     >
                         {postEdit ? 'Confirm' : 'Post'}
                     </button>

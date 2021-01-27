@@ -1,21 +1,45 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../../Modal';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { actionTypes } from '../../../../constants/constants';
 import { useAppState } from '../../../../hooks/provideAppState';
-import { DELETE_COMMUNITY } from '../../../../queries/community';
+import {
+    DELETE_COMMUNITY,
+    LEAVE_COMMUNITY
+} from '../../../../queries/community';
 import AreYouSure from '../AreYouSure/AreYouSure';
 import CommunityCodeLink from '../../../CommunityCodeLink/CommunityCodeLink';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 import { removeCommunityFromCache } from '../../../../services/utils';
+import { USER_QUERY } from '../../../../queries/profile';
 const cx = classNames.bind(require('./CommunityDetailsModal.module.scss'));
 
 const CommunityDetailsModal = ({ activeCommunity }) => {
     const { appDispatch } = useAppState();
+    const { data: userData } = useQuery(USER_QUERY);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
     const [deleteCommunity] = useMutation(DELETE_COMMUNITY, {
+        update(cache) {
+            const communityId = activeCommunity.id;
+            removeCommunityFromCache(communityId);
+
+            cache.modify({
+                fields: {
+                    feed: (_, { DELETE }) => {
+                        return DELETE;
+                    }
+                }
+            });
+
+            // Close modal
+            appDispatch({ type: actionTypes.SET_ACTIVE_MODAL, payload: null });
+        }
+    });
+
+    const [leaveCommunity] = useMutation(LEAVE_COMMUNITY, {
         update(cache) {
             const communityId = activeCommunity.id;
             removeCommunityFromCache(communityId);
@@ -44,12 +68,21 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
     }, []);
 
     return (
-        <Modal title={'Community: ' + activeCommunity.name}>
+        <Modal
+            title={'Community: ' + activeCommunity.name}
+            isConfirmOpen={isConfirmOpen}
+            setIsConfirmOpen={setIsConfirmOpen}
+            onConfirmed={() => {
+                leaveCommunity({
+                    variables: { communityId: activeCommunity.id }
+                });
+            }}
+        >
             <div className={cx('_modalSection')}>
                 <CommunityCodeLink code={activeCommunity.code} />
             </div>
             {activeCommunity.members.length > 0 && (
-                <>
+                <div className={cx('membersWrapper')}>
                     <div className={cx('_sectionLabel')}>Members</div>
                     <div
                         className={cx('_modalSection', 'memberList')}
@@ -63,7 +96,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
                             );
                         })}
                     </div>
-                </>
+                </div>
             )}
             <div className={cx('_modalSection')}>
                 <div className={cx('_sectionLabel')}>Admins</div>
@@ -82,9 +115,23 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
                 </div>
             </div>
 
+            {userData &&
+                userData.me &&
+                activeCommunity.members.find(
+                    (member) => member.id === userData.me.id
+                ) && (
+                    <div className={cx('leaveCommunityWrapper')}>
+                        <button
+                            className={cx('_btn-danger')}
+                            onClick={() => setIsConfirmOpen(true)}
+                        >
+                            Leave community
+                        </button>
+                    </div>
+                )}
             <AreYouSure
-                mutation={() =>
-                    deleteCommunity({
+                mutation={async () =>
+                    await deleteCommunity({
                         variables: { communityId: activeCommunity.id }
                     })
                 }

@@ -4,7 +4,7 @@ import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes } from '../../constants/constants';
-import { AiOutlineStar, AiOutlineDelete } from 'react-icons/ai';
+import { AiFillStar, AiOutlineTag, AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
@@ -26,6 +26,7 @@ const PostDetails = ({ post }) => {
         data: null
     });
     const [editReplyData, setEditReplyData] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const setConfirmClosedFromModal = (_) => {
         setIsConfirmOpen({
@@ -72,16 +73,20 @@ const PostDetails = ({ post }) => {
     const [editReply] = useMutation(EDIT_REPLY);
     const [deleteReply] = useMutation(DELETE_REPLY);
 
-    const confirmDelete = () => {
-        deletePost({
+    const confirmDelete = async () => {
+        setLoading(true);
+        await deletePost({
             variables: { postId: post.id }
         });
+        setLoading(false);
     };
 
-    const confirmDeleteReply = (commentId) => {
-        deleteReply({
+    const confirmDeleteReply = async (commentId) => {
+        setLoading(true);
+        await deleteReply({
             variables: { postId: post.id, commentId }
         });
+        setLoading(false);
     };
 
     const onConfirmed = () => {
@@ -109,12 +114,12 @@ const PostDetails = ({ post }) => {
                                 {post.author.given_name}
                             </div>
                             <div className={cx('date')}>
-                                - {formatDateTimeString(post.date)}
+                                {formatDateTimeString(post.date)}
                             </div>
                         </div>
                     </div>
                     {post.link && (
-                        <div className={cx('_modalSection')}>
+                        <div className={cx('_modalSection', 'linkWrapper')}>
                             <a
                                 href={post.link}
                                 target="_blank"
@@ -130,7 +135,12 @@ const PostDetails = ({ post }) => {
                             <div className={cx('ratingWrapper')}>
                                 {Array.from(Array(Math.floor(post.rating))).map(
                                     (_, idx) => {
-                                        return <AiOutlineStar key={idx} />;
+                                        return (
+                                            <AiFillStar
+                                                key={idx}
+                                                className={cx('ratingStar')}
+                                            />
+                                        );
                                     }
                                 )}
                             </div>
@@ -142,6 +152,9 @@ const PostDetails = ({ post }) => {
                                 {post.tags.map((tag, idx) => {
                                     return (
                                         <div className={cx('tag')} key={idx}>
+                                            <AiOutlineTag
+                                                className={cx('tagIcon')}
+                                            />
                                             <div className={cx('tagText')}>
                                                 {tag}
                                             </div>
@@ -207,14 +220,15 @@ const PostDetails = ({ post }) => {
                                                                 'adminBtn'
                                                             )}
                                                             onClick={() => {
-                                                                setIsConfirmOpen(
-                                                                    {
-                                                                        commentDelete: true,
-                                                                        postDelete: false,
-                                                                        data:
-                                                                            comment.id
-                                                                    }
-                                                                );
+                                                                if (!loading)
+                                                                    setIsConfirmOpen(
+                                                                        {
+                                                                            commentDelete: true,
+                                                                            postDelete: false,
+                                                                            data:
+                                                                                comment.id
+                                                                        }
+                                                                    );
                                                             }}
                                                         >
                                                             delete
@@ -248,11 +262,12 @@ const PostDetails = ({ post }) => {
                             <AiOutlineDelete
                                 className={cx('control', 'delete')}
                                 onClick={() => {
-                                    setIsConfirmOpen({
-                                        commentDelete: false,
-                                        postDelete: true,
-                                        data: null
-                                    });
+                                    if (!loading)
+                                        setIsConfirmOpen({
+                                            commentDelete: false,
+                                            postDelete: true,
+                                            data: null
+                                        });
                                 }}
                             />
                         </div>

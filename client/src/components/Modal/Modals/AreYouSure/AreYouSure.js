@@ -13,6 +13,7 @@ const AreYouSure = ({
     dangerText,
     activeCommunity
 }) => {
+    const [loading, setLoading] = useState(false);
     const { data: userData } = useQuery(USER_QUERY);
     const [areYouSureInput, setAreYouSureInput] = useState('');
 
@@ -36,8 +37,12 @@ const AreYouSure = ({
                     />
                     <button
                         className={cx('_btn-danger', 'deleteBtn')}
-                        onClick={mutation}
-                        disabled={areYouSureInput !== confirmText}
+                        onClick={async () => {
+                            setLoading(true);
+                            await mutation();
+                            setLoading(false);
+                        }}
+                        disabled={areYouSureInput !== confirmText || loading}
                     >
                         {buttonText}
                     </button>

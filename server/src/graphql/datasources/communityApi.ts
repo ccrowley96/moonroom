@@ -206,6 +206,61 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
             };
         }
     }
+
+    async leaveCommunity(communityId: string) {
+        const { user } = this.context;
+        try {
+            // Verify community exists
+            let community: any = await this.verifyCommunityExists(communityId);
+
+            // Populate members admins
+            community = await community.populate('members').populate('admins');
+
+            // Verify user is member of community
+            if (community.members.indexOf(user._id) === -1)
+                throw new Error('You are not a member of this community');
+
+            // Verify user is not an admin of community
+            if (community.admins.indexOf(user._id) !== -1)
+                throw new Error('Admins cannot leave their community');
+
+            // Remove community from user's community list
+            await User.updateOne(
+                {
+                    _id: user._id
+                },
+                {
+                    $pull: {
+                        communities: community._id
+                    }
+                }
+            );
+
+            // Remove user from community member's list
+            await Community.updateOne(
+                {
+                    _id: community._id
+                },
+                {
+                    $pull: {
+                        members: user._id
+                    }
+                }
+            );
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Community left'
+            };
+        } catch (err) {
+            return {
+                code: 500,
+                success: false,
+                message: err
+            };
+        }
+    }
 }
 
 export default CommunityApi;
