@@ -11,7 +11,8 @@ const AreYouSure = ({
     placeholder,
     confirmText,
     dangerText,
-    activeCommunity
+    activeCommunity,
+    titleText
 }) => {
     const [loading, setLoading] = useState(false);
     const { data: userData } = useQuery(USER_QUERY);
@@ -24,7 +25,7 @@ const AreYouSure = ({
     ) {
         return (
             <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Admin</div>
+                <div className={cx('_sectionLabel')}>{titleText}</div>
                 <div className={cx('deleteContainer')}>
                     <div className={cx('_sectionValue', '_danger')}>
                         {dangerText}

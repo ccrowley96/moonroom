@@ -22,7 +22,7 @@ export default function Routes() {
                 <PrivateRoute path="/profile">
                     <Profile />
                 </PrivateRoute>
-                <PrivateRoute path="/community/:code">
+                <PrivateRoute path="/moon/:code">
                     <JoinCommunityLink />
                 </PrivateRoute>
                 <PrivateRoute path="/">

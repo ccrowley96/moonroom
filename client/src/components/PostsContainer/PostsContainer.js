@@ -31,10 +31,12 @@ const PostsContainer = ({ activeCommunity }) => {
         variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
     });
 
-    const fetchMoreNoCursor = () => {
-        fetchMore({
+    const fetchMoreNoCursor = async (fromRefresh = false) => {
+        await fetchMore({
             variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
         });
+        if (fromRefresh)
+            appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
     };
 
     // Re-fetch on room change
@@ -46,11 +48,10 @@ const PostsContainer = ({ activeCommunity }) => {
     useDidUpdateEffect(() => {
         if (appState.triggerRefresh) {
             if (appState.searchActive) {
-                feedSearch();
+                feedSearch(null, true);
             } else {
-                fetchMoreNoCursor();
+                fetchMoreNoCursor(true);
             }
-            appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
         }
     }, [triggerRefresh]);
 
@@ -61,7 +62,7 @@ const PostsContainer = ({ activeCommunity }) => {
         // eslint-disable-next-line
     }, [activeCommunityId]);
 
-    const feedSearch = async (cursor = null) => {
+    const feedSearch = async (cursor = null, fromRefresh = false) => {
         await client.query({
             query: FEED_SEARCH,
             variables: getFeedSearchVariables(
@@ -72,6 +73,9 @@ const PostsContainer = ({ activeCommunity }) => {
             ),
             fetchPolicy: 'network-only'
         });
+
+        if (fromRefresh)
+            appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
     };
 
     return (

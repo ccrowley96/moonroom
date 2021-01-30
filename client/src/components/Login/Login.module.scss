@@ -15,6 +15,34 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
+
+    .jumboTitle {
+        font-size: 3em;
+        margin-bottom: 8px;
+        margin-top: 8px;
+        margin-bottom: 0px;
+    }
+
+    .jumboSubtitle {
+        margin-top: 8px;
+        font-size: 1.2em;
+        padding: 0px 8px;
+        margin-bottom: 0px;
+    }
+
+    .jumboListWrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+    }
+
+    .jumboList {
+        text-align: center;
+        width: fit-content;
+        position: relative;
+        font-weight: 600;
+        width: 300px;
+    }
 }
 
 .googleLogin {

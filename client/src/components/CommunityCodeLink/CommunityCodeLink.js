@@ -21,7 +21,7 @@ const CommunityCodeLink = ({ code }) => {
     return (
         <div className={cx('codeLinkWrapper')}>
             <CopyToClipboard
-                text={`${window.location.origin}/community/${code}`}
+                text={`${window.location.origin}/moon/${code}`}
                 onCopy={() => setCopied(true)}
             >
                 <div className={cx('copyWrapper')}>
@@ -33,7 +33,7 @@ const CommunityCodeLink = ({ code }) => {
                     <div className={cx('clickInfo')}>
                         {copied
                             ? 'link copied to clipboard...'
-                            : '(click to copy join-community link)'}
+                            : '(click to copy moon link)'}
                     </div>
                 </div>
             </CopyToClipboard>

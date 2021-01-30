@@ -38,10 +38,8 @@ export default function Login() {
     return (
         <div className={cx('jumboContainer')}>
             <div className={cx('jumbo')}>
-                <h2>OurStuff</h2>
-                <h4>
-                    <i>Start sharing some stuff</i>
-                </h4>
+                <h2 className={cx('jumboTitle')}>MoonRoom</h2>
+
                 <div className={cx('googleLogin')}>
                     <GoogleLogin
                         theme={theme}
@@ -53,6 +51,13 @@ export default function Login() {
                         // isSignedIn={true} auto logs in user
                         cookiePolicy={'single_host_origin'}
                     />
+                </div>
+                <div className={cx('jumboListWrapper')}>
+                    <div className={cx('jumboList')}>
+                        <div>Create a moon 🌕</div>
+                        <div>Gather your astronauts 👨‍🚀</div>
+                        <div>Start sharing &#128640;</div>
+                    </div>
                 </div>
             </div>
         </div>

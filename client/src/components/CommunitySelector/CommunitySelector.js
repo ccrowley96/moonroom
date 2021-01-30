@@ -79,7 +79,7 @@ const CommunitySelector = ({
                             <div className={cx('_modalSection')}>
                                 <div className={cx('activeCommunity')}>
                                     <h3 className={cx('communityName')}>
-                                        Community: {activeCommunity.name}
+                                        Moon: {activeCommunity.name} 🌕
                                     </h3>
                                     <CommunityCodeLink
                                         code={activeCommunity.code}
@@ -89,9 +89,7 @@ const CommunitySelector = ({
                         ) : null}
                         <div className={cx('_modalSection')}>
                             <div className={cx('_sectionLabel')}>
-                                {activeCommunity
-                                    ? 'My communities'
-                                    : 'Select community'}
+                                {activeCommunity ? 'My moons' : 'Select moon'}
                             </div>
                             <select
                                 className={cx('_select')}
@@ -105,7 +103,7 @@ const CommunitySelector = ({
                                     disabled
                                     hidden
                                 >
-                                    Select community
+                                    Select Moon
                                 </option>
                                 {communities.map((community, idx) => {
                                     return (
@@ -121,10 +119,10 @@ const CommunitySelector = ({
                 <div className={cx('_modalSection')}>
                     <MutationInput
                         mutationType={CREATE_COMMUNITY}
-                        dataTitle={'Create community'}
+                        dataTitle={'Create moon'}
                         dataKey={'addCommunity'}
                         maxLength={16}
-                        placeholder={'Enter community name'}
+                        placeholder={'Enter moon name'}
                         inputVariable={'name'}
                         refetchQueries={[{ query: MY_COMMUNITIES }]}
                         onSuccess={(result) => {
@@ -136,10 +134,10 @@ const CommunitySelector = ({
                     />
                     <MutationInput
                         mutationType={JOIN_COMMUNITY}
-                        dataTitle={'Join community'}
+                        dataTitle={'Join moon'}
                         dataKey={'joinCommunity'}
                         maxLength={8}
-                        placeholder={'Enter community code'}
+                        placeholder={'Enter moon code'}
                         inputVariable={'code'}
                         refetchQueries={[{ query: MY_COMMUNITIES }]}
                         onSuccess={(result) => {

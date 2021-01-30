@@ -8,6 +8,7 @@ import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
 import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
 import { BsPlus } from 'react-icons/bs';
 import { MdRefresh } from 'react-icons/md';
+import { BiAddToQueue } from 'react-icons/bi';
 
 import classNames from 'classnames/bind';
 const cx = classNames.bind(require('./TopBar.module.scss'));
@@ -18,7 +19,7 @@ const TopBar = () => {
             user: { picture }
         }
     } = useAuth();
-    const { appDispatch } = useAppState();
+    const { appState, appDispatch } = useAppState();
 
     const activeRoomId = useReactiveVar(activeRoomIdVar);
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
@@ -70,11 +71,16 @@ const TopBar = () => {
                                 })
                             }
                         >
-                            {activeRoomId
-                                ? activeCommunity.rooms.find(
-                                      (room) => room.id === activeRoomId
-                                  ).name
-                                : 'All'}
+                            <div className={cx('roomDeetz')}>
+                                {activeRoomId
+                                    ? activeCommunity.rooms.find(
+                                          (room) => room.id === activeRoomId
+                                      ).name
+                                    : 'All'}
+                                <div className={cx('addRoomIcon')}>
+                                    <BiAddToQueue />
+                                </div>
+                            </div>
                         </div>
                     </>
                 )}
@@ -82,7 +88,11 @@ const TopBar = () => {
             <div className={cx('action', 'navItem')}>
                 {activeCommunity && (
                     <MdRefresh
-                        className={cx('actionIcon', 'refreshIcon')}
+                        className={cx(
+                            'actionIcon',
+                            'refreshIcon',
+                            appState.triggerRefresh ? '_refresh-start' : ''
+                        )}
                         onClick={() => {
                             appDispatch({
                                 type: actionTypes.TRIGGER_REFRESH,

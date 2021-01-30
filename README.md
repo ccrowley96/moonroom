@@ -1,4 +1,4 @@
-# Private community app (name TBD)
+# MoonRoom
 This web app provides a place to share with friends, family, and private communities. 
 
 ## Motivation

@@ -16,7 +16,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
             communityOwner.communities.forEach((community) => {
                 if (community.name === name)
                     throw new ApolloError(
-                        'You already have a community with that name, please choose a unique name',
+                        'You already have a moon with that name, please choose a unique name',
                         errorCodes.communityAlreadyExists
                     );
             });
@@ -58,7 +58,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
             return {
                 code: 200,
                 success: true,
-                message: 'Community created successfully!',
+                message: 'Moon created successfully!',
                 community: savedCommunity,
                 user: communityOwner
             };
@@ -95,7 +95,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
 
         if (!community) {
             throw new ApolloError(
-                'Community does not exist',
+                'Moon does not exist',
                 errorCodes.communityNotFound
             );
         }
@@ -112,7 +112,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
         ).map((community) => String(community.id));
         if (myCommunitiesIds.indexOf(communityId) === -1) {
             throw new ApolloError(
-                "You don't have access to this community!",
+                "You don't have access to this moon!",
                 errorCodes.communityUnauthorized
             );
         }
@@ -141,7 +141,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
             ];
             if (membersAndAdmins.indexOf(String(user._id)) !== -1) {
                 throw new ApolloError(
-                    'You are already a member or admin of this community',
+                    'You are already a member or admin of this moon',
                     errorCodes.communityAlreadyJoined
                 );
             }
@@ -183,9 +183,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
 
             // Verify user is admin of community
             if (community.admins.indexOf(user._id) === -1)
-                throw new Error(
-                    'You are not authorized to delete this community'
-                );
+                throw new Error('You are not authorized to delete this moon');
 
             // Delete community
             let toDelete = await Community.findById({
@@ -218,11 +216,11 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
 
             // Verify user is member of community
             if (community.members.indexOf(user._id) === -1)
-                throw new Error('You are not a member of this community');
+                throw new Error('You are not a member of this moon');
 
             // Verify user is not an admin of community
             if (community.admins.indexOf(user._id) !== -1)
-                throw new Error('Admins cannot leave their community');
+                throw new Error('Admins cannot leave their moon');
 
             // Remove community from user's community list
             await User.updateOne(
@@ -251,7 +249,7 @@ class CommunityApi<TData> extends MongoDataSource<TData> {
             return {
                 code: 200,
                 success: true,
-                message: 'Community left'
+                message: 'Moon left'
             };
         } catch (err) {
             return {

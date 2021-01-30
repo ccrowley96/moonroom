@@ -69,7 +69,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
 
     return (
         <Modal
-            title={'Community: ' + activeCommunity.name}
+            title={'Moon: ' + activeCommunity.name}
             isConfirmOpen={isConfirmOpen}
             setIsConfirmOpen={setIsConfirmOpen}
             onConfirmed={() => {
@@ -83,7 +83,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
             </div>
             {activeCommunity.members.length > 0 && (
                 <div className={cx('membersWrapper')}>
-                    <div className={cx('_sectionLabel')}>Members</div>
+                    <div className={cx('_sectionLabel')}>Astronauts</div>
                     <div
                         className={cx('_modalSection', 'memberList')}
                         ref={targetRef}
@@ -99,7 +99,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
                 </div>
             )}
             <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Admins</div>
+                <div className={cx('_sectionLabel')}>Mission commander</div>
                 {activeCommunity.admins.map((admin, idx) => {
                     return (
                         <div key={idx} className={cx('sectionValue')}>
@@ -109,7 +109,7 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
                 })}
             </div>
             <div className={cx('_modalSection')}>
-                <div className={cx('_sectionLabel')}>Created</div>
+                <div className={cx('_sectionLabel')}>Moon formation date</div>
                 <div className={cx('_sectionValue')}>
                     {new Date(Number(activeCommunity.createdAt)).toDateString()}
                 </div>
@@ -137,11 +137,12 @@ const CommunityDetailsModal = ({ activeCommunity }) => {
                 }
                 activeCommunity={activeCommunity}
                 dataKey={'deleteCommunity'}
-                successMessage={'Community deleted'}
-                failedMessage={'Community could not be deleted'}
-                buttonText={'Delete community'}
-                placeholder={'Enter community name to confirm'}
+                successMessage={'Moon deleted'}
+                failedMessage={'Moon could not be deleted'}
+                buttonText={'Delete moon'}
+                placeholder={'Enter moon name to confirm'}
                 confirmText={activeCommunity.name}
+                titleText={'Moon detonator'}
                 dangerText={
                     <span>
                         Deleting <b>{activeCommunity.name}</b> will also delete

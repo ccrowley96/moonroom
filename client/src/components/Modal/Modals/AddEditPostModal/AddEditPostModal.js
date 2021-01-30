@@ -234,7 +234,9 @@ const AddEditPostModal = ({ activeCommunity }) => {
     return (
         <Modal
             title={
-                postEdit ? 'Editing post' : `Posting to ${activeCommunity.name}`
+                postEdit
+                    ? 'Editing post'
+                    : `Posting to ${activeCommunity.name} 🌕`
             }
         >
             <div className={cx('addEditWrapper')} ref={targetRef}>
