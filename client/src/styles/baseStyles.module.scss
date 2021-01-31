@@ -90,13 +90,15 @@ select {
     position: relative;
     display: inline-block;
     &::after {
-        content: '\0023F7';
-        font: normal normal normal 18px/1 FontAwesome;
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        font-size: 18px;
+        content: '\f0d7';
         color: var(--color-btn-text);
         right: 8px;
         top: 0px;
         height: 26px;
-        padding: 6px 0px 0px 8px;
+        padding: 4px 0px 0px 8px;
         position: absolute;
         pointer-events: none;
     }
