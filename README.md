@@ -1,29 +1,25 @@
-# MoonRoom
-This web app provides a place to share with friends, family, and private communities. 
+# MoonRoom 🚀🌕
+A **more than chronological** way of sharing with friends, family, and private communities. 
 
-## Motivation
-Providing a **more than chronological** way of sharing with private communities.
-
-## Communities
-Users can create **communities**.  Once created, a user can share a unique code to join that community.  Anyone with the code will be able to join.
-
-The creator of a community will become the community admin.  Only admins can delete communities.
+## Moons
+Users can create **moons**.  Once created, a user can share a unique code to join that moon.  Anyone with the code will be able to join.
+The creator of a moon will become the **mission commander**.  Only **mission commander** can destroy moons.
 
 ## Rooms
-Anyone in a community can create **rooms**.  Think of rooms like a category of ideas.  For example, a user might create rooms to share **recipes**, **favorite wines**, **music**, and **videogames** with their friends.
+Anyone astronaut invited onto a moon can create **rooms**.  Think of rooms like a category of ideas.  For example, a user might create rooms to share **recipes**, **favorite wines**, **music**, and **videogames** with their friends.
 
 ## Posts
-Anyone in a community can create **posts**.  Posts will be un-categorized by default, but the user can choose to post to a specific room, recipes for example.
+Anyone on a moon can create **posts**.  Posts will be un-categorized by default, but the user can choose to post to a specific room, recipes for example.
 
-Let's say I want to share a recipe with my family community.  I'll click the new post button, select the recipes room (created earlier), give my post a title, link, description, rating, and tags, then post the recipe.
+Let's say I want to share a recipe with my family moon.  I'll click the new post button, select the recipes room (created earlier), give my post a title, link, description, rating, and tags, then post the recipe.
 
 ## Tags
 When creating a post, a user can add tags to the post.  For example, if sharing a recipe, you might want to tag it [`dairy-free`, `easy`, `healthy`]
 
-These tags make searching and filtering posts easier for other members of the community.
+These tags make searching and filtering posts easier for other members of the moon.
 
 ## Filtering
-Once a community contains posts, and possibly rooms, users can easily search and filter all posts by different parameters.  This makes it easy to find anything shared in the community.
+Once a moon contains posts, and possibly rooms, users can easily search and filter all posts by different parameters.  This makes it easy to find anything shared in the moon.
 
 
 # Development
