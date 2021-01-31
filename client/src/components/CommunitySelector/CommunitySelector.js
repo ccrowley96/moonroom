@@ -91,28 +91,33 @@ const CommunitySelector = ({
                             <div className={cx('_sectionLabel')}>
                                 {activeCommunity ? 'My moons' : 'Select moon'}
                             </div>
-                            <select
-                                className={cx('_select')}
-                                value={selectedCommunity}
-                                onChange={handleCommunitySelectChange}
-                            >
-                                {/* Default option */}
-                                <option
-                                    key={'default'}
-                                    value={'none'}
-                                    disabled
-                                    hidden
+                            <div className={cx('_select-wrapper')}>
+                                <select
+                                    className={cx('_select')}
+                                    value={selectedCommunity}
+                                    onChange={handleCommunitySelectChange}
                                 >
-                                    Select Moon
-                                </option>
-                                {communities.map((community, idx) => {
-                                    return (
-                                        <option key={idx} value={community.id}>
-                                            {community.name}
-                                        </option>
-                                    );
-                                })}
-                            </select>
+                                    {/* Default option */}
+                                    <option
+                                        key={'default'}
+                                        value={'none'}
+                                        disabled
+                                        hidden
+                                    >
+                                        Select Moon
+                                    </option>
+                                    {communities.map((community, idx) => {
+                                        return (
+                                            <option
+                                                key={idx}
+                                                value={community.id}
+                                            >
+                                                {community.name}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
                         </div>
                     </>
                 )}

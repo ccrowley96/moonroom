@@ -243,38 +243,40 @@ const AddEditPostModal = ({ activeCommunity }) => {
                 <div className={cx('fieldWrapper')}>
                     <div className={cx('_modalSection')}>
                         <div className={cx('_sectionLabel')}>Select room</div>
-                        <select
-                            className={cx('_select')}
-                            value={selectedRoom}
-                            onChange={(e) => {
-                                let val = e.target.value;
-                                setSelectedRoom(val);
-                            }}
-                        >
-                            {/* Default option */}
-                            <option
-                                key={'default'}
-                                value={noRoomSelected}
-                                onClick={() => {
-                                    setSelectedRoom(noRoomSelected);
+                        <div className={cx('_select-wrapper')}>
+                            <select
+                                className={cx('_select')}
+                                value={selectedRoom}
+                                onChange={(e) => {
+                                    let val = e.target.value;
+                                    setSelectedRoom(val);
                                 }}
                             >
-                                {noRoomSelected}
-                            </option>
-                            {activeCommunity.rooms.map((room, idx) => {
-                                return (
-                                    <option
-                                        key={idx}
-                                        value={room.id}
-                                        onClick={() => {
-                                            setSelectedRoom(room.id);
-                                        }}
-                                    >
-                                        {room.name}
-                                    </option>
-                                );
-                            })}
-                        </select>
+                                {/* Default option */}
+                                <option
+                                    key={'default'}
+                                    value={noRoomSelected}
+                                    onClick={() => {
+                                        setSelectedRoom(noRoomSelected);
+                                    }}
+                                >
+                                    {noRoomSelected}
+                                </option>
+                                {activeCommunity.rooms.map((room, idx) => {
+                                    return (
+                                        <option
+                                            key={idx}
+                                            value={room.id}
+                                            onClick={() => {
+                                                setSelectedRoom(room.id);
+                                            }}
+                                        >
+                                            {room.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
                     </div>
                     <div className={cx('_modalSection')}>
                         <div className={cx('labelWrapper')}>
@@ -333,25 +335,27 @@ const AddEditPostModal = ({ activeCommunity }) => {
                                 ? '(out of 5)'
                                 : `(${rating} / 5)`}
                         </div>
-                        <select
-                            className={cx('_select')}
-                            value={rating}
-                            onChange={(e) => {
-                                setRating(e.target.value);
-                            }}
-                        >
-                            {/* Default option */}
-                            <option key={'default'} value={'noRating'}>
-                                No rating
-                            </option>
-                            {ratings.map((rating, idx) => {
-                                return (
-                                    <option key={idx} value={rating}>
-                                        {rating} / 5
-                                    </option>
-                                );
-                            })}
-                        </select>
+                        <div className={cx('_select-wrapper')}>
+                            <select
+                                className={cx('_select')}
+                                value={rating}
+                                onChange={(e) => {
+                                    setRating(e.target.value);
+                                }}
+                            >
+                                {/* Default option */}
+                                <option key={'default'} value={'noRating'}>
+                                    No rating
+                                </option>
+                                {ratings.map((rating, idx) => {
+                                    return (
+                                        <option key={idx} value={rating}>
+                                            {rating} / 5
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </div>
                     </div>
                     <div className={cx('_modalSection')}>
                         <div className={cx('_sectionLabel')}>Tags</div>

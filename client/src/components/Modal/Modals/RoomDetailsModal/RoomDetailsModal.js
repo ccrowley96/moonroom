@@ -84,41 +84,45 @@ const RoomDetailsModal = ({ activeCommunity }) => {
                     <div className={cx('_modalSection')}>
                         <div className={cx('_sectionLabel')}>Select room</div>
                         <div className={cx('rooms')}>
-                            <select
-                                className={cx('_select')}
-                                value={selectedRoom}
-                                onChange={(e) => {
-                                    let val = e.target.value;
-                                    setSelectedRoom(val);
-                                    activeRoomIdVar(val === 'all' ? null : val);
-                                }}
-                            >
-                                {/* Default option */}
-                                <option
-                                    key={'default'}
-                                    value={'all'}
-                                    onClick={() => {
-                                        setSelectedRoom('all');
-                                        activeRoomIdVar(null);
+                            <div className={cx('_select-wrapper')}>
+                                <select
+                                    className={cx('_select')}
+                                    value={selectedRoom}
+                                    onChange={(e) => {
+                                        let val = e.target.value;
+                                        setSelectedRoom(val);
+                                        activeRoomIdVar(
+                                            val === 'all' ? null : val
+                                        );
                                     }}
                                 >
-                                    All
-                                </option>
-                                {activeCommunity.rooms.map((room, idx) => {
-                                    return (
-                                        <option
-                                            key={idx}
-                                            value={room.id}
-                                            onClick={() => {
-                                                setSelectedRoom(room.id);
-                                                activeRoomIdVar(room.id);
-                                            }}
-                                        >
-                                            {room.name}
-                                        </option>
-                                    );
-                                })}
-                            </select>
+                                    {/* Default option */}
+                                    <option
+                                        key={'default'}
+                                        value={'all'}
+                                        onClick={() => {
+                                            setSelectedRoom('all');
+                                            activeRoomIdVar(null);
+                                        }}
+                                    >
+                                        All
+                                    </option>
+                                    {activeCommunity.rooms.map((room, idx) => {
+                                        return (
+                                            <option
+                                                key={idx}
+                                                value={room.id}
+                                                onClick={() => {
+                                                    setSelectedRoom(room.id);
+                                                    activeRoomIdVar(room.id);
+                                                }}
+                                            >
+                                                {room.name}
+                                            </option>
+                                        );
+                                    })}
+                                </select>
+                            </div>
                         </div>
                     </div>
                 )}

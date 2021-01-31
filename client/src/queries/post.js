@@ -172,7 +172,7 @@ export const FEED_QUERY = gql`
             roomId: $roomId
             first: $first
             after: $after
-        ) @connection(key: "feed", filter: ["type"]) {
+        ) {
             edges {
                 cursor
                 node {
