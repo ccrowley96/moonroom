@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DELETE_POST, DELETE_REPLY, EDIT_REPLY } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
+import { useTheme } from '../../hooks/provideTheme';
 import { useAuth } from '../../hooks/auth';
-import { actionTypes, modalTypes } from '../../constants/constants';
+import { actionTypes, modalTypes, themes } from '../../constants/constants';
 import { AiFillStar, AiOutlineTag, AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
@@ -20,6 +21,7 @@ const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = ({ post }) => {
     const { appDispatch } = useAppState();
+    const { theme } = useTheme();
     const auth = useAuth();
     const [isConfirmOpen, setIsConfirmOpen] = useState({
         postDelete: false,
@@ -28,6 +30,7 @@ const PostDetails = ({ post }) => {
     });
     const [editReplyData, setEditReplyData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [linkPreview, setLinkPreview] = useState(false);
 
     const setConfirmClosedFromModal = (_) => {
         setIsConfirmOpen({
@@ -120,14 +123,22 @@ const PostDetails = ({ post }) => {
                         </div>
                     </div>
                     {post.link && (
-                        <div className={cx('link')}>
+                        <div
+                            className={cx('link', linkPreview ? 'loaded' : '')}
+                        >
                             <ReactTinyLink
                                 cardSize="small"
                                 showGraphic={true}
                                 maxLine={2}
                                 minLine={1}
                                 url={post.link}
-                                defaultMedia={'./logo192.png'}
+                                defaultMedia={
+                                    theme === themes.dark
+                                        ? './logo192_dark.png'
+                                        : './logo192.png'
+                                }
+                                onSuccess={() => setLinkPreview(true)}
+                                onError={() => setLinkPreview(true)}
                             />
                         </div>
                     )}

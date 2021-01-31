@@ -70,6 +70,7 @@ option {
 }
 
 ._select {
+    height: 32px;
     padding: 5px 8px;
     padding-right: 28px;
     border-radius: 6px;
@@ -90,15 +91,18 @@ select {
     position: relative;
     display: inline-block;
     &::after {
+        box-sizing: border-box;
         font-family: 'Font Awesome 5 Free';
         font-weight: 900;
-        font-size: 18px;
+        font-size: 16px;
         content: '\f0d7';
         color: var(--color-btn-text);
         right: 8px;
-        top: 0px;
-        height: 26px;
-        padding: 4px 0px 0px 8px;
+        height: 100%;
+        top: 0;
+        bottom: 0;
+        padding-top: 6px;
+        padding-left: 8px;
         position: absolute;
         pointer-events: none;
     }

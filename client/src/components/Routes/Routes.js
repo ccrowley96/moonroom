@@ -25,6 +25,9 @@ export default function Routes() {
                 <PrivateRoute path="/moon/:code">
                     <JoinCommunityLink />
                 </PrivateRoute>
+                <PrivateRoute path="/post/:id">
+                    {/* <PostFullView /> */}
+                </PrivateRoute>
                 <PrivateRoute path="/">
                     <TopBar />
                     <Home />
