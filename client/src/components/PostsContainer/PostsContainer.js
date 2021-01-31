@@ -141,7 +141,7 @@ const PostsContainer = ({ activeCommunity }) => {
 const PostPreviews = ({ loading, data, fetchMore, communityCode }) => {
     const posts = data?.feed?.edges;
     if (loading) {
-        return <div className={cx('noPosts')}>Loading...</div>;
+        return <div className={cx('loading')}>Loading...</div>;
     }
     if (!posts || posts?.length === 0) {
         return <NoPostsFound communityCode={communityCode} />;

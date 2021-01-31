@@ -7,6 +7,7 @@ import { actionTypes, modalTypes } from '../../constants/constants';
 import { AiFillStar, AiOutlineTag, AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { ReactTinyLink } from 'react-tiny-link';
 
 import classNames from 'classnames/bind';
 import { useMutation } from '@apollo/client';
@@ -119,15 +120,15 @@ const PostDetails = ({ post }) => {
                         </div>
                     </div>
                     {post.link && (
-                        <div className={cx('_modalSection', 'linkWrapper')}>
-                            <a
-                                href={post.link}
-                                target="_blank"
-                                rel="noreferrer"
-                                className={cx('link')}
-                            >
-                                {post.link}
-                            </a>
+                        <div className={cx('link')}>
+                            <ReactTinyLink
+                                cardSize="small"
+                                showGraphic={true}
+                                maxLine={2}
+                                minLine={1}
+                                url={post.link}
+                                defaultMedia={'./logo192.png'}
+                            />
                         </div>
                     )}
                     {post.rating && (

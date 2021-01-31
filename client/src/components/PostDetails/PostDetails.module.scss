@@ -122,9 +122,13 @@
 }
 
 .link {
-    width: fit-content;
-    color: var(--color-text-link);
-    text-align: center;
+    margin: 16px 8px;
+    a {
+        background-color: var(--color-bg-canvas-inset);
+        border-color: var(--color-border-primary);
+        color: var(--color-text-primary);
+        border-radius: 8px;
+    }
 }
 
 .footer {
