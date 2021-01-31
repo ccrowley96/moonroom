@@ -1,9 +1,13 @@
 @import '../../styles/baseStyles.module.scss';
 
 .profileWrapper {
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
     padding: 20px;
     overflow-x: hidden;
+    position: relative;
     th,
     td {
         padding: 8px 0px;
