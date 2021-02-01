@@ -6,7 +6,7 @@
 }
 
 .commentHeader {
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: underline;
 }
 
@@ -16,7 +16,7 @@
     .commentMeta {
         display: flex;
         .commentAuthor {
-            font-weight: 600;
+            font-weight: 700;
         }
         .commentDate {
             font-style: italic;
@@ -61,7 +61,7 @@
     align-items: center;
 
     .author {
-        font-weight: 600;
+        font-weight: 700;
         margin-right: 8px;
     }
     .date {
@@ -70,7 +70,7 @@
 }
 
 .title {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .ratingWrapper {

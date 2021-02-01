@@ -17,10 +17,16 @@
     text-align: center;
 
     .jumboTitle {
-        font-size: 3em;
+        font-size: 2.8em;
         margin-bottom: 8px;
         margin-top: 8px;
         margin-bottom: 0px;
+        position: relative;
+
+        .beta {
+            font-size: 0.3em;
+            margin-left: 4px;
+        }
     }
 
     .jumboSubtitle {
@@ -40,7 +46,7 @@
         text-align: center;
         width: fit-content;
         position: relative;
-        font-weight: 600;
+        font-weight: 700;
         width: 300px;
     }
 }

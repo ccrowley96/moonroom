@@ -38,7 +38,9 @@ export default function Login() {
     return (
         <div className={cx('jumboContainer')}>
             <div className={cx('jumbo')}>
-                <h2 className={cx('jumboTitle')}>MoonRoom</h2>
+                <h2 className={cx('jumboTitle')}>
+                    MoonRoom<span className={cx('beta')}>{`beta`}</span>
+                </h2>
 
                 <div className={cx('googleLogin')}>
                     <GoogleLogin

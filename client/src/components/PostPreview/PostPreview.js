@@ -15,6 +15,16 @@ const PostPreview = ({ post }) => {
         appState: { activeModal, modalData }
     } = useAppState();
 
+    let linkText = 'External link';
+    if (post.link) {
+        try {
+            linkText = new URL(post.link).host;
+        } catch (err) {
+            linkText = 'External link';
+            console.log(err);
+        }
+    }
+
     return (
         <>
             {activeModal === modalTypes.POST_DETAILS &&
@@ -43,7 +53,7 @@ const PostPreview = ({ post }) => {
                             rel="noreferrer"
                             className={cx('linkText')}
                         >
-                            {post.link}
+                            {linkText}
                         </a>
                         <FiLink className={cx('linkIcon')} />
                     </div>

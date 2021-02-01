@@ -7,7 +7,7 @@
     border-radius: 6px;
     padding: 5px 16px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     border: 1px solid;
     border-color: var(--color-btn-border);
     line-height: 20px;
@@ -113,7 +113,7 @@ select {
 }
 
 ._sectionLabel {
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 8px;
     &._required {
         &::after {
