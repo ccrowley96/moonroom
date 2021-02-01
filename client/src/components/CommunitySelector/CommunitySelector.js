@@ -12,6 +12,7 @@ import CommunityCodeLink from '../CommunityCodeLink/CommunityCodeLink';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(require('./CommunitySelector.module.scss'));
 
 const CommunitySelector = ({
@@ -152,6 +153,11 @@ const CommunitySelector = ({
                             selectCommunity(communityId);
                         }}
                     />
+                </div>
+                <div className={cx('_modalSection')}>
+                    <Link className={cx('help')} to={'/profile'}>
+                        Astronaut training...
+                    </Link>
                 </div>
             </div>
         </div>

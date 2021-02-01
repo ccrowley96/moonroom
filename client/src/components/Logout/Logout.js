@@ -27,6 +27,7 @@ export default function Logout() {
                     buttonText="Logout"
                     onLogoutSuccess={responseGoogle}
                     cookiePolicy={'single_host_origin'}
+                    className={cx('logoutBtn')}
                 />
             </div>
         );

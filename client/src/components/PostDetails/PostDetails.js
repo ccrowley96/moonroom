@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { DELETE_POST, DELETE_REPLY, EDIT_REPLY } from '../../queries/post';
+import { DELETE_POST, DELETE_REPLY } from '../../queries/post';
 import Modal from '../Modal/Modal';
 import { useAppState } from '../../hooks/provideAppState';
 import { useTheme } from '../../hooks/provideTheme';
@@ -12,10 +12,7 @@ import { ReactTinyLink } from 'react-tiny-link';
 
 import classNames from 'classnames/bind';
 import { useMutation } from '@apollo/client';
-import {
-    formatDateTimeString,
-    formatShortDateString
-} from '../../services/utils';
+import { formatDateTimeString } from '../../services/utils';
 import Reply from '../Reply/Reply';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
@@ -74,7 +71,6 @@ const PostDetails = ({ post }) => {
         }
     });
 
-    const [editReply] = useMutation(EDIT_REPLY);
     const [deleteReply] = useMutation(DELETE_REPLY);
 
     const confirmDelete = async () => {

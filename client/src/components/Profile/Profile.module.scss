@@ -6,7 +6,6 @@
     margin-right: auto;
     width: 100%;
     padding: 20px;
-    overflow-x: hidden;
     position: relative;
     th,
     td {
@@ -14,19 +13,134 @@
     }
 }
 
+.nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 32px;
+    position: relative;
+    margin-bottom: 32px;
+
+    .homeLink {
+        margin-left: 16px;
+        a {
+            color: var(--color-text-primary);
+        }
+    }
+
+    .moonAndSunWrapper {
+        height: 100%;
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+        transition: 0.8s cubic-bezier(0.3, 0, 0.5, 1);
+        transition-property: color, background-color, border-color, box-shadow;
+
+        .moonAndSun {
+            font-size: 1.7em;
+            border-radius: 50%;
+            &.light {
+                color: var(--color-scale-yellow-5);
+                background-color: var(--color-scale-yellow-5);
+                box-shadow: 0px 0px 10px 12px var(--color-scale-yellow-4);
+                border: 2px solid var(--color-scale-yellow-3);
+            }
+            &.dark {
+                color: var(--color-scale-yellow-1);
+                background-color: var(--color-scale-yellow-8);
+                box-shadow: 2px 2px 6px 2px var(--color-scale-yellow-7);
+                border: 1px solid var(--color-scale-yellow-8);
+            }
+        }
+    }
+}
+
+.profileInfoWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.profileData {
+    min-height: 96px;
+}
+
+.userMeta {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.userName {
+    font-size: 1.6em;
+    @media screen and (max-width: 400px) {
+        font-size: 1.4em;
+    }
+}
+
+.joinDate {
+    margin-top: 4px;
+    @media screen and (max-width: 500px) {
+        font-size: 0.75em;
+    }
+}
+
 .profilePicture {
     border-radius: 50%;
 }
 
-.homeLink {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    a {
-        color: var(--color-text-primary);
+.profileBtn {
+    margin: 20px 0px;
+}
+
+.hamburgerWrapper {
+    width: 50%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    cursor: pointer;
+    .burger {
+        border-radius: 2px;
+        width: 100%;
+        height: 4px;
+        margin: 2px 0px;
+        background-color: var(--color-bg-info-inverse);
+        opacity: 0.9;
     }
 }
 
-.profileBtn {
-    margin: 20px 0px;
+.helpWrapper {
+    margin-top: 16px;
+    .helpTitle {
+        font-weight: 700;
+        font-size: 1.2em;
+        text-align: center;
+    }
+    .helpSection {
+        margin: 8px 0px;
+    }
+    .helpSubtitle {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .helpBody {
+        display: flex;
+        align-items: center;
+        .helpIcon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--color-bg-info-inverse);
+            font-size: x-large;
+            margin-right: 8px;
+        }
+        .help {
+            width: calc(100% - 40px);
+            p {
+                margin: 4px 0px;
+            }
+        }
+    }
 }
