@@ -170,51 +170,54 @@
 }
 
 .footer {
-    flex-direction: row;
     width: 100%;
     display: flex;
     margin-top: 8px;
-    height: 42px;
+    flex-direction: column;
+    height: 84px;
 
     .replyWrapper {
         height: 42px;
         width: 100%;
     }
 
-    @media screen and (max-width: '520px') {
-        flex-direction: column;
-        height: 84px;
-    }
-
     .postControls {
-        max-width: 120px;
         display: flex;
         align-items: center;
         flex-direction: row;
         justify-content: flex-start;
 
-        .control {
-            width: 32px;
+        .controlBtn {
             height: 32px;
-            border-radius: 4px;
-            padding: 4px;
-            &.edit {
-                padding: 6px;
-                &:hover {
-                    background-color: var(--color-btn-primary-hover-bg);
-                    border-color: var(--color-btn-primary-hover-border);
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            @media screen and (max-width: 500px) {
+                padding-left: 8px;
+                padding-right: 4px;
+                margin-right: 8px;
+                padding-top: 3px;
+                padding-bottom: 3px;
+                height: 28px;
+            }
+            .btnText {
+                margin-right: 4px;
+                @media screen and (max-width: 500px) {
+                    font-size: 0.7em;
+                    margin-right: 4px;
+                    font-weight: 400;
                 }
             }
+        }
+
+        .control {
+            font-size: large;
+            @media screen and (max-width: 500px) {
+                font-size: small;
+            }
+
             &.delete {
                 color: var(--color-btn-danger-text);
-                &:hover {
-                    color: var(--color-btn-danger-hover-text);
-                    background-color: var(--color-btn-danger-hover-bg);
-                    border-color: var(--color-btn-danger-hover-border);
-                }
-            }
-            &.shareLink {
-                padding: 6px;
             }
         }
     }

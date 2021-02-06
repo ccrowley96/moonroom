@@ -15,6 +15,7 @@ import classNames from 'classnames/bind';
 import { useMutation } from '@apollo/client';
 import { formatDateTimeString } from '../../services/utils';
 import Reply from '../Reply/Reply';
+import { useHistory } from 'react-router-dom';
 const cx = classNames.bind(require('./PostDetails.module.scss'));
 
 const PostDetails = ({ post }) => {
@@ -29,6 +30,7 @@ const PostDetails = ({ post }) => {
     const [editReplyData, setEditReplyData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [linkPreview, setLinkPreview] = useState(false);
+    const history = useHistory();
 
     const setConfirmClosedFromModal = (_) => {
         setIsConfirmOpen({
@@ -284,42 +286,56 @@ const PostDetails = ({ post }) => {
                     <div className={cx('postControls')}>
                         {post.author.id === auth.session.user._id && (
                             <>
-                                <FiEdit2
-                                    className={cx('control', 'edit')}
-                                    onClick={() => {
-                                        appDispatch({
-                                            type: actionTypes.SET_ACTIVE_MODAL,
-                                            payload: modalTypes.NEW_POST,
-                                            modalData: post
-                                        });
-                                    }}
-                                />
-                                <AiOutlineDelete
-                                    className={cx('control', 'delete')}
-                                    onClick={() => {
-                                        if (!loading)
-                                            setIsConfirmOpen({
-                                                commentDelete: false,
-                                                postDelete: true,
-                                                data: null
+                                <button className={cx('_btn', 'controlBtn')}>
+                                    <div className={cx('btnText')}>Edit</div>
+                                    <FiEdit2
+                                        className={cx('control', 'edit')}
+                                        onClick={() => {
+                                            appDispatch({
+                                                type:
+                                                    actionTypes.SET_ACTIVE_MODAL,
+                                                payload: modalTypes.NEW_POST,
+                                                modalData: post
                                             });
-                                    }}
-                                />
+                                        }}
+                                    />
+                                </button>
+                                <button className={cx('_btn', 'controlBtn')}>
+                                    <div className={cx('btnText')}>Delete</div>
+                                    <AiOutlineDelete
+                                        className={cx('control', 'delete')}
+                                        onClick={() => {
+                                            if (!loading)
+                                                setIsConfirmOpen({
+                                                    commentDelete: false,
+                                                    postDelete: true,
+                                                    data: null
+                                                });
+                                        }}
+                                    />
+                                </button>
                             </>
                         )}
-                        <BiShuffle
-                            className={cx('control', 'crossPost')}
-                            onClick={() => {
-                                appDispatch({
-                                    type: actionTypes.SET_ACTIVE_MODAL,
-                                    payload: modalTypes.CROSSPOST,
-                                    modalData: post
-                                });
-                            }}
-                        />
-                        <a href={`/post/${post.id}`}>
+                        <button className={cx('_btn', 'controlBtn')}>
+                            <div className={cx('btnText')}>Crosspost</div>
+                            <BiShuffle
+                                className={cx('control', 'crossPost')}
+                                onClick={() => {
+                                    appDispatch({
+                                        type: actionTypes.SET_ACTIVE_MODAL,
+                                        payload: modalTypes.CROSSPOST,
+                                        modalData: post
+                                    });
+                                }}
+                            />
+                        </button>
+                        <button
+                            className={cx('_btn', 'controlBtn')}
+                            onClick={() => history.push(`/post/${post.id}`)}
+                        >
+                            <div className={cx('btnText')}>Share</div>
                             <FiShare className={cx('control', 'shareLink')} />
-                        </a>
+                        </button>
                     </div>
 
                     <div className={cx('replyWrapper')}>

@@ -26,6 +26,7 @@ export const postDataFragment = gql`
             name
         }
         community {
+            id
             name
         }
         sourcePost {

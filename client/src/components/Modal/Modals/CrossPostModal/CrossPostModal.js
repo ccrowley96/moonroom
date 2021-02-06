@@ -57,13 +57,25 @@ const CrossPostModal = ({ activeCommunity, communities }) => {
                                 Select moon
                             </option>
                             {communities
-                                .filter(
-                                    (c) =>
-                                        c.id !== activeCommunity.id &&
-                                        c.id !==
-                                            appState.modalData.sourcePost
-                                                ?.community?.id
-                                )
+                                .filter((c) => {
+                                    if (
+                                        c.id ===
+                                        appState.modalData.sourcePost?.community
+                                            ?.id
+                                    ) {
+                                        return false;
+                                    }
+
+                                    // Post belongs to active community
+                                    if (
+                                        appState.modalData.community.id ===
+                                        activeCommunity.id
+                                    ) {
+                                        return c.id !== activeCommunity.id;
+                                    } else {
+                                        return true;
+                                    }
+                                })
                                 .map((c, idx) => {
                                     return (
                                         <option key={idx} value={c.id}>

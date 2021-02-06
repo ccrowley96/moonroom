@@ -109,7 +109,8 @@
     text-align: center;
     font-weight: 700;
     font-size: 1.3em;
-    margin: 20px 0px;
+    margin-top: 20px;
+    margin-bottom: 12px;
 }
 .postMetaWrapper {
     display: flex;
@@ -154,7 +155,7 @@
 
 .tagWrapper {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
     margin: 8px 0px;
