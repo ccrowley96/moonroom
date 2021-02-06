@@ -5,6 +5,7 @@ import path from 'path';
 import { Community, connectDB, Post, Room, User } from './db/index';
 import morgan from 'morgan';
 import authApi from './routes/auth';
+import corsApi from './routes/cors';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers/resolvers';
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
@@ -59,6 +60,9 @@ app.use(express.static(path.join(__dirname, '../dist/client_build')));
 
 // Auth API used for login/sign-up
 app.use('/auth', authApi);
+
+// Cors proxy endpoint
+app.use('/cors', corsApi);
 
 // Use Apollo context to verify authentication token
 const context = async ({ req, res }) => {
