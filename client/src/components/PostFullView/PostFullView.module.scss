@@ -1,9 +1,13 @@
 @import '../../styles/baseStyles.module.scss';
 
-.loading {
+.loadingAndError {
     width: 100%;
     text-align: center;
     margin-top: 20px;
+}
+
+.modalFiller {
+    height: 220px;
 }
 
 .postWrapper {
@@ -28,5 +32,185 @@
             text-align: center;
             width: 100%;
         }
+    }
+}
+
+.controlsWrapper {
+    display: flex;
+    position: relative;
+    height: 42px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 12px 0px;
+
+    .editWrapper {
+        margin-right: 12px;
+    }
+
+    .adminControls {
+        display: flex;
+        align-items: center;
+    }
+
+    .controlWrapper {
+        height: 32px;
+        padding-right: 2px;
+        padding-left: 8px;
+        display: flex;
+        align-items: center;
+    }
+
+    .control {
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        padding: 7px;
+        &.edit {
+            padding: 8px;
+        }
+        &.delete {
+            color: var(--color-btn-danger-text);
+        }
+        &.shareLink {
+            padding: 6px;
+        }
+    }
+}
+
+.link {
+    margin: 16px 8px;
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    p {
+        padding: 2px !important;
+        border-radius: 2px;
+        background: var(--color-bg-canvas) !important;
+    }
+    a {
+        width: 100%;
+        background-color: var(--color-bg-canvas-inset);
+        border-color: var(--color-border-primary);
+        color: var(--color-text-primary);
+        border-radius: 8px;
+        &:hover {
+            background-color: var(--color-bg-canvas-inset);
+            border-color: var(--color-state-hover-primary-bg);
+        }
+    }
+    &.loaded {
+        p {
+            background-color: var(--color-bg-canvas-inset) !important;
+        }
+    }
+}
+
+.postTitle {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.3em;
+    margin: 20px 0px;
+}
+.postMetaWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.postMeta {
+    .author {
+        font-weight: 700;
+    }
+    .date {
+        font-size: 0.8em;
+    }
+}
+.postRating {
+    display: flex;
+    align-items: center;
+    .ratingStar {
+        fill: var(--color-scale-yellow-5);
+    }
+}
+
+.crossPostMetaWrapper {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    font-size: small;
+    margin-top: 4px;
+    position: relative;
+
+    .sourceCommunityName {
+        font-weight: 700;
+    }
+    .sourceAuthorName {
+        font-weight: 700;
+    }
+    .crossPostIconWrapper {
+        display: flex;
+        align-items: center;
+        font-size: 1.5em;
+    }
+}
+
+.tagWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 8px 0px;
+
+    .tagIcon {
+        font-size: 20px;
+        margin-right: 4px;
+    }
+    .tag {
+        background-color: var(--color-topic-tag-hover-bg);
+        border-radius: 6px;
+        margin: 4px;
+        padding: 5px 8px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+.body {
+    font-size: 1.2em;
+}
+
+.commentHeader {
+    font-weight: 700;
+    font-size: 1.3em;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    margin: 8px 0px;
+    .commentMeta {
+        display: flex;
+        .commentAuthor {
+            font-weight: 700;
+        }
+        .commentDate {
+            margin-left: 8px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+        }
+        .commentAdmin {
+            display: flex;
+            flex-direction: row;
+            flex-grow: 1;
+            justify-content: flex-end;
+            .adminBtn {
+                margin-right: 8px;
+                font-size: 0.7rem;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+        }
+    }
+    .commentBody {
+        margin-left: 16px;
     }
 }

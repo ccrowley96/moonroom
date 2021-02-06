@@ -153,10 +153,11 @@ const PostDetails = ({ post }) => {
                                 maxLine={2}
                                 minLine={1}
                                 url={post.link}
+                                proxyUrl={'/cors'}
                                 defaultMedia={
                                     theme === themes.dark
-                                        ? './logo192_dark.png'
-                                        : './logo192.png'
+                                        ? '/logo192_dark.png'
+                                        : '/logo192.png'
                                 }
                                 onSuccess={() => setLinkPreview(true)}
                                 onError={() => setLinkPreview(true)}
