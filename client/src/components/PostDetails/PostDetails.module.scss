@@ -175,9 +175,15 @@
     display: flex;
     margin-top: 8px;
     height: 42px;
+
     .replyWrapper {
         height: 42px;
         width: 100%;
+    }
+
+    @media screen and (max-width: '520px') {
+        flex-direction: column;
+        height: 84px;
     }
 
     .postControls {
@@ -207,8 +213,8 @@
                     border-color: var(--color-btn-danger-hover-border);
                 }
             }
-            &.crossPost {
-                margin-right: 4px;
+            &.shareLink {
+                padding: 6px;
             }
         }
     }

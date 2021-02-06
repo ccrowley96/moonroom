@@ -318,10 +318,10 @@ export default class postApi<TData> extends MongoDataSource<TData> {
                 errorCodes.postNotFound
             );
 
-        // Check that user has access to the community
-        post = await post.populate('community');
-        let communityId = post.community._id;
-        await communityApi.verifyAccessToCommunity(communityId);
+        // // Check that user has access to the community
+        // post = await post.populate('community');
+        // let communityId = post.community._id;
+        // await communityApi.verifyAccessToCommunity(communityId);
 
         // Return post
         return post;

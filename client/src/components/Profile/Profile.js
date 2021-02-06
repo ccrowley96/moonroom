@@ -44,7 +44,7 @@ export default function Profile() {
                 </div>
                 <button
                     className={cx('homeLink', '_btn')}
-                    onClick={() => history.push('/home')}
+                    onClick={() => history.push('/')}
                 >
                     Home
                 </button>

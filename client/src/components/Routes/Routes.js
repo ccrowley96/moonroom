@@ -11,6 +11,7 @@ import Profile from '../Profile/Profile';
 import Home from '../Home/Home';
 import TopBar from '../TopBar/TopBar';
 import JoinCommunityLink from '../JoinCommunityLink/JoinCommunityLink';
+import PostFullView from '../PostFullView/PostFullView';
 
 export default function Routes() {
     return (
@@ -26,7 +27,7 @@ export default function Routes() {
                     <JoinCommunityLink />
                 </PrivateRoute>
                 <PrivateRoute path="/post/:id">
-                    {/* <PostFullView /> */}
+                    <PostFullView />
                 </PrivateRoute>
                 <PrivateRoute path="/">
                     <TopBar />

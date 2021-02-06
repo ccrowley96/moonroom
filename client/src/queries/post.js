@@ -50,6 +50,15 @@ export const postDataFragment = gql`
     ${commentDataFragment}
 `;
 
+export const GET_POST = gql`
+    query getPost($postId: ID!) {
+        post(postId: $postId) {
+            ...postData
+        }
+    }
+    ${postDataFragment}
+`;
+
 export const NEW_REPLY = gql`
     mutation addComment($postId: ID!, $communityId: ID!, $body: String) {
         addComment(postId: $postId, communityId: $communityId, body: $body) {

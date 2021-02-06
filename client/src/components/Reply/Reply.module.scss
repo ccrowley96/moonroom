@@ -9,8 +9,10 @@
     .replyInput {
         flex-grow: 1;
         width: 100%;
-        max-width: 260px;
         font-size: 12px;
+        @media screen and (min-width: '520px') {
+            margin-left: 20px;
+        }
     }
 
     .replyBtn {

@@ -6,7 +6,7 @@ import { useTheme } from '../../hooks/provideTheme';
 import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes, themes } from '../../constants/constants';
 import { AiFillStar, AiOutlineTag, AiOutlineDelete } from 'react-icons/ai';
-import { FiEdit2 } from 'react-icons/fi';
+import { FiEdit2, FiShare } from 'react-icons/fi';
 import { BiShuffle } from 'react-icons/bi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { ReactTinyLink } from 'react-tiny-link';
@@ -316,6 +316,9 @@ const PostDetails = ({ post }) => {
                                 });
                             }}
                         />
+                        <a href={`/post/${post.id}`}>
+                            <FiShare className={cx('control', 'shareLink')} />
+                        </a>
                     </div>
 
                     <div className={cx('replyWrapper')}>

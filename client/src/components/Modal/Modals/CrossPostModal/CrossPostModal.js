@@ -18,7 +18,7 @@ const CrossPostModal = ({ activeCommunity, communities }) => {
     const submitCrossPost = async () => {
         try {
             setLoading(true);
-            let result = await crossPost({
+            await crossPost({
                 variables: {
                     postId: appState.modalData.id,
                     communityId: selectedComunity,

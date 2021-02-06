@@ -239,8 +239,8 @@ const AddEditPostModal = ({ activeCommunity }) => {
                     : `Posting to ${activeCommunity.name} 🌕`
             }
         >
-            <div className={cx('addEditWrapper')} ref={targetRef}>
-                <div className={cx('fieldWrapper')}>
+            <div className={cx('addEditWrapper')}>
+                <div className={cx('fieldWrapper')} ref={targetRef}>
                     <div className={cx('_modalSection')}>
                         <div className={cx('_sectionLabel')}>Select room</div>
                         <div className={cx('_select-wrapper')}>
