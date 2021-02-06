@@ -135,6 +135,72 @@ export default class postApi<TData> extends MongoDataSource<TData> {
         }
     }
 
+    async crossPost(postId, communityId, roomId) {
+        try {
+            // Grab context variables
+            const {
+                user,
+                dataSources: { roomApi, communityApi }
+            } = this.context;
+
+            // Verify community exists and user has access
+            let community = await communityApi.getCommunity(communityId);
+            let room = null;
+
+            if (roomId) {
+                // Verify rooms exists
+                room = await roomApi.getRoom(communityId, roomId);
+            }
+
+            // Verify post exists
+            let post: any = await Post.findById({ _id: mongooseId(postId) });
+            if (!post) {
+                throw new ApolloError(
+                    'Post does not exist!',
+                    errorCodes.postNotFound
+                );
+            }
+
+            // Create post object
+            let crossPost = new Post({
+                title: post.title,
+                link: post?.link,
+                body: post?.body,
+                rating: post?.rating,
+                author: mongooseId(user._id),
+                community: mongooseId(communityId),
+                room: room ? mongooseId(roomId) : null,
+                tags: post?.tags,
+                sourcePost: mongooseId(post._id)
+            });
+
+            await crossPost.save();
+
+            // Add post to community
+            community.posts.push(mongooseId(post._id));
+            await community.save();
+
+            // Add post to user
+            user.posts.push(mongooseId(post._id));
+            await user.save();
+
+            return {
+                code: 200,
+                success: true,
+                message: 'Crossposted successfully',
+                post: post
+            };
+        } catch (err) {
+            console.log(err);
+            return {
+                code: 500,
+                success: false,
+                message: err.message,
+                post: null
+            };
+        }
+    }
+
     async editPost(
         postId,
         communityId,

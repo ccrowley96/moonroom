@@ -63,6 +63,7 @@ const Reply = ({ postId, editReplyData, clearData }) => {
     return (
         <div className={cx('replyForm')}>
             <input
+                type="text"
                 className={cx('_input', 'replyInput')}
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}

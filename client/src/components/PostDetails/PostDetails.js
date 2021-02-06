@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/auth';
 import { actionTypes, modalTypes, themes } from '../../constants/constants';
 import { AiFillStar, AiOutlineTag, AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
+import { BiShuffle } from 'react-icons/bi';
 import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import { ReactTinyLink } from 'react-tiny-link';
 
@@ -117,6 +118,30 @@ const PostDetails = ({ post }) => {
                                 {formatDateTimeString(post.date)}
                             </div>
                         </div>
+                        {post.sourcePost && (
+                            <div className={cx('crossPostMetaWrapper')}>
+                                <div className={cx('crossPostMeta')}>
+                                    <div className={cx('community')}>
+                                        Cross-posted from{' '}
+                                        <span
+                                            className={cx(
+                                                'sourceCommunityName'
+                                            )}
+                                        >
+                                            {post.sourcePost.community.name}
+                                        </span>
+                                    </div>
+                                    <div className={cx('author')}>
+                                        Authored by{' '}
+                                        <span
+                                            className={cx('sourceAuthorName')}
+                                        >
+                                            {post.sourcePost.author.given_name}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     {post.link && (
                         <div
@@ -255,31 +280,44 @@ const PostDetails = ({ post }) => {
                     )}
                 </div>
                 <div className={cx('footer')}>
-                    {post.author.id === auth.session.user._id && (
-                        <div className={cx('postControls')}>
-                            <FiEdit2
-                                className={cx('control', 'edit')}
-                                onClick={() => {
-                                    appDispatch({
-                                        type: actionTypes.SET_ACTIVE_MODAL,
-                                        payload: modalTypes.NEW_POST,
-                                        modalData: post
-                                    });
-                                }}
-                            />
-                            <AiOutlineDelete
-                                className={cx('control', 'delete')}
-                                onClick={() => {
-                                    if (!loading)
-                                        setIsConfirmOpen({
-                                            commentDelete: false,
-                                            postDelete: true,
-                                            data: null
+                    <div className={cx('postControls')}>
+                        {post.author.id === auth.session.user._id && (
+                            <>
+                                <FiEdit2
+                                    className={cx('control', 'edit')}
+                                    onClick={() => {
+                                        appDispatch({
+                                            type: actionTypes.SET_ACTIVE_MODAL,
+                                            payload: modalTypes.NEW_POST,
+                                            modalData: post
                                         });
-                                }}
-                            />
-                        </div>
-                    )}
+                                    }}
+                                />
+                                <AiOutlineDelete
+                                    className={cx('control', 'delete')}
+                                    onClick={() => {
+                                        if (!loading)
+                                            setIsConfirmOpen({
+                                                commentDelete: false,
+                                                postDelete: true,
+                                                data: null
+                                            });
+                                    }}
+                                />
+                            </>
+                        )}
+                        <BiShuffle
+                            className={cx('control', 'crossPost')}
+                            onClick={() => {
+                                appDispatch({
+                                    type: actionTypes.SET_ACTIVE_MODAL,
+                                    payload: modalTypes.CROSSPOST,
+                                    modalData: post
+                                });
+                            }}
+                        />
+                    </div>
+
                     <div className={cx('replyWrapper')}>
                         <Reply
                             postId={post.id}

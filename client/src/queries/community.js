@@ -80,6 +80,10 @@ export const MY_COMMUNITIES = gql`
         myCommunities {
             name
             id
+            rooms {
+                name
+                id
+            }
         }
     }
 `;

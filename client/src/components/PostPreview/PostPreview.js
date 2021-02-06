@@ -3,6 +3,7 @@ import { modalTypes, actionTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import { BsArrowRightShort } from 'react-icons/bs';
 import { FiLink } from 'react-icons/fi';
+import { BiShuffle } from 'react-icons/bi';
 
 import classNames from 'classnames/bind';
 import { formatShortDateString } from '../../services/utils';
@@ -60,15 +61,34 @@ const PostPreview = ({ post }) => {
                 )}
                 <div className={cx('postPreviewFooter')}>
                     <div className={cx('author')}>
-                        {post.author.given_name}{' '}
-                        {post.room?.name ? (
-                            <>
-                                <BsArrowRightShort
-                                    className={cx('inRoomIcon')}
-                                />{' '}
-                                {post.room.name}
-                            </>
-                        ) : null}
+                        <span className={cx('postMeta')}>
+                            {post.author.given_name}{' '}
+                            {post.room?.name ? (
+                                <>
+                                    {post.sourcePost ? (
+                                        <div
+                                            className={cx('inRoomIconWrapper')}
+                                        >
+                                            <BiShuffle
+                                                className={cx(
+                                                    'inRoomIcon',
+                                                    'crossPost'
+                                                )}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div
+                                            className={cx('inRoomIconWrapper')}
+                                        >
+                                            <BsArrowRightShort
+                                                className={cx('inRoomIcon')}
+                                            />
+                                        </div>
+                                    )}
+                                    {post.room.name}
+                                </>
+                            ) : null}
+                        </span>
                     </div>
                     <div className={cx('postDate')}>
                         {formatShortDateString(post.date)}

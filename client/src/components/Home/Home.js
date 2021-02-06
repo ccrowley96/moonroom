@@ -11,6 +11,7 @@ import AddEditPostModal from '../Modal/Modals/AddEditPostModal/AddEditPostModal'
 import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
+import CrossPostModal from '../Modal/Modals/CrossPostModal/CrossPostModal';
 const cx = classNames.bind(require('./Home.module.scss'));
 
 export default function Home() {
@@ -63,6 +64,12 @@ export default function Home() {
             )}
             {activeModal === modalTypes.NEW_POST && (
                 <AddEditPostModal
+                    activeCommunity={activeCommunityData?.community}
+                />
+            )}
+            {activeModal === modalTypes.CROSSPOST && (
+                <CrossPostModal
+                    communities={communitiesData?.myCommunities}
                     activeCommunity={activeCommunityData?.community}
                 />
             )}

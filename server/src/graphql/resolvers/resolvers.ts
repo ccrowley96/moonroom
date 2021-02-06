@@ -78,6 +78,13 @@ export default {
                 tags
             );
         },
+        crossPost: async (
+            _,
+            { postId, communityId, roomId },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.crossPost(postId, communityId, roomId);
+        },
         editPost: async (
             _,
             { postId, communityId, roomId, title, link, body, rating, tags },

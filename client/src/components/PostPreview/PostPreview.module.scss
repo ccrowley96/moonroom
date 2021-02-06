@@ -45,13 +45,37 @@
         text-overflow: ellipsis;
     }
     .postDate {
+        min-width: 100px;
         flex-grow: 1;
         text-align: end;
     }
 }
 
+.postMeta {
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+.inRoomIconWrapper {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+}
+
 .inRoomIcon {
-    margin-top: 4px;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    vertical-align: middle;
+    &.crossPost {
+        font-size: 0.8em;
+        margin-left: 2px;
+        margin-right: 4px;
+    }
 }
 
 .date {

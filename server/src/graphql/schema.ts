@@ -18,6 +18,7 @@ const typeDefs = gql`
         title: String
         author: User
         community: Community
+        sourcePost: Post
         room: Room
         link: String
         date: String
@@ -135,6 +136,13 @@ const typeDefs = gql`
         post: Post
     }
 
+    type crossPostMutationResponse implements MutationResponse {
+        code: String!
+        success: Boolean!
+        message: String!
+        post: Post
+    }
+
     type addEditCommentMutationResponse implements MutationResponse {
         code: String!
         success: Boolean!
@@ -162,6 +170,11 @@ const typeDefs = gql`
             rating: Float
             tags: [String]
         ): addEditPostMutationResponse
+        crossPost(
+            postId: ID!
+            communityId: ID!
+            roomId: ID
+        ): crossPostMutationResponse
         editPost(
             postId: ID!
             communityId: ID!

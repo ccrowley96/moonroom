@@ -145,6 +145,30 @@
     }
 }
 
+.crossPostMetaWrapper {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    font-size: small;
+    margin-top: 4px;
+    .sourceCommunityName {
+        font-weight: 700;
+    }
+    .sourceAuthorName {
+        font-weight: 700;
+    }
+    .author,
+    .community {
+        text-align: end;
+    }
+
+    .crossPostIconWrapper {
+        display: flex;
+        align-items: center;
+        margin-right: 8px;
+    }
+}
+
 .footer {
     flex-direction: row;
     width: 100%;
@@ -157,7 +181,7 @@
     }
 
     .postControls {
-        width: 80px;
+        max-width: 120px;
         display: flex;
         align-items: center;
         flex-direction: row;
@@ -166,7 +190,6 @@
         .control {
             width: 32px;
             height: 32px;
-            margin-right: 8px;
             border-radius: 4px;
             padding: 4px;
             &.edit {
@@ -183,6 +206,9 @@
                     background-color: var(--color-btn-danger-hover-bg);
                     border-color: var(--color-btn-danger-hover-border);
                 }
+            }
+            &.crossPost {
+                margin-right: 4px;
             }
         }
     }

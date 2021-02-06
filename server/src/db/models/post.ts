@@ -16,6 +16,10 @@ const postSchema = new mongoose.Schema({
         ref: 'Community',
         required: true
     },
+    sourcePost: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Post'
+    },
     room: {
         type: mongoose.Types.ObjectId,
         ref: 'Room',
@@ -88,6 +92,19 @@ postSchema.pre('remove', { document: true }, async function () {
         {
             $pull: {
                 posts: post._id
+            }
+        },
+        { multi: true }
+    );
+
+    // Remove post ref from any post that references it as source posts
+    await post.model('Post').update(
+        {
+            sourcePost: post._id
+        },
+        {
+            $unset: {
+                sourcePost: null
             }
         },
         { multi: true }

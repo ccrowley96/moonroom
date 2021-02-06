@@ -7,5 +7,8 @@ export default {
     },
     author: async (post) => {
         return (await post.populate('author').execPopulate()).author;
+    },
+    sourcePost: async (post) => {
+        return (await post.populate('sourcePost').execPopulate()).sourcePost;
     }
 };

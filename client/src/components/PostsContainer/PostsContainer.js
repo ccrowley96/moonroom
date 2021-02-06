@@ -32,11 +32,20 @@ const PostsContainer = ({ activeCommunity }) => {
     });
 
     const fetchMoreNoCursor = async (fromRefresh = false) => {
-        await fetchMore({
-            variables: getFeedQueryVariables(activeCommunityId, activeRoomId)
-        });
-        if (fromRefresh)
-            appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
+        if (fetchMore) {
+            await fetchMore({
+                variables: getFeedQueryVariables(
+                    activeCommunityId,
+                    activeRoomId
+                )
+            });
+
+            if (fromRefresh)
+                appDispatch({
+                    type: actionTypes.TRIGGER_REFRESH,
+                    payload: false
+                });
+        }
     };
 
     // Re-fetch on room change
@@ -123,13 +132,14 @@ const PostsContainer = ({ activeCommunity }) => {
                                     Number(cursor)
                                 ).toLocaleTimeString()}...`
                             );
-                            fetchMore({
-                                variables: getFeedQueryVariables(
-                                    activeCommunityId,
-                                    activeRoomId,
-                                    cursor
-                                )
-                            });
+                            fetchMore &&
+                                fetchMore({
+                                    variables: getFeedQueryVariables(
+                                        activeCommunityId,
+                                        activeRoomId,
+                                        cursor
+                                    )
+                                });
                         }
                     }}
                 />

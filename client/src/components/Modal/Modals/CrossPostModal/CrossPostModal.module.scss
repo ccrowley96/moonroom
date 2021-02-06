@@ -1,0 +1,19 @@
+@import '../../../../styles/baseStyles.module.scss';
+
+.selectors {
+    display: flex;
+    flex-direction: column;
+}
+.selectMoon,
+.selectRoom {
+    margin: 12px 0px;
+}
+.selectLabel {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.btnWrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin: 12px 0px;
+}

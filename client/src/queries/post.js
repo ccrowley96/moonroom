@@ -28,6 +28,15 @@ export const postDataFragment = gql`
         community {
             name
         }
+        sourcePost {
+            community {
+                id
+                name
+            }
+            author {
+                given_name
+            }
+        }
         link
         date
         body
@@ -112,6 +121,20 @@ export const NEW_POST = gql`
             rating: $rating
             tags: $tags
         ) {
+            code
+            success
+            message
+            post {
+                ...postData
+            }
+        }
+    }
+    ${postDataFragment}
+`;
+
+export const CROSS_POST = gql`
+    mutation crossPost($postId: ID!, $communityId: ID!, $roomId: ID) {
+        crossPost(postId: $postId, communityId: $communityId, roomId: $roomId) {
             code
             success
             message
