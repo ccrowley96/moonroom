@@ -6,12 +6,17 @@ import { useTheme } from '../../hooks/provideTheme';
 import { useHistory } from 'react-router-dom';
 import { RiMoonFill } from 'react-icons/ri';
 import { HiSun } from 'react-icons/hi';
-import { BiAddToQueue, BiMessageDetail, BiDetail } from 'react-icons/bi';
+import {
+    BiAddToQueue,
+    BiMessageDetail,
+    BiDetail,
+    BiShuffle
+} from 'react-icons/bi';
 import { CgScrollH } from 'react-icons/cg';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BsPlus } from 'react-icons/bs';
 import { MdRefresh } from 'react-icons/md';
-import { FiSend } from 'react-icons/fi';
+import { FiSend, FiShare } from 'react-icons/fi';
 
 import classNames from 'classnames/bind';
 import { themes } from '../../constants/constants';
@@ -84,7 +89,8 @@ export default function Profile() {
                             <p>
                                 Use the 'moon selector' menu to create moons,
                                 join moons via code, and select your active
-                                moon.
+                                moon. Think of a moon like a private community.
+                                Make sure to invite your favorite astronauts.
                             </p>
                         </div>
                     </div>
@@ -104,7 +110,13 @@ export default function Profile() {
                                 your moon with. Once they click the link,
                                 they'll automatically be added as an astronaut
                                 on your moon. The 6 character codes can also be
-                                manually entered in the moon selector menu.
+                                manually entered in the moon selector menu. A
+                                unique moon link will look something like this -{' '}
+                                <span className={cx('fakeLink')}>
+                                    moonroom.app/<u>uayhdv</u>
+                                </span>
+                                . The underlined portion is the moon <b>code</b>
+                                .
                             </p>
                         </div>
                     </div>
@@ -119,7 +131,10 @@ export default function Profile() {
                             <p>
                                 Use the 'create room' button to open the room
                                 creation menu. Here you can create rooms, delete
-                                rooms, and select your active room.
+                                rooms, and select your active room. Room provide
+                                a way to categorize posts. Here a some example
+                                rooms: <b>Music</b>, <b>Recipes</b>,{' '}
+                                <b>Memes</b>, <b>Books</b>.
                             </p>
                         </div>
                     </div>
@@ -145,6 +160,33 @@ export default function Profile() {
                 </div>
                 <div className={cx('helpSection')}>
                     <div className={cx('helpSubtitle')}>
+                        Sharing posts via the detailed post view
+                    </div>
+                    <div className={cx('helpBody')}>
+                        <div className={cx('helpIcon')}>
+                            <FiShare />
+                        </div>
+                        <div className={cx('help')}>
+                            <p>
+                                Clicking on the share button will navigate to a
+                                more detailed post view. From here, you can copy
+                                the post link (either via the URL or copy post
+                                link button). A post URL of the format{' '}
+                                <span className={cx('fakeLink')}>
+                                    moonroom.app/post/:id
+                                </span>{' '}
+                                can be shared with <b>anyone</b>, even if they
+                                aren't on your moon. Sharing a post will{' '}
+                                <b>not</b> invite the recipient to join your
+                                moon. If you want to save a post that has been
+                                shared with you, you can cross post to one of
+                                your moons.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className={cx('helpSection')}>
+                    <div className={cx('helpSubtitle')}>
                         Viewing and replying to posts
                     </div>
                     <div className={cx('helpBody')}>
@@ -153,12 +195,31 @@ export default function Profile() {
                         </div>
                         <div className={cx('help')}>
                             <p>
-                                Click on the box surrounding a post to view the
-                                entire post. From here, the post author can edit
-                                and delete their post. Any astronaut can reply
-                                to the post from here as well. Replies will be
-                                tagged on to the end of the post and can be
-                                later edited and deleted by their author.
+                                Click on the box surrounding a post preview to
+                                view the entire post. From here, the post author
+                                can edit and delete their post. Any astronaut
+                                can cross post, view the full post, share the
+                                post, and reply to the post from here as well.
+                                Replies will be tagged on to the end of the post
+                                and can be later edited and deleted by their
+                                author.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className={cx('helpSection')}>
+                    <div className={cx('helpSubtitle')}>Cross posting</div>
+                    <div className={cx('helpBody')}>
+                        <div className={cx('helpIcon')}>
+                            <BiShuffle />
+                        </div>
+                        <div className={cx('help')}>
+                            <p>
+                                Click on the cross post button to share a post
+                                with another moon. This is a great way to share
+                                posts with different astronaut communities. The
+                                original author will be credited and post
+                                replies will <b>not</b> be copied over.
                             </p>
                         </div>
                     </div>
@@ -188,10 +249,11 @@ export default function Profile() {
                         <div className={cx('help')}>
                             <p>
                                 Use the search box to search for anything posted
-                                to the active moon. To clear the search, clear
-                                all characters from the search box. This will
-                                search for a matching <i>title</i>, <i>link</i>,{' '}
-                                <i>body</i>, or <i>tags</i>.
+                                to the active moon. This will search for posts
+                                with a matching <i>title</i>, <i>link</i>,{' '}
+                                <i>body</i>, or <i>tags</i> using the search
+                                string you enter. To clear the search, clear all
+                                characters from the search box.
                             </p>
                         </div>
                     </div>
@@ -204,8 +266,8 @@ export default function Profile() {
                         </div>
                         <div className={cx('help')}>
                             <p>
-                                Use the refresh button to make sure you're all
-                                up to date with the latest posts.
+                                Use the refresh button to make sure your moon
+                                and posts have the latest data.
                             </p>
                         </div>
                     </div>

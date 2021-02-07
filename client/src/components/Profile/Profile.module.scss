@@ -13,6 +13,10 @@
     }
 }
 
+.fakeLink {
+    color: var(--color-bg-info-inverse);
+}
+
 .nav {
     display: flex;
     justify-content: space-between;
@@ -114,7 +118,6 @@
     .helpTitle {
         font-weight: 700;
         font-size: 1.2em;
-        text-align: center;
     }
     .helpSection {
         margin: 8px 0px;

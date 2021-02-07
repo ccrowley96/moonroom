@@ -1,0 +1,22 @@
+.welcomeToTheMoon {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    width: 80%;
+    height: 400px;
+}
+
+.welcomeText {
+    text-align: center;
+    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+}
+.tutorialLink {
+    color: var(--color-bg-info-inverse);
+    width: fit-content;
+    font-size: 1.1em;
+}

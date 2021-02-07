@@ -12,6 +12,7 @@ import PostsContainer from '../PostsContainer/PostsContainer';
 
 import classNames from 'classnames/bind';
 import CrossPostModal from '../Modal/Modals/CrossPostModal/CrossPostModal';
+import { Link } from 'react-router-dom';
 const cx = classNames.bind(require('./Home.module.scss'));
 
 export default function Home() {
@@ -78,6 +79,21 @@ export default function Home() {
                 <PostsContainer
                     activeCommunity={activeCommunityData?.community}
                 />
+            )}
+            {!activeCommunityData?.community && (
+                <div className={cx('welcomeToTheMoon')}>
+                    <div className={cx('welcomeText')}>
+                        Welcome to the moon &#128640;
+                    </div>
+                    <div className={cx('welcomeText')}>
+                        <Link
+                            className={cx('welcomeText', 'tutorialLink')}
+                            to={'/profile'}
+                        >
+                            Astronautics 101
+                        </Link>
+                    </div>
+                </div>
             )}
         </div>
     );
