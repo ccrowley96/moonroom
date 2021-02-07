@@ -21,6 +21,7 @@ const cx = classNames.bind(require('./PostsContainer.module.scss'));
 
 const PostsContainer = ({ activeCommunity }) => {
     const [searchFilter, setSearchFilter] = useState('');
+    const [searchData, setSearchData] = useState(null);
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
     const activeRoomId = useReactiveVar(activeRoomIdVar);
     const { appState, appDispatch } = useAppState();
@@ -48,11 +49,6 @@ const PostsContainer = ({ activeCommunity }) => {
         }
     };
 
-    // // Re-fetch on room change
-    useDidUpdateEffect(() => {
-        if (fetchMore) fetchMoreNoCursor();
-    }, [activeRoomId]);
-
     // Re-fetch on refresh trigger
     useDidUpdateEffect(() => {
         if (appState.triggerRefresh) {
@@ -71,8 +67,15 @@ const PostsContainer = ({ activeCommunity }) => {
         // eslint-disable-next-line
     }, [activeCommunityId]);
 
+    // Re-fetch on room change (when search active)
+    useDidUpdateEffect(() => {
+        if (appState.searchActive) {
+            if (fetchMore) feedSearch();
+        }
+    }, [activeRoomId]);
+
     const feedSearch = async (cursor = null, fromRefresh = false) => {
-        await client.query({
+        let result = await client.query({
             query: FEED_SEARCH,
             variables: getFeedSearchVariables(
                 activeCommunityId,
@@ -80,8 +83,10 @@ const PostsContainer = ({ activeCommunity }) => {
                 activeRoomId,
                 cursor
             ),
-            fetchPolicy: 'network-only'
+            ...(cursor && { fetchPolicy: 'network-only' })
         });
+
+        setSearchData(result.data.feedSearch);
 
         if (fromRefresh)
             appDispatch({ type: actionTypes.TRIGGER_REFRESH, payload: false });
@@ -102,7 +107,7 @@ const PostsContainer = ({ activeCommunity }) => {
             <div className={cx('postsContainer')}>
                 <PostPreviews
                     loading={loading}
-                    data={data}
+                    data={appState.searchActive ? searchData : data?.feed}
                     activeCommunityId={activeCommunityId}
                     activeRoomId={activeRoomId}
                     communityCode={activeCommunity?.code}
@@ -110,7 +115,7 @@ const PostsContainer = ({ activeCommunity }) => {
                         // Fetch more posts using search query
                         if (appState.searchActive) {
                             let cursor =
-                                data.feed.edges[data.feed.edges.length - 1]
+                                searchData.edges[searchData.edges.length - 1]
                                     .cursor;
                             console.log(
                                 `fetching more posts matching [${searchFilter}] before ${new Date(
@@ -149,7 +154,7 @@ const PostsContainer = ({ activeCommunity }) => {
 };
 
 const PostPreviews = ({ loading, data, fetchMore, communityCode }) => {
-    const posts = data?.feed?.edges;
+    const posts = data?.edges;
     if (loading) {
         return <div className={cx('loading')}>Loading...</div>;
     }
@@ -159,10 +164,13 @@ const PostPreviews = ({ loading, data, fetchMore, communityCode }) => {
     return posts.map((post, i) => {
         return (
             <React.Fragment key={post.node.id}>
-                {i === data.feed.edges.length - 3 &&
-                    data.feed.pageInfo.hasNextPage && (
-                        <Waypoint onEnter={fetchMore} />
-                    )}
+                {i === data.edges.length - 3 && data.pageInfo.hasNextPage && (
+                    <Waypoint
+                        onEnter={() => {
+                            fetchMore();
+                        }}
+                    />
+                )}
                 <PostPreview post={post.node} />
             </React.Fragment>
         );

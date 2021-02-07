@@ -15,7 +15,12 @@ export const cache = new InMemoryCache({
                         return activeRoomIdVar();
                     }
                 },
-                feed: relayStylePagination(['roomId', 'communityId'])
+                feed: relayStylePagination(['roomId', 'communityId']),
+                feedSearch: relayStylePagination([
+                    'roomId',
+                    'communityId',
+                    'filter'
+                ])
             }
         }
     }

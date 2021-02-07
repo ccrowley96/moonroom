@@ -80,6 +80,12 @@ const typeDefs = gql`
         feed(
             communityId: ID!
             roomId: ID
+            first: Int
+            after: String
+        ): FeedConnection
+        feedSearch(
+            communityId: ID!
+            roomId: ID
             filter: String
             first: Int
             after: String

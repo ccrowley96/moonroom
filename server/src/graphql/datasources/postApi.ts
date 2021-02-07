@@ -8,6 +8,34 @@ import escape from 'escape-regexp';
 export default class postApi<TData> extends MongoDataSource<TData> {
     // First === limit, after === cursor ID
     async feedQuery(communityId, roomId, filter, first, after) {
+        const searchQuery = {
+            community: mongooseId(communityId),
+            ...(roomId && { room: mongooseId(roomId) }),
+            ...(after && {
+                date: { $lt: new Date(Number(after)).toISOString() }
+            })
+        };
+
+        const count = await Post.countDocuments(searchQuery);
+
+        let postsFound: any = await Post.find(searchQuery)
+            .limit(first)
+            .sort({ date: 'descending' });
+
+        const feedEdges = postsFound.map((doc: any) => ({
+            cursor: doc.date,
+            node: doc
+        }));
+
+        return {
+            edges: feedEdges,
+            pageInfo: {
+                hasNextPage: count > feedEdges.length
+            }
+        };
+    }
+
+    async feedSearch(communityId, roomId, filter, first, after) {
         const searchQuery =
             filter && filter !== ''
                 ? {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useReactiveVar, useQuery } from '@apollo/client';
 import { useAppState } from '../../hooks/provideAppState';
 import { actionTypes, modalTypes } from '../../constants/constants';
-import { activeCommunityIdVar, activeRoomIdVar } from '../../cache';
+import { activeCommunityIdVar, activeRoomIdVar, cache } from '../../cache';
 import { GET_ACTIVE_COMMUNITY } from '../../queries/community';
 import { BsPlus } from 'react-icons/bs';
 import { MdRefresh } from 'react-icons/md';
@@ -97,6 +97,19 @@ const TopBar = () => {
                             appDispatch({
                                 type: actionTypes.TRIGGER_REFRESH,
                                 payload: true
+                            });
+                            cache.modify({
+                                fields: {
+                                    feed(existingFeedRef, { DELETE }) {
+                                        return DELETE;
+                                    },
+                                    feedSearch(
+                                        existingFeedSearchRef,
+                                        { DELETE }
+                                    ) {
+                                        return DELETE;
+                                    }
+                                }
                             });
                         }}
                     />

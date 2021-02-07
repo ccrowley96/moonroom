@@ -36,10 +36,17 @@ export default {
         },
         feed: async (
             _,
+            { communityId, roomId, first = 5, after },
+            { dataSources: { postApi } }
+        ) => {
+            return await postApi.feedQuery(communityId, roomId, first, after);
+        },
+        feedSearch: async (
+            _,
             { communityId, roomId, filter, first = 5, after },
             { dataSources: { postApi } }
         ) => {
-            return await postApi.feedQuery(
+            return await postApi.feedSearch(
                 communityId,
                 roomId,
                 filter,

@@ -228,7 +228,7 @@ export const FEED_SEARCH = gql`
         $filter: String
         $roomId: ID
     ) {
-        feed(
+        feedSearch(
             communityId: $communityId
             first: $first
             after: $after
