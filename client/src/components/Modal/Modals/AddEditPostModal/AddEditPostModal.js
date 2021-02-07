@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Modal from '../../Modal';
 import { activeRoomIdVar } from '../../../../cache';
 import { useReactiveVar, useMutation, gql } from '@apollo/client';
-import { EDIT_POST, NEW_POST } from '../../../../queries/post';
+import { EDIT_POST, FEED_QUERY, NEW_POST } from '../../../../queries/post';
 import { enterPressed } from '../../../../services/utils';
 import { CgClose } from 'react-icons/cg';
 import { useAppState } from '../../../../hooks/provideAppState';
@@ -64,42 +64,11 @@ const AddEditPostModal = ({ activeCommunity }) => {
 
     // New post mutation
     const [createNewPost] = useMutation(NEW_POST, {
-        update: (
-            cache,
-            {
-                data: {
-                    addPost: { post }
-                }
-            }
-        ) => {
+        update: (cache) => {
             cache.modify({
                 fields: {
-                    feed(currentFeed) {
-                        const newPostRef = cache.writeFragment({
-                            data: post,
-                            fragment: gql`
-                                fragment NewPost on Post {
-                                    id
-                                    title
-                                }
-                            `
-                        });
-
-                        return {
-                            ...currentFeed,
-                            edges: [
-                                {
-                                    cursor: post.date,
-                                    node: newPostRef,
-                                    __typename: 'FeedEdge'
-                                },
-                                ...currentFeed.edges
-                            ],
-                            pageInfo: {
-                                ...currentFeed.pageInfo,
-                                startCursor: post.date
-                            }
-                        };
+                    feed(currentFeed, { DELETE }) {
+                        return DELETE;
                     }
                 }
             });
