@@ -80,7 +80,7 @@ export default function Home() {
                     activeCommunity={activeCommunityData?.community}
                 />
             )}
-            {!activeCommunityData?.community && (
+            {!activeCommunityId && (
                 <div className={cx('welcomeToTheMoon')}>
                     <div className={cx('welcomeText')}>
                         Welcome to the moon &#128640;
