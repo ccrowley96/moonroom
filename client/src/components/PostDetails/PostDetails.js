@@ -187,7 +187,17 @@ const PostDetails = ({ post }) => {
                             <div className={cx('tagWrapper')}>
                                 {post.tags.map((tag, idx) => {
                                     return (
-                                        <div className={cx('tag')} key={idx}>
+                                        <div
+                                            className={cx('tag')}
+                                            key={idx}
+                                            onClick={() => {
+                                                appDispatch({
+                                                    type:
+                                                        actionTypes.TAG_SEARCH,
+                                                    payload: tag
+                                                });
+                                            }}
+                                        >
                                             <AiOutlineTag
                                                 className={cx('tagIcon')}
                                             />

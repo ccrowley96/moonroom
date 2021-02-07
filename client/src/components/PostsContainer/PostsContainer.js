@@ -70,16 +70,27 @@ const PostsContainer = ({ activeCommunity }) => {
     // Re-fetch on room change (when search active)
     useDidUpdateEffect(() => {
         if (appState.searchActive) {
-            if (fetchMore) feedSearch();
+            feedSearch();
         }
     }, [activeRoomId]);
+
+    useEffect(() => {
+        if (appState.tagSearch) {
+            setSearchFilter(appState.tagSearch);
+            appDispatch({
+                type: actionTypes.SET_SEARCH_ACTIVE,
+                payload: true
+            });
+            feedSearch();
+        }
+    }, [appState.tagSearch]);
 
     const feedSearch = async (cursor = null, fromRefresh = false) => {
         let result = await client.query({
             query: FEED_SEARCH,
             variables: getFeedSearchVariables(
                 activeCommunityId,
-                searchFilter,
+                appState.tagSearch ? appState.tagSearch : searchFilter,
                 activeRoomId,
                 cursor
             ),

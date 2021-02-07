@@ -10,7 +10,8 @@ const initialAppState = {
     activeModal: null,
     modalData: null,
     searchActive: false,
-    triggerRefresh: false
+    triggerRefresh: false,
+    tagSearch: null
 };
 
 const AppStateReducer = (state, action) => {
@@ -32,12 +33,19 @@ const AppStateReducer = (state, action) => {
         case actionTypes.SET_SEARCH_ACTIVE:
             return {
                 ...state,
-                searchActive: action.payload
+                searchActive: action.payload,
+                tagSearch: action.payload ? state.tagSearch : null
             };
         case actionTypes.TRIGGER_REFRESH:
             return {
                 ...state,
                 triggerRefresh: action.payload
+            };
+        case actionTypes.TAG_SEARCH:
+            return {
+                ...state,
+                tagSearch: action.payload,
+                activeModal: null
             };
         default:
             throw new Error();

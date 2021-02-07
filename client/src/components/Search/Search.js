@@ -15,7 +15,7 @@ const Search = ({
     feedSearch,
     fetchMoreNoCursor
 }) => {
-    const { appDispatch } = useAppState();
+    const { appState, appDispatch } = useAppState();
 
     const activeRoomId = useReactiveVar(activeRoomIdVar);
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
@@ -36,6 +36,12 @@ const Search = ({
 
     const handleSearchChange = (e) => {
         setSearchFilter(e.target.value);
+        if (appState.tagSearch) {
+            appDispatch({
+                type: actionTypes.TAG_SEARCH,
+                payload: null
+            });
+        }
         if (e.target.value === '') {
             appDispatch({
                 type: actionTypes.SET_SEARCH_ACTIVE,
