@@ -13,6 +13,7 @@ import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { cache } from '../../cache';
 const cx = classNames.bind(require('./CommunitySelector.module.scss'));
 
 const CommunitySelector = ({
@@ -56,6 +57,10 @@ const CommunitySelector = ({
         } else {
             setSelectedCommunity(selection);
             selectCommunity(selection);
+            appDispatch({
+                type: actionTypes.SET_SEARCH_ACTIVE,
+                payload: false
+            });
         }
     };
 

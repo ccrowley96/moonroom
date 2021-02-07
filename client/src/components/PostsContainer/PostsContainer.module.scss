@@ -4,6 +4,16 @@
     width: 100%;
 }
 
+.searchCallout {
+    margin: 0px 20px;
+    margin-top: -8px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}
+
 .filterAndPosts {
     width: 100%;
     max-width: 800px;

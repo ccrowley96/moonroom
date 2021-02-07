@@ -104,6 +104,11 @@ const PostsContainer = ({ activeCommunity }) => {
                 />
             </div>
             <RoomSelectorList />
+            {appState.searchActive && searchFilter.length > 0 && (
+                <div className={cx('searchCallout')}>
+                    Posts matching '<b>{searchFilter}</b>'
+                </div>
+            )}
             <div className={cx('postsContainer')}>
                 <PostPreviews
                     loading={loading}
@@ -178,9 +183,13 @@ const PostPreviews = ({ loading, data, fetchMore, communityCode }) => {
 };
 
 const NoPostsFound = ({ communityCode }) => {
+    const { appState } = useAppState();
     return (
         <div className={cx('noPostsFoundWrapper')}>
-            <div className={cx('noPosts')}>No posts found...</div>
+            <div className={cx('noPosts')}>
+                No posts found{' '}
+                {appState.searchActive ? 'matching your search' : ''}...
+            </div>
             <div className={cx('info')}>
                 <FiShare className={cx('infoIcon')} />
                 <div>Add this app to your homescreen</div>
