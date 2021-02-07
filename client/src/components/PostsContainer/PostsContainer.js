@@ -48,7 +48,7 @@ const PostsContainer = ({ activeCommunity }) => {
         }
     };
 
-    // Re-fetch on room change
+    // // Re-fetch on room change
     useDidUpdateEffect(() => {
         if (fetchMore) fetchMoreNoCursor();
     }, [activeRoomId]);

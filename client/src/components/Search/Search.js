@@ -64,7 +64,7 @@ const Search = ({
         <>
             <div className={cx('searchWrapper')}>
                 <input
-                    type="text"
+                    type="search"
                     className={cx('_input', 'searchBox')}
                     onChange={handleSearchChange}
                     placeholder={roomPlaceholder}
