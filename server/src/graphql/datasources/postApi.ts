@@ -7,7 +7,7 @@ import escape from 'escape-regexp';
 
 export default class postApi<TData> extends MongoDataSource<TData> {
     // First === limit, after === cursor ID
-    async feedQuery(communityId, roomId, filter, first, after) {
+    async feedQuery(communityId, roomId, first, after) {
         const searchQuery = {
             community: mongooseId(communityId),
             ...(roomId && { room: mongooseId(roomId) }),
