@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CommunitySelector from '../CommunitySelector/CommunitySelector';
 import { useQuery, useReactiveVar } from '@apollo/client';
 import { MY_COMMUNITIES, GET_ACTIVE_COMMUNITY } from '../../queries/community';
 import { activeCommunityIdVar } from '../../cache';
-import { modalTypes } from '../../constants/constants';
+import { actionTypes, modalTypes } from '../../constants/constants';
 import { useAppState } from '../../hooks/provideAppState';
 import CommunityDetailsModal from '../Modal/Modals/CommunityDetailsModal/CommunityDetailsModal';
 import RoomDetailsModal from '../Modal/Modals/RoomDetailsModal/RoomDetailsModal';
@@ -18,13 +18,21 @@ const cx = classNames.bind(require('./Home.module.scss'));
 export default function Home() {
     // global app state
     const {
-        appState: { activeModal }
+        appState: { activeModal },
+        appDispatch
     } = useAppState();
 
     // Grab list of all communities
     const { data: communitiesData } = useQuery(MY_COMMUNITIES, {
         errorPolicy: 'all'
     });
+
+    // Clear active modal on mount
+    useEffect(() => {
+        return () =>
+            appDispatch({ type: actionTypes.SET_ACTIVE_MODAL, payload: null });
+        // eslint-disable-next-line
+    }, []);
 
     const activeCommunityId = useReactiveVar(activeCommunityIdVar);
 
